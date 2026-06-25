@@ -1,0 +1,8 @@
+# 텍스트 파일은 저장소에 LF로 정규화 (여러 윈도우 PC 간 줄바꿈 diff 노이즈 방지)
+* text=auto eol=lf
+
+# 바이너리 — 변환 금지
+*.jpeg binary
+*.jpg  binary
+*.png  binary
+*.pdf  binary
