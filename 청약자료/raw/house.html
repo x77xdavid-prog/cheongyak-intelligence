@@ -1,0 +1,69 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="ko">
+	<head>
+	    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+	    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1"/>
+	    <meta name="format-detection" content="telephone=no"/>
+	    <link rel="icon" type="image/ico" href="/images/favicon.ico"/>
+	
+	    <link rel="stylesheet" type="text/css" href="/css/kabhom/main/hom.css"/>
+	
+	    <title>한국부동산원 주택청약</title>
+	    <script src="/js/kabhom/plugin/jquery.3.1.1.min.js"></script>
+		<script src="/js/kabhom/plugin/jquery-ui.min.js"></script>
+		<script src="/js/kabhom/util/hom.all.js"></script>
+		<script>
+			$(function() {
+				if(parent) {
+					$("#btnSubmit").text("닫기");
+				}
+			});
+			
+			function fn_btnSubmitClick() {
+				if(parent) {
+					$pop.closeDialog();
+				} else {
+					location.href='/co/coa/selectMainView.do';
+				}
+			}
+		</script>   
+	</head>
+<body>
+    <div class="error_pg_wrap">
+        <div class="error_pg_box">
+            <div class="er_pg_content">
+                <img src="/images/kabhom/sub/ic_error_lg.png" alt="에러페이지 아이콘"/>
+                <h5>죄송합니다.</h5>
+                
+                	
+                		<p>관리자에게 문의바랍니다.</p>
+                	
+                	
+                
+            </div>
+            <div class="btn_box">
+                <button type="button" id="btnSubmit" class="btn_submit" onclick="fn_btnSubmitClick()">홈으로 이동</button>
+            </div>
+        </div>
+    </div>
+ 
+</body>
+</html>

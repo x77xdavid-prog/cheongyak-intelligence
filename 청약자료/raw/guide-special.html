@@ -1,0 +1,3924 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1" />
+	<meta name="format-detection" content="telephone=no" />
+	<link rel="icon" type="image/ico" href="https://static.applyhome.co.kr/images/kabhom/common/favicon.ico" />
+	<link rel="apple-touch-icon" href="https://static.applyhome.co.kr/images/kabhom/common/phone.png"/>
+	<link rel="shortcut icon" href="https://static.applyhome.co.kr/images/kabhom/common/phone.png"/> 
+	
+	<link rel="stylesheet" type="text/css" href="/css/kabhom/main/leftSubMenu.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/kabhom/main/hom.css"/>	
+	<link rel="stylesheet" type="text/css" href="/css/kabhom/main/scrap/virtual.css"/>
+	
+	
+	
+	<!-- 배너 슬라이드 추가링크 -->
+	<!-- <link rel="stylesheet" href="/css/kabhom/main/vendors/swiper.min.css">
+    <script src="/js/kabhom/plugin/swiper.min.js"></script> -->
+   
+	<title>청약홈 | APT청약안내 특별공급</title>
+	
+	
+	<!-- 운영일 경우에만 -->
+	
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143621263-1"></script>
+	
+	
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'UA-143621263-1');
+	</script>
+	
+	<script src="https://static.applyhome.co.kr/js/kabhom/plugin/jquery.3.1.1.min.js"></script>
+	<script src="https://static.applyhome.co.kr/js/kabhom/plugin/jquery-ui.min.js"></script>
+	<script src="/js/kabhom/main/site.js"></script>
+	
+	<!-- 성능제어 Netfunnel, 키보드보안 -->
+	<script src="/js/kabhom/com/com.js"></script>
+	
+	<!-- 성능제어 Netfunnel -->
+	<script src="https://static.applyhome.co.kr/netfunnel/netfunnel.js"></script>
+	<script src="https://static.applyhome.co.kr/netfunnel/netfunnel_skin.js"></script>
+	
+	<script>
+	document.domain = "applyhome.co.kr";
+	
+	window.onpageshow = function(event) {
+		if(event.persisted) {
+			
+			window.location.reload(true);
+		}
+	}
+	$(document).ready(function() {
+		if(gfn_isMobile()) {
+			$('#divTab').css("display","none");
+		}
+		
+		var gnbTree = $("#gnbTree > li > button");
+		$(gnbTree).on("click", function() {
+				 $(this).parents("li").siblings("li").children("ul").slideUp();
+				 $(this).parents("li").siblings("li").children("button").removeClass("on");
+				 $(this).siblings("ul").slideToggle();
+				 $(this).addClass("on");
+		 });
+	});
+	
+		
+		var strPopupYn = 'N';
+		
+		
+		if(window.name == "iframeDialog" && strPopupYn == 'Y')
+		{
+			parent.document.location.href = "/co/coz/selectComplexLoginView.do";
+		}
+
+		$(function(){
+			 
+			 /**
+			 * Description	: 상단 lnb_wrap setting
+			 */
+			$navi = $("#naviUl li").last();
+			var umid = $navi.data("umid");
+			if(umid != null) {
+				$navi.append($("#menu"+umid).next("ul").clone());
+				$navi.find('a').removeAttr('id');
+			}
+			
+			
+			var strMenuId = "menu" + $("#naviUl li").eq(1).data('mid');
+			$('#gnb #' + strMenuId).addClass('lnb_active');
+			
+			
+			
+			
+			if(gfn_getCookie("COA01M04_POPUP02") == "Y")
+			{
+			    $("#snb .info-wrap").addClass("hide");
+			}
+		});
+		
+	// Form input을 name=value 형식의 object로 변환	
+	$.fn.formToObject = function() {
+		var obj = null;
+		try {
+			if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+				var arr = this.serializeArray();
+				if(arr) {
+					obj = {};
+					$.each(arr, function(){
+						obj[this.name] = this.value;
+					})
+				}
+			}
+		} catch (e) {
+			alert(e.message);
+		} finally {
+			return obj;
+		}
+	};
+	
+	function formToString(form) {
+		var formData = new FormData($form);
+		
+		var object = {};
+		formData.forEach(function(value, key){
+		    object[key] = value;
+		});
+		var json = JSON.stringify(object);
+	}
+	
+	function fn_openPopup(url, title) {
+//	    if(gfn_isMobile() == false) {
+	        window.open(url, title);
+//	    }
+	}
+	
+	//팝업창에서 excepion 화면 닫기
+	function fn_closeKabExceptionDialog(){
+    	$(".ui-dialog").remove();
+    }
+	
+	</script>
+</head>
+<body>
+<div id="wrap">
+	<a href="#gnb" class="skip-link">주메뉴 바로가기</a>
+	<a href="#subContent" class="skip-link">본문 바로가기</a>	
+	<div id="snb">
+		<div class="info-wrap">
+			<div>
+				<p><span>청약문의 1644-7445</span>(월~금 09:00~17:30)</p>
+				<button class="btn-close txt-indent color-wh">닫기</button>
+			</div>
+		</div>
+		<div id="header">
+			<div class="my-area">
+				<h1><a href="javascript:$net.href('/co/coa/selectMainView.do');" class="txt-indent">청약HOME</a></h1>
+				<div>
+					
+						<button type="button" class="btn-search txt-indent">검색</button>
+					
+					<button type="button" class="btn-menu txt-indent">메인 메뉴</button>
+				</div>
+			</div>
+			
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	
+			<div class="search-area">
+				<div class="search-wrap">
+					<div class="search-btn"><button type="button" class="btn-close txt-indent">닫기</button></div>
+					<div class="search-box">
+						<form name="konanSearchform" id="konanSearchform" action="" method="POST"></form>
+						<input type="search" id="mainSchTxt" name="mainSchTxt" placeholder="검색어 입력" autocomplete="off" />
+						<!-- <button type="button" class="btn-search-delete txt-indent">삭제</button> -->
+						<button type="button" id="btnKonanSearch" class="btn-search txt-indent">검색</button>
+					</div>
+					<div class="search-autobox">
+						<div class="left-box">
+							<ul id="autolist"></ul>
+						</div>
+					</div>
+				</div>
+				
+				<div class="search-txt">찾으시는 메뉴명과 관심 지역명을 검색해보세요(순위확인서, 대구, 역삼 등)</div>
+			</div>
+			<div class="search-shadow"></div>
+			
+			<script>
+			$(function () {
+			    var searchTerm = "";
+			    $("#mainSchTxt").autocomplete({
+			        source: function (request, response) {
+			            searchTerm = request.term;
+			            $.ajax({
+			                url: "/co/coz/searchSuggestResult.do",
+			                data: { term: searchTerm },
+			                type: "GET",
+			                success: function(data) {
+			                    //console.log(data);
+			                    var jsonData = (typeof data === "string") ? JSON.parse(data) : data;
+			                    var html = "";
+			                    $.each(jsonData.suggestions.s || [], function(index, item) {
+			                        var itemTxt = item.keyword || '';
+			                        //자동완성 API 호출값에 URL이 포함되어지면 해당 ID값 호출 처리
+			                        //console.log(item.addtional || '');
+			                        var url = item.addtional[0] || '';			                        
+			                        var searchRegex = searchTerm.replace(/[.*+?^$()|[]\\]/g, '\\$&');
+			                        var highlighted = itemTxt.replace(new RegExp('(' + searchRegex + ')', 'gi'),'<span>$1</span>');
+			                        html += '<li data-url="'+url+'"><a href="'+url+'">';
+			                        if(!url || url.length === 0) {
+			                            html += highlighted;
+			                        }else {
+			                            html += highlighted + ' ≫';
+			                        }
+			                        html += '<div class="url-box"></div></a></li>';
+			                    });
+			                    $("#autolist").html(html).show();
+			                    //response(data);
+			                    response([]);
+			                }
+			            });
+			        },
+			        minLength: 1,
+			        delay: 300
+			    });
+			    $("#mainSchTxt").on("keydown", function(e) {
+			        if(e.keyCode === 13) {
+			            e.preventDefault();
+			            var chkArr = search.checkSearchCondition();
+			            var searchTxt = $("#mainSchTxt").val();
+			            var recordCountPerPage = 10;
+			            if(searchTxt.length > 1) {
+			                if ( chkArr ) {
+				                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'schTxt', name:'schTxt', value:searchTxt}) );
+				                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'recordCountPerPage', name:'recordCountPerPage', value:recordCountPerPage}) );
+					    		$net.submit("konanSearchform", "/co/coz/integratedSearchResultView.do");
+			                }
+			            }else {
+			                alert('검색어를 2글자 이상 입력해주세요.');
+			                return false;
+			            }
+			        }
+			    });
+			    $("#btnKonanSearch").on("click", function(e) {
+			        e.preventDefault();
+			        var chkArr = search.checkSearchCondition();
+			        var searchTxt = $("#mainSchTxt").val();
+			        var recordCountPerPage = 10;
+		            if(searchTxt.length > 1) {
+		                if ( chkArr ) {
+			                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'schTxt', name:'schTxt', value:searchTxt}) );
+			                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'recordCountPerPage', name:'recordCountPerPage', value:recordCountPerPage}) );
+				    		$net.submit("konanSearchform", "/co/coz/integratedSearchResultView.do");
+		                }
+		            }else {
+		                alert('검색어를 2글자 이상 입력해주세요.');
+		                return false;
+		            }
+			    });
+			    $(document).on("mouseenter", "#autolist li", function(e) {
+			        var $currentLi = $(this);
+			        $("#autolist li").not(this).find("div").empty().removeData("inited"); //다른 li의 div값을 비움
+			        
+			        if($currentLi.find("div").data("inited")) return; //이미 만들었다면 스킵하기
+			        
+			        var selectedTxt = $(this).children("a").first().text().replace("≫", "").trim();
+			        var url = $(this).data("url");
+			        if(url){
+			            var html = '<span>'+url+'</spna><span class="search-url">'+selectedTxt+'로 바로 이동</span>';
+				        $currentLi.find("div").html(html).data("inited", true);
+			        }
+			    });
+			    $(document).on("click", "#autolist li a", function(e) {
+			        e.preventDefault();
+			        var chkArr = search.checkSearchCondition();
+			        var selectedTxt = $(this).text().replace("≫", "").trim();
+			        var url = $(this).closest("li").data("url");
+			        var recordCountPerPage = 10;
+			        $("#autolist").val(selectedTxt);
+			        if(url){
+			            $net.href(""+url+"");
+			        }else{
+			            if ( chkArr ) {
+				            $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'schTxt', name:'schTxt', value:selectedTxt}) );
+				            $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'recordCountPerPage', name:'recordCountPerPage', value:recordCountPerPage}) );
+				    		$net.submit("konanSearchform", "/co/coz/integratedSearchResultView.do");
+			            }
+			        }
+			    });
+			    $(document).on("click", function(e) {
+			        if(!$(e.target).closest(".search-area").length) {
+			            $("#mainSchTxt").val("");
+			            $("#autolist").hide();
+			        }
+			    });
+			    $("#mainSchTxt").on("input", function(e) {
+					if(!e.target.value) {
+						$("#autolist").empty();
+					}
+				});
+			});
+			
+			var search = {
+			    checkSearchCondition : function() {
+					
+		    		var regApct = /[\%\&\<\>\"\']/gi;		
+		    		if(regApct.test($('#mainSchTxt').val()))
+		    		{
+		    			alert("검색어에 허용되지 않는 특수문자가 존재합니다.");	
+		    			$('#mainSchTxt').focus();
+		    			return false;
+		    		}
+		    		
+		    		var regApct = /(<([^>]+)>)/gi;		
+		    		if(regApct.test($('#mainSchTxt').val()))
+		    		{
+		    			alert("검색어에 허용되지 않는 문자스크립트가 존재합니다.");	
+		    			$('#mainSchTxt').val('');
+		    			$('#mainSchTxt').focus();
+		    			return false;
+		    		}
+		    		return true;
+		    	}
+			}
+			</script>
+		</div>
+		<div class="scrolling">
+			<nav id="gnb">
+				<div class="btn-box">
+					<div>
+					
+						
+							<a href="javascript:$net.href('/co/cob/selectSubscrptBnkbSbscrbDesc.do');" class="btn-login">마이페이지</a>
+						
+						
+					
+					</div>
+					<button type="button" class="btn-close txt-indent">닫기</button>
+				</div>
+				
+	<ul class="main">
+		<li>
+			<a href="#">청약신청</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" id="menu639">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" id="menu667">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=01&ty=10');" id="menu100085">1순위/2순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=04&ty=10');" id="menu100133">무순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=11&ty=10');" id="menu100337">임의공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=06&ty=20');" id="menu100164">불법행위재공급</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptReqstList.do');" id="menu668">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptCanclList.do');" id="menu669">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" id="menu640">오피스텔/생활숙박시설/도시형/민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" id="menu670">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptReqstList.do');" id="menu671">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptCanclList.do');" id="menu672">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" id="menu641">공공지원민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" id="menu673">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptReqstList.do');" id="menu674">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptCanclList.do');" id="menu675">청약취소</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약당첨조회</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinDescList.do');" id="menu646">APT</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wab/selectOfctlUrbtyPrzwinHouseList.do');" id="menu647">오피스텔/생활숙박시설/도시형/민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wac/selectPrvateRentPrzwinHouseList.do');" id="menu648">공공지원민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wad/selectMxtrHouseDrwtList.do');" id="menu649">주택조합 동·호수 추첨결과</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약자격확인</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldInfoProvdAgreRequestView.do');" id="menu100022">세대구성원 등록/조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldMbInfoProvdAgreView.do');" id="menu100127">세대구성원 동의</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/cob/selectSubscrptLmttCnList.do');" id="menu100128">청약제한사항확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectHousePosesnList.do');" id="menu100129">주택소유확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do');" id="menu100276">청약통장</a>
+						<ul>
+							<li><a href="javascript:NetFunnel.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do', '');" id="menu100277">가입내역</a></li>
+							<li><a href="javascript:$net.href('/cu/cud/selectRankCnfrmnIssuView.do');" id="menu100278">순위확인서 발급</a></li>
+							<li><a href="javascript:$net.href('/cu/cue/selectRankCnfrmnIssuView.do');" id="menu100279">순위확인서 발급내역</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/coc/selectSubscrptQualfDiagMain.do');" id="menu100312">청약자격진단</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">공고단지 청약연습</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" id="menu100280">공고단지</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" id="menu100281">청약연습</a></li>
+							<li><a href="javascript:$net.href('/ra/raa/selectAptSpsplyPreparSubscrptReqstList.do');" id="menu100282">연습내역 조회</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apg/selectAddpntCalculatorView.do');" id="menu100125">청약가점계산기</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/app/reqst/selectSubscrtReqstAptMainView.do');" id="menu100126">청약가상체험</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약일정 및 통계</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ai/aib/selectSubscrptCalenderView.do');" id="menu651">청약캘린더(청약일정)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cuc/selectSubscrptAllimiView.do');" id="menu652">청약알리미 신청</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" id="menu650">분양정보/경쟁률</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" id="menu686">APT</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectOtherLttotPblancListView.do');" id="menu687">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTRemndrLttotPblancListView.do');" id="menu818">APT 잔여세대</a></li>
+							<li><a href="javascript:$net.href('/ap/apk/selectAPTLttotPblancListView.do');" id="menu100383">민간사전청약</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" id="menu654">청약통장 통계</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" id="menu688">전체 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAcctoSbscrbStusView.do');" id="menu689">통장별 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbSbscrbPdAcctoStusView.do');" id="menu690">가입기간별 현황</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약제도안내</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" id="menu655">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" id="menu692">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroBnkbView.do');" id="menu693">청약통장</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroQualfView.do');" id="menu694">청약자격</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroSpetialView.do');" id="menu695">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHowToReqstView.do');" id="menu696">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroPreawnerSlctnView.do');" id="menu697">당첨자 선정</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroRemndrHshldView.do');" id="menu761">잔여세대</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" id="menu656">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" id="menu698">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionReqstMthInfoView.do');" id="menu699">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscrptIntroPreawnerSlctn.do');" id="menu700">당첨자 선정</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectsubscriptionDepositInfoView.do');" id="menu657">주택청약 상품정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aic/selectSpecltSubscrptRndAreaList.do');" id="menu100121">규제지역정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/ard/selectSubscriptVocabularyView.do');" id="menu658">주택청약 용어설명</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약소통방</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/cu/cua/selectNoticeListView.do');" id="menu660">공지사항</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cub/selectFAQList.do');" id="menu661">자주묻는질문</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinCnfrmnList.do');" id="menu100156">APT당첨사실조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cui/selectAdvPrzwnerCanclView.do');" id="menu100382">사전청약 당첨취소자 조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/rs/rsa/selectResaleListView.do');" id="menu100174">분양권 정보(전매제한등)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTMvnPrearngeHsHldcoList.do');" id="menu100267">입주(예정)정보</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+	</ul>
+
+			</nav>
+			<footer>
+				<div class="cs-box">
+					<strong class="txt-phone">청약문의</strong>
+					<div>
+						<strong class="num-phone">1644-칠사사오</strong>
+						<span>문의 시간  <strong>월~금 09:00 ~ 17:30</strong> </span>
+						<p>상담은 법적 효력 없는 참고용입니다.</p>
+					</div>
+				</div>
+				<div class="family-box">
+					<ul>
+						<li><a href="javascript:$net.href('/kabbnk/cn/cna/selectMainView.do');">대행은행</a></li>
+						<li><a href="javascript:$net.href('/kabbiz/cm/cma/selectMainView.do');">사업주체</a></li>
+					</ul>
+				</div>
+				<h2><a href="javascript:$net.href('/co/coa/selectMainView.do');" class="logo-bottom txt-indent">한국부동산원 청약 HOME</a></h2>
+				<div class="policy-box">
+					<ul>
+						<li><a href="javascript:$net.href('/co/coz/selectIndvdlinfoPolicyView.do');">개인정보처리방침</a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectMobileUseInfoView.do');">모바일 사용에 대한 안내</a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectMailColctDenialView.do');">이메일 추출방지정책 </a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectSecurityProgrmView.do');">보안프로그램</a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectCrtfctCopyView.do');">공동인증서 관리</a></li>
+						<li><a href="http://remote.kais.kr" target="_blank">원격연결</a></li>
+						<li><a href="#" class="menu-sitemap">사이트맵</a></li>
+					</ul>
+					<div class="info-sitemap">
+ 						<div class="site-wrap">
+							<a class="btn-close txt-indent color-wh">닫기</a>            	
+							
+	<ul class="main">
+		<li>
+			<a href="#">청약신청</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" class="title" id="menu639">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" id="menu667">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=01&ty=10');" id="menu100085">1순위/2순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=04&ty=10');" id="menu100133">무순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=11&ty=10');" id="menu100337">임의공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=06&ty=20');" id="menu100164">불법행위재공급</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptReqstList.do');" id="menu668">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptCanclList.do');" id="menu669">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" class="title" id="menu640">오피스텔/생활숙박시설/도시형/민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" id="menu670">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptReqstList.do');" id="menu671">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptCanclList.do');" id="menu672">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" class="title" id="menu641">공공지원민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" id="menu673">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptReqstList.do');" id="menu674">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptCanclList.do');" id="menu675">청약취소</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약당첨조회</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinDescList.do');" class="title" id="menu646">APT</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wab/selectOfctlUrbtyPrzwinHouseList.do');" class="title" id="menu647">오피스텔/생활숙박시설/도시형/민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wac/selectPrvateRentPrzwinHouseList.do');" class="title" id="menu648">공공지원민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wad/selectMxtrHouseDrwtList.do');" class="title" id="menu649">주택조합 동·호수 추첨결과</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약자격확인</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldInfoProvdAgreRequestView.do');" class="title" id="menu100022">세대구성원 등록/조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldMbInfoProvdAgreView.do');" class="title" id="menu100127">세대구성원 동의</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/cob/selectSubscrptLmttCnList.do');" class="title" id="menu100128">청약제한사항확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectHousePosesnList.do');" class="title" id="menu100129">주택소유확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do');" class="title" id="menu100276">청약통장</a>
+						<ul>
+							<li><a href="javascript:NetFunnel.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do', '');" id="menu100277">가입내역</a></li>
+							<li><a href="javascript:$net.href('/cu/cud/selectRankCnfrmnIssuView.do');" id="menu100278">순위확인서 발급</a></li>
+							<li><a href="javascript:$net.href('/cu/cue/selectRankCnfrmnIssuView.do');" id="menu100279">순위확인서 발급내역</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/coc/selectSubscrptQualfDiagMain.do');" class="title" id="menu100312">청약자격진단</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">공고단지 청약연습</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" class="title" id="menu100280">공고단지</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" id="menu100281">청약연습</a></li>
+							<li><a href="javascript:$net.href('/ra/raa/selectAptSpsplyPreparSubscrptReqstList.do');" id="menu100282">연습내역 조회</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apg/selectAddpntCalculatorView.do');" class="title" id="menu100125">청약가점계산기</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/app/reqst/selectSubscrtReqstAptMainView.do');" class="title" id="menu100126">청약가상체험</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약일정 및 통계</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ai/aib/selectSubscrptCalenderView.do');" class="title" id="menu651">청약캘린더(청약일정)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cuc/selectSubscrptAllimiView.do');" class="title" id="menu652">청약알리미 신청</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" class="title" id="menu650">분양정보/경쟁률</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" id="menu686">APT</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectOtherLttotPblancListView.do');" id="menu687">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTRemndrLttotPblancListView.do');" id="menu818">APT 잔여세대</a></li>
+							<li><a href="javascript:$net.href('/ap/apk/selectAPTLttotPblancListView.do');" id="menu100383">민간사전청약</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" class="title" id="menu654">청약통장 통계</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" id="menu688">전체 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAcctoSbscrbStusView.do');" id="menu689">통장별 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbSbscrbPdAcctoStusView.do');" id="menu690">가입기간별 현황</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약제도안내</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" class="title" id="menu655">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" id="menu692">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroBnkbView.do');" id="menu693">청약통장</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroQualfView.do');" id="menu694">청약자격</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroSpetialView.do');" id="menu695">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHowToReqstView.do');" id="menu696">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroPreawnerSlctnView.do');" id="menu697">당첨자 선정</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroRemndrHshldView.do');" id="menu761">잔여세대</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" class="title" id="menu656">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" id="menu698">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionReqstMthInfoView.do');" id="menu699">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscrptIntroPreawnerSlctn.do');" id="menu700">당첨자 선정</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectsubscriptionDepositInfoView.do');" class="title" id="menu657">주택청약 상품정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aic/selectSpecltSubscrptRndAreaList.do');" class="title" id="menu100121">규제지역정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/ard/selectSubscriptVocabularyView.do');" class="title" id="menu658">주택청약 용어설명</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약소통방</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/cu/cua/selectNoticeListView.do');" class="title" id="menu660">공지사항</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cub/selectFAQList.do');" class="title" id="menu661">자주묻는질문</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinCnfrmnList.do');" class="title" id="menu100156">APT당첨사실조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cui/selectAdvPrzwnerCanclView.do');" class="title" id="menu100382">사전청약 당첨취소자 조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/rs/rsa/selectResaleListView.do');" class="title" id="menu100174">분양권 정보(전매제한등)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTMvnPrearngeHsHldcoList.do');" class="title" id="menu100267">입주(예정)정보</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+	</ul>
+
+						</div>
+					</div>
+				</div>
+				<p class="txt-address">(우)41068 대구광역시 동구 이노밸리로 291 (신서동)</p>
+				<p class="txt-copyright">COPYRIGHT ⓒ KOREA REAL ESTATE BOARD, ALL RIGHTS RESERVED.</p>
+			</footer>
+		</div>
+	</div>
+
+	<div id="content" class="sub_content">
+		<div class="sub_visu guide_visu">
+			<div class="sub_visu_box">
+				<div class="sub_visu_txt">
+					<h5>
+				
+					
+						청약제도안내
+					
+					
+				
+					</h5>
+					
+					
+					<div class="lnb_wrap">
+						<ul class="lnb_box" id="naviUl">
+							<li><a href="javascript:$net.href('/co/coa/selectMainView.do');"><i class="xi-home"></i><span class="blind">홈으로</span></a></li>
+							<li class="mo_none" data-mid="637"><i class="xi-angle-right-thin"></i> 청약제도안내</li>
+					
+						
+							<li class="mo_none" data-mid="655" data-umid="637"><i class="xi-angle-right-thin"></i> APT</li>
+							 
+							<li data-mid="695" data-umid="655">
+								<a href="#a"><i class="xi-angle-right-thin"></i> 특별공급 <img src="https://static.applyhome.co.kr/images/kabhom/common/lnb_arw.png" alt=""></a>
+							</li>
+							
+						
+						
+						
+						
+						
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+<!-- 배너 슬라이드 추가 스크립트 -->
+    <!-- <script>
+    var swiper = new Swiper('.swiper-container',{
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        spaceBetween: 30,
+        effect: 'fade',
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+  </script> -->
+<script>
+	$(function(){
+		
+		$(".tab_box li a").on("click", function() {
+		    $(this).parents(".cateWrap").find("ul.tab_box li").removeClass("active");
+			$(this).parents("li").addClass("active");
+			$(this).parents(".cateWrap").find(".tab_content").hide();
+			$(".tab_box li b").remove();
+			$(this).append($('<b/>', {'class':'blind', text:'현재 선택된 메뉴'}));
+		
+			var activeTab = $(this).parents("li").data("show");
+		
+			$("#"+activeTab).show()
+		});
+	});
+	</script>
+	    <style>
+        #cate1 .tab_content, #cate4 .tab_content, #cate5 .tab_content, #cate6 .tab_content, #cate7 .tab_content, #cate11 .tab_content{display:none}
+    </style>
+<div class="sub_content_box" id="subContent">
+	<h4 class="sub_tit">APT 청약안내 : 특별공급</h4>
+	<div class="line_box noti_line">
+		<div class="line_content">
+			<p>특별공급은 다자녀가구, 신혼부부, 국가유공자, 노부모부양, 청년 등 정책적 배려가 필요한 사회계층이 분양(임대)받을 수 있도록 주택마련을 지원해주는 제도입니다.</p>
+		</div>
+	</div>
+	
+	<div class="voca_tab_wrap mt_30">
+
+		<div class="cate_wrap">
+			<button type="button" class="cate_sel">전체</button>
+			<ul class="cate_list cate_4" id="vocabox">
+				<li><a href="#cate1"><p>특별공급 소득기준</p></a></li>
+				<li><a href="#cate2"><p>특별공급이란</p></a></li>
+				<li><a href="#cate3"><p>기관추천</p></a></li>
+				<li><a href="#cate4"><p>신혼부부</p></a></li>
+				<li><a href="#cate5"><p>다자녀가구</p></a></li>
+				<li><a href="#cate6"><p>노부모부양</p></a></li>
+				<li><a href="#cate7"><p>생애최초 주택구입</p></a></li>
+				<li><a href="#cate10"><p>청년</p></a></li>
+				<li><a href="#cate11"><p>신생아</p></a></li>
+				<li><a href="#cate8"><p>이전기관종사자 등</p></a></li>
+				<!-- <li><a href="#cate9"><p>외국인</p></a></li> 삭제-->
+			</ul>
+		</div>
+
+		<div id="vocabox_con" class="mt_50">
+			<div id="cate1" class="cateWrap">
+			
+    			<div class="tab_wrap">
+    	            <ul class="tab_box">
+    	                <li data-show="tab_021"  class="active"><a href="#tab_021"><span>민영주택</span><b class="blind">현재 선택된 메뉴 </b></a></li>
+    	                <li data-show="tab_022"><a href="#tab_022"><span>국민주택</span></a></li>
+    	                <li data-show="tab_023"><a href="#tab_023"><span>공공주택</span></a></li>
+    	             </ul>
+    			</div>
+			
+    			 <!-- 특별공급 소득기준 탭1 민영주택 -->
+    			 <div id="tab_021" class="tab_content" style="display:block">
+        			<div id="publicHouseMmAvrgIncomeStdr" class="popDiv" data-tit="도시근로자 가구원수별 월평균소득 기준" data-width="900" data-height="650">
+        			<!-- <div class="line_box">
+        			    <div class="line_content">
+        					<p>‘21.11.16. 개정된 「주택공급에 관한 규칙」을 반영한 소득기준으로, 규칙 개정일 이후 입주자 모집 승인을 신청하는 단지부터 적용됩니다.</p>
+        	 				<p>* 개정일 이전 입주자 모집 승인을 신청한 단지의 경우, 현 기준과 상이할 수 있으므로 반드시 입주자모집공고문을 참고하시기 바랍니다.</p>
+        	 				<p>** 하단의 월평균 소득기준표는 2020년도 도시근로자 월평균소득 기준입니다.</p>
+        				</div>
+        			</div> -->
+
+                    
+                    
+
+
+    
+		
+		
+		
+	
+	
+		
+
+    
+	
+		<h5 class="sub_sub_sub_tit mt_30">(신혼부부) 2025년도 도시근로자 가구원수별 월평균소득 기준</h5>
+	    <div class="incomeRate" style="display:block;">
+	        <p class="tbl_caption">(단위 : 원)</p>
+	        <div class="tbl_scroll lgtbl">
+	            <table class="tbl_st tbl_center form_tbl_pd">
+	                <caption class="blind">월평균소득 기준 세부내역</caption>
+	                <colgroup>
+	                    <col style="width: 17%;">
+	                    <col style="width: 22%;">
+	                    <col style="width: 17%;">
+	                    <col style="width: auto">
+	                    <col style="width: auto">
+	                    <col style="width: auto">
+	                </colgroup>
+	                <thead>
+	                    <tr>
+	                        <th colspan="2" scope="col">공급유형</th>
+	                        <th scope="col">기준</th>
+	                        <th scope="col">3인 이하</th>
+	                        <th scope="col">4인</th>
+	                        <th scope="col">5인</th>
+	                    </tr>
+	                </thead>
+	                              
+	                <!-- 민영주택 - 신혼부부 소득기준 -->
+	                
+	                <tbody id="income50">
+	                    <tr>
+	                        <td rowspan="2">우선공급<br>(기준소득, 50%)</td>
+	                        <td>부부 중 한명만<br>소득이 있는 경우</td>
+	                        <td>100% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">~7,533,763</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">~8,802,202</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">~9,326,985</small></td>
+	                    </tr>
+	                    <tr>
+	                        <td>부부 모두<br>소득이 있는 경우</td>
+	                        <td>120% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">~9,040,516</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">~10,562,642</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">~11,192,382</small></td>
+	                    </tr>
+					</tbody>
+					<tbody id="income20">
+	                    <tr>
+	                        <td rowspan="2">일반공급<br>(상위소득, 20%)</td>
+	                        <td>부부 중 한명만<br>소득이 있는 경우</td>
+	                        <td>100% 초과 <br>140% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">7,533,764<br>~10,547,268</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">8,802,203<br>~12,323,083</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">9,326,986<br>~13,057,779</small></td>
+	                    </tr>
+	                    <tr>
+	                        <td>부부 모두<br>소득이 있는 경우</td>
+	                        <td>120% 초과 <br>160% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">9,040,517<br>~12,054,021</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">10,562,643<br>~14,083,523</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">11,192,383<br>~14,923,176</small></td>
+	                    </tr>
+	                </tbody>
+	                <tbody id="income30">
+	                    <tr>
+	                        <td rowspan="2">추첨공급</td>
+	                        <td>부부 중 한명만<br>소득이 있는 경우</td>
+	                        <td colspan="4">세대의 월평균소득이 전년도 도시근로자 월평균소득의 140% 초과하나,<br>부동산가액이 3억 3,100만원 이하인 경우</td>
+	                    </tr>
+	                    <tr>
+	                        <td>부부 모두<br>소득이 있는 경우</td>
+	                        <td colspan="4">세대의 월평균소득이 전년도 도시근로자 월평균소득의 160% 초과하나,<br>부동산가액이 3억 3,100만원 이하인 경우</td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	        </div>
+	    </div>
+	
+
+	
+	<div class="incomeRate">
+		<ul class="bul_list black_list mt_10" id="income25">
+			<li>우선공급 : 부부 모두 소득이 있는 경우, 부부 중 1인의 소득이 전년도 도시근로자 가구당 월평균소득의 100%를 초과하지 않아야 하며, 부부 중 1인의 소득이 월평균소득 기준의 100%를 초과 시 일반공급으로 청약하셔야 합니다.</li>
+		</ul>
+		<ul class="bul_list black_list mt_10" id="income10">
+			<li>일반공급 : 부부 모두 소득이 있는 경우, 부부 중 1인의 소득이 전년도 도시근로자 가구당 월평균소득의 140%를 초과하지 않아야 합니다.</li>
+		</ul>
+	</div>
+	<p class="mt_10"><span class="color_red">&#8251; 가구원 수가 6인 이상인 경우의 소득기준 금액 등은 입주자 모집공고문을 통해 확인하시기 바랍니다.</span></p>
+
+
+ 
+	
+		
+		
+		
+	
+	
+		
+
+    
+	
+		<h5 class="sub_sub_sub_tit mt_30">(생애최초) 2025년도 도시근로자 가구원수별 월평균소득 기준</h5>
+	    <div class="incomeRate" style="display:block;">
+	        <p class="tbl_caption">(단위 : 원)</p>
+	        <div class="tbl_scroll lgtbl">
+	            <table class="tbl_st tbl_center form_tbl_pd">
+	                <caption class="blind">월평균소득 기준 세부내역</caption>
+	                <colgroup>
+	                    <col style="width: 12%;">
+	                    <col style="width: 25%;">
+	                    <col style="width: 18%;">
+	                    <col style="width: auto">
+	                    <col style="width: auto">
+	                    <col style="width: auto">
+	                </colgroup>
+	                <thead>
+	                    <tr>
+	                        <th colspan="2" scope="col">공급유형</th>
+	                        <th scope="col">기준</th>
+	                        <th scope="col">3인 이하</th>
+	                        <th scope="col">4인</th>
+	                        <th scope="col">5인</th>
+	                    </tr>
+	                </thead>
+	                              
+	                <!-- 민영주택 - 생애최초 소득기준 -->
+	                
+    					
+    					
+			                <tbody>
+			                    <tr>
+			                        <td colspan="2">우선공급 (기준소득, 50%)</td>
+			                        <td>130% 이하</td>
+			                        <td class="txt_r"><small class="mo_sm_no">~9,793,892</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~11,442,863</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~12,125,081</small></td>
+			                    </tr>
+			                    <tr>
+			                        <td colspan="2">일반공급 (상위소득, 20%)</td>
+			                        <td>130% 초과 <br>160% 이하</td>
+			                        <td class="txt_r"><small class="mo_sm_no">9,793,893<br>~12,054,021</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">11,442,864<br>~14,083,523</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">12,125,082<br>~14,923,176</small></td>
+			                    </tr>
+			                    <tr>
+			                    	<td rowspan="2">추첨공급</td>
+			                        <td>혼인 중이거나,<br>미혼자녀가 있는 경우</td>
+			                        <td colspan="4">세대의 월평균소득이 전년도 도시근로자 월평균소득의 160% 초과하나,<br>부동산가액이 3억 3,100만원 이하인 경우</td>
+			                    </tr>
+			                    <tr>
+			                        <td>1인가구</td>
+			                        <td colspan="4">세대의 월평균소득이 전년도 도시근로자 월평균소득의 160% 이하이거나,<br>부동산가액이 3억 3,100만원 이하인 경우</td>
+			                    </tr>
+			                </tbody>
+	                	
+	                
+	            </table>
+	        </div>
+	    </div>
+	
+
+	
+	<p class="mt_10"><span class="color_red">&#8251; 가구원 수가 6인 이상인 경우의 소득기준 금액 등은 입주자 모집공고문을 통해 확인하시기 바랍니다.</span></p>
+    <p class="mt_10">&#8251; 1인가구 신청자는 소득기준 또는 자산기준 중 하나의 요건을 충족해야 합니다.</p>
+  	<p class="mt_5">- 자산은 부동산가액을 의미하며, 자동차가액 및 금융자산은 포함되지 않음</p>
+
+<!-- 신생아 특별공급 제도개선 추가 사항 -->
+
+	<h5 class="sub_sub_sub_tit mt_30">(신생아) 2025년도 도시근로자 가구원수별 월평균소득 기준</h5>
+	<div class="incomeRate" style="display:block;">
+        <p class="tbl_caption">(단위 : 원)</p>
+        <div class="tbl_scroll lgtbl">
+            <table class="tbl_st tbl_center form_tbl_pd">
+                <caption class="blind">월평균소득 기준 세부내역</caption>
+                <colgroup>
+                    <col style="width: 37%;">
+                    <col style="width: 18%;">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">공급유형</th>
+                        <th scope="col">기준</th>
+                        <th scope="col">3인 이하</th>
+                        <th scope="col">4인</th>
+                        <th scope="col">5인</th>
+                    </tr>
+                </thead>
+                
+    				
+					
+						<tr>
+						    <td scope="col">우선공급 (기준소득, 50%)</td>
+						    <td>130% 이하</td>
+						    <td class="txt_r"><small class="mo_sm_no">~9,793,892</small></td>
+						    <td class="txt_r"><small class="mo_sm_no">~11,442,863</small></td>
+						    <td class="txt_r"><small class="mo_sm_no">~12,125,081</small></td>
+						</tr>
+		                <tr>
+		                    <td scope="col">일반공급 (상위소득, 20%)</td>
+		                    <td>130% 초과<br>160% 이하</td>
+		                    <td class="txt_r"><small class="mo_sm_no">9,793,893</br>~12,054,021</small></td>
+		                    <td class="txt_r"><small class="mo_sm_no">11,442,864</br>~14,083,523</small></td>
+		                    <td class="txt_r"><small class="mo_sm_no">12,125,082</br>~14,923,176</small></td>
+		                </tr>
+						<tr>
+							<td>추첨공급</td>
+							<td colspan="4">세대의 월평균소득이 전년도 도시근로자 월평균소득의 160% 초과하나,</br>부동산가액이 3억 3,100만원 이하인 경우</td>
+						</tr>
+					
+				
+			</table>
+		</div>
+	</div>
+	<p class="mt_10"><span class="color_red">&#8251; 가구원 수가 6인 이상인 경우의 소득기준 금액 등은 입주자 모집공고문을 통해 확인하시기 바랍니다.</span></p>
+    <p class="mt_10">&#8251; 자산은 부동산가액을 의미하며, 자동차가액 및 금융자산은 포함되지 않음</p>
+
+
+				</div>
+			 </div>
+             <!-- 특별공급 소득기준 탭1 -->
+             
+             <!-- 특별공급 소득기준 탭2 국민주택 -->
+    			 <div id="tab_022" class="tab_content">
+        			<div id="publicHouseMmAvrgIncomeStdr" class="popDiv" data-tit="도시근로자 가구원수별 월평균소득 기준" data-width="900" data-height="650">
+        			<!-- <div class="line_box">
+        			    <div class="line_content">
+        					<p>‘21.2.2. 개정된 「주택공급에 관한 규칙」을 반영한 소득기준으로, 규칙 개정일 이후 입주자 모집 승인을 신청하는 단지부터 적용됩니다.</p>
+        	 				<p>* 개정일 이전 입주자 모집 승인을 신청한 단지의 경우, 현 기준과 상이할 수 있으므로 반드시 입주자모집공고문을 참고하시기 바랍니다.</p>
+        	 				<p>** 하단의 월평균 소득기준표는 2020년도 도시근로자 월평균소득 기준입니다.</p>
+        				</div>
+        			</div> -->
+
+                    
+                    
+
+
+	
+		
+		<!-- <h5 class="sub_sub_sub_tit mt_30">(신혼부부) 2022년도 도시근로자 가구원수별 월평균소득 기준 ('24.02.28. 이전 모집공고분에 적용)</h5>
+	    <div class="incomeRate" style="display:block;">
+	        <p class="tbl_caption">(단위 : 원)</p>
+	        <div class="tbl_scroll lgtbl">
+	            <table class="tbl_st tbl_center form_tbl_pd">
+	                <caption class="blind">월평균소득 기준 세부내역</caption>
+	                <colgroup>
+	                    <col style="width: 17%;">
+	                    <col style="width: 23%;">
+	                    <col style="width: 15%;">
+	                    <col style="width: auto">
+	                    <col style="width: auto">
+	                    <col style="width: auto">
+	                </colgroup>
+	                <thead>
+	                    <tr>
+	                        <th colspan="2" scope="col">공급유형</th>
+	                        <th scope="col">기준</th>
+	                        <th scope="col">3인 이하</th>
+	                        <th scope="col">4인</th>
+	                        <th scope="col">5인</th>
+	                    </tr>
+	                </thead>
+	                <tbody id="income70">
+	                    <tr>
+	                        <td rowspan="2">신혼부부 우선공급 (기준소득,70%)</td>
+	                        <td>배우자가 소득이 없는 경우</td>
+	                        <td>100% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">~ 6,509,452</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">~ 7,622,056</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">~ 8,040,492</small></td>
+	                    </tr>
+	                    <tr>
+	                        <td>신혼부부 모두 소득이 있는 경우</td>
+	                        <td>100% 초과 <br>~ 120% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">6,509,453 <br>~ 7,811,342</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">7,622,057 <br>~ 9,146,467</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">8,040,493 <br>~ 9,648,590</small></td>
+	                    </tr>
+	                </tbody>
+	                <tbody id="income30">
+	                    <tr>
+	                        <td rowspan="2">신혼부부 일반공급 (상위소득,30%)</td>
+	                        <td>배우자가 소득이 없는 경우</td>
+	                        <td>100% 초과 <br>~ 140% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">6,509,453 <br>~ 9,113,233</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">7,622,057 <br>~ 10,670,878</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">8,040,493 <br>~ 11,256,689</small></td>
+	                    </tr>
+	                    <tr>
+	                        <td>신혼부부 모두 소득이 있는 경우</td>
+	                        <td>120% 초과 <br>~ 160% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">7,811,343 <br>~ 10,415,123</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">9,146,468 <br>~ 12,195,290</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">9,648,591 <br>~ 12,864,787</small></td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	        </div>
+	    </div> -->
+	
+	
+	
+		
+		<h5 class="sub_sub_sub_tit mt_30">(신혼부부) 2025년도 도시근로자 가구원수별 월평균소득 기준</h5>
+	    <div class="incomeRate" style="display:block;">
+	        <p class="tbl_caption">(단위 : 원)</p>
+	        <div class="tbl_scroll lgtbl">
+	            <table class="tbl_st tbl_center form_tbl_pd">
+	                <caption class="blind">월평균소득 기준 세부내역</caption>
+	                <colgroup>
+	                    <col style="width: 17%;">
+	                    <col style="width: 23%;">
+	                    <col style="width: 15%;">
+	                    <col style="width: auto">
+	                    <col style="width: auto">
+	                    <col style="width: auto">
+	                </colgroup>
+	                <thead>
+	                    <tr>
+	                        <th colspan="2" scope="col">공급유형</th>
+	                        <th scope="col">기준</th>
+	                        <th scope="col">3인 이하</th>
+	                        <th scope="col">4인</th>
+	                        <th scope="col">5인</th>
+	                    </tr>
+	                </thead>
+	                <tbody id="income50">
+	                    <tr>
+	                        <td rowspan="2">우선공급<br>(기준소득, 50%)</td>
+	                        <td>부부 중 한명만<br>소득이 있는 경우</td>
+	                        <td>100% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">~7,533,763</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">~8,802,202</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">~9,326,985</small></td>
+	                    </tr>
+	                    <tr>
+	                        <td>부부 모두<br>소득이 있는 경우</td>
+	                        <td>120% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">~9,040,516</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">~10,562,642</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">~11,192,382</small></td>
+	                    </tr>
+	                </tbody>
+	                <tbody id="income20">
+	                    <tr>
+	                        <td rowspan="2">일반공급<br>(상위소득, 20%)</td>
+	                        <td>부부 중 한명만<br>소득이 있는 경우</td>
+	                        <td>100% 초과<br>140% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">7,533,764<br>~10,547,268</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">8,802,203<br>~12,323,083</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">9,326,986<br>~13,057,779</small></td>
+	                    </tr>
+	                    <tr>
+	                        <td>부부 모두<br>소득이 있는 경우</td>
+	                        <td>120% 초과<br>160% 이하</td>
+	                        <td class="txt_r"><small class="mo_sm_no">9,040,517<br>~12,054,021</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">10,562,643<br>~14,083,523</small></td>
+	                        <td class="txt_r"><small class="mo_sm_no">11,192,383<br>~14,923,176</small></td>
+	                    </tr>
+	                </tbody>
+	                <tbody id="income30">
+	                    <tr>
+	                        <td rowspan="2">추첨공급</td>
+	                        <td>부부 중 한명만<br>소득이 있는 경우</td>
+	                        <td colspan="4">세대의 월평균소득이 전년도 도시근로자 월평균소득의 140% 초과하나,<br>부동산가액이 3억 3,100만원 이하인 경우</td>
+	                    </tr>
+	                    <tr>
+	                        <td>부부 모두<br>소득이 있는 경우</td>
+	                        <td colspan="4">세대의 월평균소득이 전년도 도시근로자 월평균소득의 160% 초과하나,<br>부동산가액이 3억 3,100만원 이하인 경우</td>
+	                    </tr>
+	                </tbody>
+	            </table>
+	        </div>
+	    </div>
+	
+	<div class="incomeRate">
+		<ul class="bul_list black_list mt_10" id="income25">
+			<li>우선공급 : 부부 모두 소득이 있는 경우, 부부 중 1인의 소득이 전년도 도시근로자 가구당 월평균소득의 100%를 초과하지 않아야 하며, 부부 중 1인의 소득이 월평균소득 기준의 100%를 초과 시 일반공급으로 청약하셔야 합니다.</li>
+		</ul>
+		<ul class="bul_list black_list mt_10" id="income10">
+			<li>일반공급 : 부부 모두 소득이 있는 경우, 부부 중 1인의 소득이 전년도 도시근로자 가구당 월평균소득의 140%를 초과하지 않아야 합니다.</li>
+		</ul>
+	</div>
+	<p class="mt_10"><span class="color_red">&#8251; 가구원 수가 6인 이상인 경우의 소득기준 금액 등은 입주자 모집공고문을 통해 확인하시기 바랍니다.</span></p>
+
+	
+
+	
+		
+		
+	
+	
+	
+		
+		<h5 class="sub_sub_sub_tit mt_30">(생애최초) 2025년도 도시근로자 가구원수별 월평균소득 기준</h5>
+	    <div class="incomeRate" style="display:block;">
+	        <p class="tbl_caption">(단위 : 원)</p>
+	        <div class="tbl_scroll lgtbl">
+	            <table class="tbl_st tbl_center form_tbl_pd">
+	                <caption class="blind">월평균소득 기준 세부내역</caption>
+	                <colgroup>
+	                    <col style="width: 17%;">
+	                    <col style="width: 23%;">
+	                    <col style="width: 15%;">
+	                    <col style="width: auto">
+	                    <col style="width: auto">
+	                    <col style="width: auto">
+	                </colgroup>
+	                <thead>
+	                    <tr>
+	                        <th colspan="2" scope="col">공급유형</th>
+	                        <th scope="col">기준</th>
+	                        <th scope="col">3인 이하</th>
+	                        <th scope="col">4인</th>
+	                        <th scope="col">5인</th>
+	                    </tr>
+	                </thead>
+	                
+    					
+    					
+			                <tbody>
+			                    <tr>
+			                        <td colspan="2">우선공급 (기준소득, 50%)</td>
+			                        <td>100% 이하</td>
+			                        <td class="txt_r"><small class="mo_sm_no">~7,533,763</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~8,802,202</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~9,326,985</small></td>
+			                    </tr>
+			                    <tr>
+			                        <td colspan="2">일반공급 (상위소득, 20%)</td>
+			                        <td>100% 초과 <br>130% 이하</td>
+			                        <td class="txt_r"><small class="mo_sm_no">7,533,764<br>~9,793,892</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">8,802,203<br>~11,442,863</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">9,326,986<br>~12,125,081</small></td>
+			                    </tr>
+			                    <tr>
+			                    	<td rowspan="2">추첨공급</td>
+			                        <td>혼인 중이거나,<br>미혼자녀가 있는 경우</td>
+			                        <td colspan="4">세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 초과하나,<br>부동산가액이 3억 3,100만원 이하인 경우</td>
+			                    </tr>
+			                    <tr>
+			                        <td>1인가구</td>
+			                        <td colspan="4">세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 이하이거나,<br>부동산가액이 3억 3,100만원 이하인 경우</td>
+			                    </tr>
+			                </tbody>
+						
+					
+	            </table>
+	        </div>
+	    </div>
+	
+	<p class="mt_10"><span class="color_red">&#8251; 가구원 수가 6인 이상인 경우의 소득기준 금액 등은 입주자 모집공고문을 통해 확인하시기 바랍니다.</span></p>
+	<p class="mt_10">&#8251; 1인가구 신청자는 소득기준 또는 자산기준 중 하나의 요건을 충족해야 합니다.</p>
+  	<p class="mt_5">- 자산은 부동산가액을 의미하며, 자동차가액 및 금융자산은 포함되지 않음</p>
+
+<!-- 신생아 특별공급 제도개선 추가 사항 -->
+
+	<h5 class="sub_sub_sub_tit mt_30">(신생아) 2025년도 도시근로자 가구원수별 월평균소득 기준</h5>
+	<div class="incomeRate" style="display:block;">
+        <p class="tbl_caption">(단위 : 원)</p>
+        <div class="tbl_scroll lgtbl">
+            <table class="tbl_st tbl_center form_tbl_pd">
+                <caption class="blind">월평균소득 기준 세부내역</caption>
+                <colgroup>
+                    <col style="width: 40%;">
+                    <col style="width: 15%;">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">공급유형</th>
+                        <th scope="col">기준</th>
+                        <th scope="col">3인 이하</th>
+                        <th scope="col">4인</th>
+                        <th scope="col">5인</th>
+                    </tr>
+                </thead>
+				
+   					
+					
+						<tr>
+						    <td scope="col">우선공급 (기준소득, 50%)</td>
+						    <td>100% 이하</td>
+						    <td class="txt_r"><small class="mo_sm_no">~7,533,763</small></td>
+						    <td class="txt_r"><small class="mo_sm_no">~8,802,202</small></td>
+						    <td class="txt_r"><small class="mo_sm_no">~9,326,985</small></td>
+						</tr>
+		                <tr>
+		                    <td scope="col">일반공급 (상위소득, 20%)</td>
+		                    <td>100% 초과<br>130% 이하</td>
+		                    <td class="txt_r"><small class="mo_sm_no">7,533,764</br>~9,793,892</small></td>
+		                    <td class="txt_r"><small class="mo_sm_no">8,802,203</br>~11,442,863</small></td>
+		                    <td class="txt_r"><small class="mo_sm_no">9,326,986</br>~12,125,081</small></td>
+		                </tr>
+						<tr>
+							<td>추첨공급</td>
+							<td colspan="4">세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 초과하나,</br>부동산가액이 3억 3,100만원 이하인 경우</td>
+						</tr>
+						</tbody>
+					
+				
+			</table>
+		</div>
+	</div>
+	<p class="mt_10"><span class="color_red">&#8251; 가구원 수가 6인 이상인 경우의 소득기준 금액 등은 입주자 모집공고문을 통해 확인하시기 바랍니다.</span></p>
+    <p class="mt_10">&#8251; 자산은 부동산가액을 의미하며, 자동차가액 및 금융자산은 포함되지 않음</p>
+
+                    
+				</div>
+			 </div>
+             <!-- 특별공급 소득기준 탭2 -->
+			 
+			 <!-- 특별공급 소득기준 탭3 공공주택 -->
+			 <div id="tab_023" class="tab_content">
+			 	 <div id="publicHouseMmAvrgIncomeStdr" class="popDiv" data-tit="도시근로자 가구원수별 월평균소득 기준" data-width="900" data-height="650">
+    			 <!-- <div class="line_box">
+    				<div class="line_content">
+    					<p>‘21.2.2. 개정된 「주택공급에 관한 규칙」을 반영한 소득기준으로, 규칙 개정일 이후 입주자 모집 승인을 신청하는 단지부터 적용됩니다.</p>
+    	 				<p>* 개정일 이전 입주자 모집 승인을 신청한 단지의 경우, 현 기준과 상이할 수 있으므로 반드시 입주자모집공고문을 참고하시기 바랍니다.</p>
+    	 				<p>** 하단의 월평균 소득기준표는 2020년도 도시근로자 월평균소득 기준입니다.</p>
+    				</div>
+    			  </div> -->
+          
+                  
+                  
+
+	
+	
+	
+
+
+	
+	
+    	
+		
+		
+		
+		
+		
+		
+			<h5 class="sub_sub_sub_tit mt_30">(공공주택) 2025년도 도시근로자 가구원수별 월평균소득 기준</h5>
+			<div class="mt_10">
+				<small><p>&#8251; 아래 표는</p>
+				<ul class="bul_list line_list black_list">
+					<li>「공공주택 특별법 시행규칙」 별표6에 따라 공급하는 <b>일반형 공공주택</b> 중 공공분양주택
+					</li>
+					<li><p>「공공주택 특별법 시행규칙」 별표6의6에 따라 공급하는 <b>나눔형 공공주택</b>(이익공유형 및 토지임대부 공공분양주택)</p>
+					<p>&nbsp;&nbsp;에 적용되는 소득 기준입니다.</p>
+					</li>
+					<li><p class="mt_10"><b>일반형 공공주택</b> 중 <span class="color_red">10년 분양전환공공임대주택</span> 및 「공공주택 특별법 시행규칙」 별표6의2에 따라 공급하는 <span class="color_red">선택형 공공주택(6년 분양전환공공임대주택)</span>은</p>
+					<p><span class="color_red">&nbsp;&nbsp;가구원수가 3인 이하인 경우 아래 표와 다른 소득 기준이 적용</span>되오니 <button type="button" class="btn_org" onclick="fn_popIncome('nwwdsSpsplyMmAvrgIncomeStdr');"><span>분양전환공공임대주택 소득기준</span></button> 을 통해 확인하시기 바랍니다.</p>
+					</li>
+				</ul>
+				</small>
+			</div>
+		
+	
+    <div class="incomeRate" style="display:block;">
+        <p class="tbl_caption">(단위 : 원)</p>
+        <div class="tbl_scroll lgtbl">
+            <table class="tbl_st tbl_center form_tbl_pd">
+                <caption class="blind">월평균소득 기준 세부내역</caption>
+                <colgroup>
+                    <col style="width: 15%;">
+                    <col style="width: 13%;">
+                    <col style="width: 20%;">
+                    <col style="width: 14%;">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="3" scope="col">공급유형</th>
+                        <th scope="col">기준</th>
+	                    <th scope="col">3인 이하</th>
+                        <th scope="col">4인</th>
+                        <th scope="col">5인</th>
+                    </tr>
+                </thead>
+                 
+                
+    				
+    				
+    					<tbody>
+		                	<!-- 공공주택 - 노부모부양/다자녀가구 소득기준 -->
+		                    <tr>
+		                        <td rowspan="3">다자녀가구,<br>노부모부양</td>
+		                        <td rowspan="2">우선공급<br>(90%)</td>
+		                        <td>부부 중 한명만<br>소득이 있거나 미혼인 경우</td>
+		                        <td>120% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">~9,040,516</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~10,562,642</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~11,192,382</small></td>
+		                    </tr>
+		                    <tr>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>130% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">~9,793,892</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~11,442,863</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~12,125,081</small></td>
+		                    </tr>
+		                    <tr>
+		                    	<td>추첨공급</td>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>130% 초과<br>200% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">9,793,893<br>~15,067,526</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">11,442,864<br>~17,604,404</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">12,125,082<br>~18,653,970</small></td>
+		                    </tr>
+		                    <!-- 공공주택 - 노부모부양/다자녀가구 소득기준 -->
+		                </tbody>
+    				
+				
+				
+				
+				
+				
+    				
+    				
+						<tbody>
+		                	<!-- 공공주택 - 생애최초 소득기준 -->
+		                    <tr>
+		                        <td rowspan="5">생애최초</td>
+		                        <td rowspan="2">우선공급<br>(70%)</td>
+		                        <td>부부 중 한명만<br>소득이 있거나 미혼인 경우</td>
+		                        <td>100% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">~7,533,763</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~8,802,202</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~9,326,985</small></td>
+		                    </tr>
+		                    <tr>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>120% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">~9,040,516</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~10,562,642</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~11,192,382</small></td>
+		                    </tr>
+		                    <tr>
+		                        <td rowspan="2">일반공급<br>(20%)</td>
+		                        <td>부부 중 한명만<br>소득이 있거나 미혼인 경우</td>
+		                        <td>100% 초과<br>130% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">7,533,764<br>~9,793,892</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">8,802,203<br>~11,442,863</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">9,326,986<br>~12,125,081</small></td>
+		                    </tr>
+		                    <tr>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>120% 초과<br>140% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">9,040,517<br>~10,547,268</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">10,562,643<br>~12,323,083</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">11,192,383<br>~13,057,779</small></td>
+		                    </tr>
+		                    <tr>
+		                    	<td>추첨공급</td>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>140% 초과<br>200% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">10,547,269<br>~15,067,526</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">12,323,084<br>~17,604,404</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">13,057,780<br>~18,653,970</small></td>
+		                    </tr>
+		                    <!-- 공공주택 - 생애최초 소득기준 -->
+						</tbody>
+					
+				
+				
+				
+				
+				
+    				
+					
+						<tbody>
+		                	<!-- 공공주택 - 신혼부부(일반형) 소득기준 -->
+		                    <tr>
+		                    	<td rowspan="5">신혼부부(일반형)</td>
+		                    	<td rowspan="2">우선공급<br>(70%)</td>
+				                <td>부부 중 한명만<br>소득이 있는 경우</td>
+		                        <td>100% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">~7,533,763</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~8,802,202</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~9,326,985</small></td>
+		                    </tr>
+		                    <tr>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>120% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">~9,040,516</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~10,562,642</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~11,192,382</small></td>
+		                    </tr>
+		                    <tr>
+		                    	<td rowspan="2">일반공급<br>(20%)</td>
+		                        <td>부부 중 한명만<br>소득이 있는 경우</td>
+		                        <td>100% 초과<br>130% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">7,533,764<br>~9,793,892</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">8,802,203<br>~11,442,863</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">9,326,986<br>~12,125,081</small></td>
+		                    </tr>
+		                    <tr>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>120% 초과<br>140% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">9,040,517<br>~10,547,268</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">10,562,643<br>~12,323,083</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">11,192,383<br>~13,057,779</small></td>
+		                    </tr>
+		                    <tr>
+		                    	<td>추첨공급</td>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>140% 초과<br>200% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">10,547,269<br>~15,067,526</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">12,323,084<br>~17,604,404</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">13,057,780<br>~18,653,970</small></td>
+		                    </tr>
+		                    <!-- 공공주택 - 신혼부부(일반형) 소득기준 -->
+						</tbody>
+					
+				
+                
+                
+                
+				
+    				
+					
+						<tbody>
+		                	<!-- 공공주택 - 신혼부부(나눔형) 소득기준 -->
+		                    <tr>
+		                    	<td rowspan="3">신혼부부(나눔형)</td>
+		                    	<td rowspan="2">우선공급 (30%),<br>일반공급 (60%)</td>
+				                <td>부부 중 한명만<br>소득이 있는 경우</td>
+		                        <td>130% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">~9,793,892</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~11,442,863</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~12,125,081</small></td>
+		                    </tr>
+		                    <tr>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>140% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">~10,547,268</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~12,323,083</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~13,057,779</small></td>
+		                    </tr>
+		                    <tr>
+		                    	<td>추첨공급</td>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>140% 초과<br>200% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">10,547,269<br>~15,067,526</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">12,323,084<br>~17,604,404</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">13,057,780<br>~18,653,970</small></td>
+		                    </tr>
+		                    <!-- 공공주택 - 신혼부부(나눔형) 소득기준 -->
+						</tbody>
+					
+				
+                
+				
+				
+                	<tbody>
+	                	<tr>
+	                        <td colspan="3" style="padding:15px 0 15px 0;">청년 (신청자 본인 소득)</td>
+	                        <td>140% 이하</td>
+	                        <td colspan="3" style="text-align:center;"><small class="mo_sm_no">~5,338,708</small></td>
+	                    </tr>
+	                </tbody>
+                
+				
+				
+				
+    				
+					
+						<tbody>
+		                	<!-- 공공주택 - 신생아 소득기준 -->
+		                    <tr>
+		                    	<td rowspan="5">신생아<br>(일반형,<br>나눔형)</td>
+		                    	<td rowspan="2">우선공급<br>(70%)</td>
+				                <td>부부 중 한명만<br>소득이 있거나 미혼인 경우</td>
+		                        <td>100% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">~7,533,763</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~8,802,202</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~9,326,985</small></td>
+		                    </tr>
+		                    <tr>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>120% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">~9,040,516</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~10,562,642</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">~11,192,382</small></td>
+		                    </tr>
+		                    <tr>
+		                    	<td rowspan="2">일반공급<br>(20%)</td>
+				                <td>부부 중 한명만<br>소득이 있거나 미혼인 경우</td>
+		                        <td>100% 초과<br>140% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">7,533,764<br>~10,547,268</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">8,802,203<br>~12,323,083</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">9,326,986<br>~13,057,779</small></td>
+		                    </tr>
+		                    <tr>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>120% 초과<br>150% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">9,040,517<br>~11,300,645</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">10,562,643<br>~13,203,303</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">11,192,383<br>~13,990,478</small></td>
+		                    </tr>
+		                    <tr>
+		                    	<td>추첨공급</td>
+		                        <td>부부 모두<br>소득이 있는 경우</td>
+		                        <td>150% 초과<br>200% 이하</td>
+		                        <td class="txt_r"><small class="mo_sm_no">11,300,646<br>~15,067,526</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">13,203,304<br>~17,604,404</small></td>
+		                        <td class="txt_r"><small class="mo_sm_no">13,990,479<br>~18,653,970</small></td>
+		                    </tr>
+		                    <!-- 공공주택 - 신생아 소득기준 -->
+						</tbody>
+					
+				
+				
+				
+            </table>
+        </div>
+    </div>
+
+
+	<p class="mt_10">&#8251; 소득기준 및 자산기준과 관련된 질문은 입주자모집공고문을 참조하거나, 사업주체에 문의하여 주시기 바랍니다.</p>
+	<p class="mt_10">&#8251; 가구원 수가 6인 이상인 경우의 소득기준 금액 등은 입주자모집공고문을 통해 확인하시기 바랍니다.</p>
+	<p class="mt_10"><span class="color_red">&#8251; 2023년 3월 28일 이후 출산한 자녀(임신 중이거나 2023년 3월 28일 이후 출생한 입양자를 포함하며 미성년 자녀로 한정)가 있는 가구의 경우 소득요건 및 자산요건이 기준 대비 최대 20%p 비율을 가산한 금액까지 완화될 수 있으니 자세한 사항은 입주자 모집공고문을 참고하시기 바랍니다.</span></p>
+
+<div id="Scincome">
+	<h5 class="sub_tit_20 mt_50">※ 배점항목 소득기준</h5>
+	
+	<h5 class="sub_sub_sub_tit mt_30">(신혼부부(일반형), 신생아(일반형)) '가구소득' 배점항목 소득기준</h5>
+    <div class="incomeRate" style="display:block;">
+        <p class="tbl_caption">(단위 : 원)</p>
+        <div class="tbl_scroll lgtbl">
+            <table class="tbl_st tbl_center form_tbl_pd">
+                <caption class="blind">월평균소득 기준 세부내역</caption>
+                <colgroup>
+                    <col style="width: 17%;">
+                    <col style="width: 14%;">
+                    <col style="width: 20%;">
+                    <col style="width: 14%;">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">배점항목</th>
+                        <th scope="col">점수</th>
+                        <th scope="col" colspan="2">기준</th>
+                        <th scope="col">3인 이하</th>
+                        <th scope="col">4인</th>
+                        <th scope="col">5인</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<!-- 공공주택 - (신혼부부(일반형), 신생아(일반형)) '가구소득' 배점항목 소득기준 -->
+                    <tr>
+                        <td rowspan="2">가구소득</td>
+                        <td rowspan="2">1점</td>
+                        <td>부부 중 한명만<br>소득이 있거나 미혼인 경우</td>
+                        <td>80% 이하</td>
+                        <td class="txt_r"><small class="mo_sm_no">~6,027,010</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">~7,041,762</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">~7,461,588</small></td>
+                    </tr>
+                    <tr>
+                        <td>부부 모두<br>소득이 있는 경우</td>
+                        <td>100% 이하</td>
+                        <td class="txt_r"><small class="mo_sm_no">~7,533,763</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">~8,802,202</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">~9,326,985</small></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    
+    
+	<h5 class="sub_sub_sub_tit mt_30">(신혼부부(나눔형), 신생아(나눔형)) '세대의 월평균소득' 배점항목 소득기준</h5>
+    <div class="incomeRate" style="display:block;">
+        <p class="tbl_caption">(단위 : 원)</p>
+        <div class="tbl_scroll lgtbl">
+            <table class="tbl_st tbl_center form_tbl_pd">
+                <caption class="blind">월평균소득 기준 세부내역</caption>
+                <colgroup>
+                    <col style="width: 17%;">
+                    <col style="width: 14%;">
+                    <col style="width: 20%;">
+                    <col style="width: 14%;">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">배점항목</th>
+                        <th scope="col">점수</th>
+                        <th scope="col" colspan="2">기준</th>
+                        <th scope="col">3인 이하</th>
+                        <th scope="col">4인</th>
+                        <th scope="col">5인</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<!-- 공공주택 - (신혼부부(나눔형), 신생아(나눔형)) '세대의 월평균소득' 배점항목 소득기준 -->
+                    <tr>
+                        <td rowspan="6">세대의<br>월평균 소득</td>
+                        <td rowspan="2">3점</td>
+                        <td>부부 중 한명만<br>소득이 있거나 미혼인 경우</td>
+                        <td>70% 이하</td>
+                        <td class="txt_r"><small class="mo_sm_no">~5,273,634</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">~6,161,541</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">~6,528,890</small></td>
+                    </tr>
+                    <tr>
+                        <td>부부 모두<br>소득이 있는 경우</td>
+                        <td>80% 이하</td>
+                        <td class="txt_r"><small class="mo_sm_no">~6,027,010</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">~7,041,762</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">~7,461,588</small></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">2점</td>
+                        <td>부부 중 한명만<br>소득이 있거나 미혼인 경우</td>
+                        <td>70% 초과<br>100% 이하</td>
+                        <td class="txt_r"><small class="mo_sm_no">5,273,635<br>~7,533,763</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">6,161,542<br>~8,802,202</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">6,528,891<br>~9,326,985</small></td>
+                    </tr>
+                    <tr>
+                        <td>부부 모두<br>소득이 있는 경우</td>
+                        <td>80% 초과<br>110% 이하</td>
+                        <td class="txt_r"><small class="mo_sm_no">6,027,011<br>~8,287,139</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">7,041,763<br>~9,682,422</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">7,461,589<br>~10,259,684</small></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">1점</td>
+                        <td>부부 중 한명만<br>소득이 있거나 미혼인 경우</td>
+                        <td>100% 초과</td>
+                        <td class="txt_r"><small class="mo_sm_no">7,533,764~</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">8,802,203~</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">9,326,986~</small></td>
+                    </tr>
+                    <tr>
+                        <td>부부 모두<br>소득이 있는 경우</td>
+                        <td>110% 초과</td>
+                        <td class="txt_r"><small class="mo_sm_no">8,287,140~</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">9,682,423~</small></td>
+                        <td class="txt_r"><small class="mo_sm_no">10,259,685~</small></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    
+    
+	<h5 class="sub_sub_sub_tit mt_30">(청년) '본인의 월평균소득' 배점항목 소득기준</h5>
+    <div class="incomeRate" style="display:block;">
+        <p class="tbl_caption">(단위 : 원)</p>
+        <div class="tbl_scroll lgtbl">
+            <table class="tbl_st tbl_center form_tbl_pd">
+                <caption class="blind">월평균소득 기준 세부내역</caption>
+                <colgroup>
+                    <col style="width: 17%;">
+                    <col style="width: 14%;">
+                    <col style="width: 34%;">
+                    <col style="width: auto">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th scope="col">배점항목</th>
+                        <th scope="col">점수</th>
+                        <th scope="col">기준</th>
+                        <th scope="col">1인</th>
+                    </tr>
+                </thead>
+                <tbody>
+                	<!-- 공공주택 - (청년) '본인의 월평균소득' 배점항목 소득기준 -->
+                    <tr>
+                        <td rowspan="3">본인의<br>월평균 소득</td>
+                        <td>3점</td>
+                        <td>70% 이하</td>
+                        <td><small class="mo_sm_no">~2,669,354</small></td>
+                    </tr>
+                    <tr>
+                        <td>2점</td>
+                        <td>70% 초과 100% 이하</td>
+                        <td><small class="mo_sm_no">2,669,355~3,813,363</small></td>
+                    </tr>
+                    <tr>
+                        <td>1점</td>
+                        <td>100% 초과 140% 이하</td>
+                        <td><small class="mo_sm_no">3,813,364~5,338,708</small></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+
+	<p class="mt_10">&#8251; 소득기준 및 자산기준과 관련된 질문은 입주자모집공고 참조하거나, 사업주체에게 문의하여 주시기 바랍니다.</p>
+	<p class="mt_10">&#8251; 가구원 수가 6인 이상인 경우의 소득기준 금액 등은 입주자모집공고문을 통해 확인하시기 바랍니다.</p>
+	<p class="mt_10"><span class="color_red">&#8251; 2023년 3월 28일 이후 출산한 자녀(임신 중이거나 2023년 3월 28일 이후 출생한 입양자를 포함하며 미성년 자녀로 한정)가 있는 가구의 경우 소득요건 및 자산요건이 기준 대비 최대 20%p 비율을 가산한 금액까지 완화될 수 있으니 자세한 사항은 입주자 모집공고문을 참고하시기 바랍니다.</span></p>
+</div>
+
+
+
+                  
+
+
+	<h5 class="sub_sub_sub_tit mt_30">일반공급 소득기준 (공공주택 일반형(60㎡ 이하) 및 나눔형 공공분양주택)</h5>
+	<div class="incomeRate" style="display:block;">
+        <p class="tbl_caption">(단위 : 원)</p>
+        <div class="tbl_scroll lgtbl">
+            <table class="tbl_st tbl_center form_tbl_pd">
+                <caption class="blind">월평균소득 기준 세부내역</caption>
+                <colgroup>
+                    <col style="width: 18%;">
+                    <col style="width: 20%;">
+                    <col style="width: 13%;">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                    <col style="width: auto">
+                </colgroup>
+                <thead>
+                    <tr>
+                        <th colspan="2" scope="col">공급유형</th>
+                        <th scope="col">기준</th>
+                       	<th scope="col">3인이하</th>
+                        <th scope="col">4인</th>
+                        <th scope="col">5인</th>
+                    </tr>
+                </thead>
+                    	
+	    				
+			            
+			            	<tbody>
+			            		<tr>
+			                        <td rowspan="2">신생아 우선공급,<br>우선공급</td>
+			                        <td>부부 중 한명만<br>소득이 있거나 미혼인 경우</td>
+			                        <td>100% 이하</td>
+			                        <td class="txt_r"><small class="mo_sm_no">~7,533,763</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~8,802,202</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~9,326,985</small></td>
+			                    </tr>
+			                    <tr>
+			                        <td>부부 모두<br>소득이 있는 경우</td>
+			                        <td>140% 이하</td>
+			                        <td class="txt_r"><small class="mo_sm_no">~10,547,268</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~12,323,083</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~13,057,779</small></td>
+			                    </tr>
+			                    <tr>
+			                    	<td rowspan="2">추첨공급</td>
+			                        <td>부부 중 한명만<br>소득이 있거나 미혼인 경우</td>
+			                        <td>100% 이하</td>
+			                        <td class="txt_r"><small class="mo_sm_no">~7,533,763</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~8,802,202</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~9,326,985</small></td>
+			                    </tr>
+			                    <tr>
+			                        <td>부부 모두<br>소득이 있는 경우</td>
+			                        <td>200% 이하</td>
+			                        <td class="txt_r"><small class="mo_sm_no">~15,067,526</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~17,604,404</small></td>
+			                        <td class="txt_r"><small class="mo_sm_no">~18,653,970</small></td>
+			                    </tr>
+			            	</tbody>
+			            
+		                                
+            </table>
+        </div>
+    </div>
+    <p class="mt_10">&#8251; 소득기준 및 자산기준과 관련된 질문은 입주자모집공고문을 참조하거나, 사업주체에 문의하여 주시기 바랍니다.</p>
+    <p class="mt_10">&#8251; 가구원 수가 6인 이상인 경우의 소득기준 금액 등은 입주자모집공고문을 통해 확인하시기 바랍니다.</p>
+	<p class="mt_10 color_red">&#8251; 2023년 3월 28일 이후 출산한 자녀(임신 중이거나 2023년 3월 28일 이후 출생한 입양자를 포함하며 미성년 자녀로 한정)가 있는 가구의 경우 소득요건 및 자산요건이 기준 대비 최대 20%p 비율을 가산한 금액까지 완화될 수 있으니 자세한 사항은 입주자 모집공고문을 참고하시기 바랍니다.</p>
+
+
+
+
+				</div>
+			 </div>	
+             <!-- 특별공급 소득기준 탭2 -->
+			</div>
+            <!-- CATE1 -->
+            
+            
+			<div id="cate2">
+				<h5 class="sub_sub_tit mt_50">특별공급이란</h5>
+				<ul class="bul_list line_list black_list depth">
+					<li>특별공급은 정책적 배려가 필요한 사회계층 중 무주택자의 주택마련을 지원하기 위하여 일반공급과 청약경쟁 없이 주택을 분양 받을 수 있도록 하는 제도입니다.</li>
+					<li><p>특별공급은 당첨 횟수를 1세대당 평생 1회로 제한합니다.</p>
+					* 다만, '24.3.25. 개정된 「주택공급에 관한 규칙」 제55조의3제2호에 따라,<br>신혼부부&middot;생애최초&middot;신생아 특별공급의 경우 신청자의 배우자가 혼인 전 특별공급에 당첨된 이력이 있더라도 청약할 수 있습니다.
+					</li>
+				</ul>
+				<p class="mt_10">다만, 수도권에서 지방으로 이전하는 기업ㆍ공장 종사자 등에 대한 특별공급은 유주택자에게도 공급하며, 철거되는 주택의 소유자 및 세입자는 주택공급에 관한 규칙 제55조에 따라 별도 공급할 수 있습니다.</p>
+
+				<div class="bd_top_blue mt_20">
+					<ul class="img_tit_list">
+						<li>
+							<img src="https://static.applyhome.co.kr/images/kabhom/sub/bbook_user.png" alt="대상 아이콘">
+							<p>특별공급 주요 대상</p>
+							
+							<span class="color_gray">- 2자녀 이상 세대, 신혼부부, 생애최초 주택 구입자, 노부모부양가구, 신생아 가구, 청년, 국가유공자(독립유공자, 보훈대상자, 참전유공자 등), 북한이탈주민, 철거주택 소유자 및 세입자 등</span>
+							<span class="color_gray">- 도청이전신도시, 혁신도시 등 비수도권으로 이전하는 공공기관&middot;학교&middot;의료연구기관&middot;기업의 종사자, 이전(移轉)하는 주한미군기지의 고용원, 산업단지 종사자 등</span>
+						</li>
+						<li>
+							<img src="https://static.applyhome.co.kr/images/kabhom/sub/bbook_o.png" alt="통장 아이콘">
+							<p>청약통장 보유</p>
+							<span class="color_gray">- 특별공급 청약신청자는 일반공급과 마찬가지로 청약할 주택에 해당하는 청약통장을 보유하고 있어야 합니다.</span>
+							<span class="color_gray">* 장애인, 철거민, 국가유공자(제35조 및 제36조), 이전기관 종사자(제47조) 등은<br>청약통장 없이 청약 가능</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div id="cate3">
+				<h5 class="sub_sub_tit mt_50">기관추천</h5>
+				<table class="tbl_st tbl_pd_lg mt_10">
+					<caption class="blind">기관추천 상세정보가 나와있는 테이블입니다.</caption>
+					<colgroup>
+						<col style="width:25%">
+						<col style="width:auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row">대상주택</th>
+							<td>
+								<ul class="bul_list line_list black_list">
+									<li>전용면적 85m&sup2; 이하의 분양주택 (<button type="button" class="btn_voca" data-vocaid="kookminLay"><span>국민주택</span></button>, <button type="button" class="btn_voca" data-vocaid="minyoungLay"><span>민영주택</span></button>)</li>
+									<p>* 「주택공급에 관한 규칙」 제42조제6호에 따른 시책추진대상(저출산 및 고령사회 대응) 유형의 경우 전용면적 85㎡ 초과 주택형에 배정 가능</p>
+									<li>한부모가족, 국군포로, 위안부피해자, 철거주택세입자 기관추천의 경우에는 공공임대주택</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">특별공급 물량</th>
+							<td>국민주택: 10%, 민영주택: 10% (시&middot;도지사의 승인을 받은 경우 초과 공급 가능)</td>
+						</tr>
+						<tr>
+							<th scope="row">대상자</th>
+							<td>
+								<!-- 아래 사유에 해당하며 관련기관으로부터 추천을 받은 자 -->
+								입주자모집공고일 현재 주택공급에관한규칙 제4조 제3항에 따른 공급대상인 무주택세대구성원(제27호의2에 해당하는 경우는 제외)으로서 관계기관의 장이 정하는 우선순위 기준에 따라 대상자로 선정된 자
+								<ul class="bul_list line_list black_list">
+									<li>공통 : 국가유공자, 독립유공자, 보훈대상자, 5.18유공자, 특수임무유공자, 참전유공자, 장기복무(제대)군인, 북한이탈주민, 납북피해자, 일본군위안부, 장애인, 영구귀국과학자, 올림픽 등 입상자, 중소기업근무자, 공공사업 등, 의사상자 등</li>
+									<li>국민주택 : 철거주택 소유자 또는 거주자(세입자), 다문화가족, 탄광근로자, 재외동포 등</li>
+									<li>민영주택 : 철거주택 소유 및 거주자, 해외취업근로자 등</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약자격</th>
+							<td>
+								<p>무주택세대구성원</p>
+								<ul class="bul_list line_list black_list">
+									<li>
+										무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다.
+										<small>* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small>
+									</li>
+									<li>다만, 청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는 (배우자분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약통장</th>
+							<td>
+								<p>주택별 청약가능한 청약통장에 가입한지 6개월이 경과하고 아래의 요건을 충족한 분</p>
+								<ul class="bul_list line_list black_list mt_10">
+									<li>주택청약종합저축 : 주택종류에 따라 청약저축 및 청약예금과 동일</li>
+									<li>청약저축 : 매월 약정납입일에 월 납입금 6회 이상 납부</li>
+									<li>청약예금 : 지역별 청약예금 예치금액에 상당하는 금액 예치</li>
+									<li>청약부금 : 매월 약정납입일에 납입한 금액이 지역별 85m&sup2; 이하 청약예금 예치금액 이상</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">선정방법</th>
+							<td>
+								<p>관련기관 (국가보훈부, 지자체, 중소기업청 등)의 장이 정하는 우선순위에 따라 결정</p>
+								<!-- <p class="color_lb">* 단, 이 경우에도 해당지역 거주자가 우선하며, 전입제한일이 있는 지역에서 공급할 경우 전입제한 요건을 충족한 자에게 우선공급</p> -->
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<p class="mt_10">* 세부사항은 주택공급에 관한 규칙 제35조, 제36조 참조</p>
+			</div>
+
+			<!-- ## 신혼부부 -->
+			<div id="cate4"  class="cateWrap">
+			
+			<div class="tab_wrap">
+	            <ul class="tab_box">
+	                <li data-show="tab_011"  class="active"><a href="#tab_011"><span>신혼부부(민영주택) </span><b class="blind">현재 선택된 메뉴</b></a></li>
+	                <li data-show="tab_012"><a href="#tab_012"><span>신혼부부(국민주택)</span></a></li>
+	                <li data-show="tab_013"><a href="#tab_013"><span>신혼부부(공공주택-일반형,선택형)</span></a></li>
+	                <li data-show="tab_014"><a href="#tab_014"><span>신혼부부(공공주택-나눔형)</span></a></li>
+	             </ul>
+			</div>
+			
+			 <div id="tab_011" class="tab_content" style="display:block">
+			 <h5 class="sub_sub_tit mt_20">신혼부부(민영주택)</h5>
+				<table class="tbl_st tbl_pd_lg mt_10">
+					<caption class="blind">신혼부부(민영주택) 상세정보가 나와있는 테이블입니다.</caption>
+					<colgroup>
+						<col style="width:20%">
+						<col style="width:auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>대상주택</th>
+							<td>
+								<p>전용면적 85m&sup2; 이하의 분양주택</p>
+							</td>
+						</tr>
+						<tr>
+							<th >공급 물량</th>
+							<td>건설량의 15% 내</td>
+						</tr>
+						<tr>
+							<th>대상자</th>
+							<td>
+								<p>입주자모집공고일 현재 혼인기간이 7년 이내인 분</p>
+							</td>
+						</tr>
+						<tr>
+							<th>청약자격</th>
+							<td>
+								<p>1. 무주택세대구성원</p>
+								<ul class="bul_list line_list black_list">
+									<li>
+										무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small>
+									</li>
+									<li>
+										청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는(배우자 분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+										<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+									</li>
+								</ul>
+								<p class="mt_20">2. 소득기준 및 자산기준</p>
+								<ul class="bul_list line_list black_list">
+									<li>소득기준 : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 140% 이하 (부부 모두 소득이 있는 경우 160% 이하)</li>
+									<li>
+										<p>자산기준 : 위 소득기준은 초과하나, 세대가 소유하고 있는 부동산(토지 및 건물)의 합계액이 3억 3,100만원 이하인 경우 추첨제로 청약 가능	</p>										
+										* 부동산가액 산출기준 :「공공주택 특별법 시행규칙」 제13조제2항 및 「공공주택 입주자 보유 자산 관련 업무처리기준」 제4조에 따라 산출된 금액으로서 「국민건강보험법 시행령」 제42조제1항에 따른 보험료 부과점수의 산정방법에서 정한 재산등급 29등급에 해당하는 재산금액의 상한과 하한을 산술평균한 금액
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th>청약통장</th>
+							<td>
+								<p>주택별 청약가능한 청약통장에 가입한지 6개월이 경과하고 아래의 요건을 충족한 분</p>
+								<ul class="bul_list line_list black_list mt_10">
+									<li>주택청약종합저축 : 주택종류에 따라 청약저축 및 청약예금과 동일</li>
+									<li>청약예금 : 지역별 청약예금 예치금액에 상당하는 금액 예치</li>
+									<li>청약부금 : 매월 약정납입일에 납입한 금액이 지역별 85m&sup2; 이하 청약예금 예치금액 이상</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th>선정방법</th>
+							<td>
+								<b>① 소득구분</b>							
+								<ul class="bul_list line_list black_list">
+									<li>
+										(1단계) 우선공급 (50%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 이하(부부 모두 소득이 있는 경우 120% 이하)인 분
+										<p class="mt_5">* 경쟁이 있는 경우 아래 ② → ③의 순서에 따라 입주자 선정</p>
+									</li>
+								</ul>								
+								<ul class="bul_list line_list black_list">
+									<li>
+										(2단계) 일반공급 (20%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 초과 140% 이하(부부 모두 소득이 있는 경우 120% 초과 160% 이하)인 분
+										<p class="mt_5">* 1단계 낙첨자를 포함하며, 경쟁이 있는 경우 아래 ② → ③의 순서에 따라 입주자 선정</p>
+									</li>
+								</ul>								
+								<ul class="bul_list line_list black_list">
+									<li>
+										(3단계) 추첨공급 : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 140% (부부 모두 소득이 있는 경우 160%) 초과하나, 부동산 가액이 3억 3,100만원 이하인 분
+										<p class="mt_5">* 2단계 낙첨자를 포함하며, 경쟁이 있는 경우 아래 지역우선 → 추첨으로 입주자 선정</p>
+									</li>
+								</ul>								
+								<b class="mt_20 dis_b">② 순위</b>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(1순위) 입주자모집공고일 현재 혼인관계에 있는 배우자와의 사이에서 출산한 미성년 자녀가 있는 경우
+										<p class="mt_5">* 임신 및 입양자녀 포함, 전혼자녀 제외</p>
+										<p>* 「민법」제855조제2항에 따라 혼인 중의 출생자로 인정되는 혼인외의 출생자가 있는 경우를 포함</p>
+									</li>
+									<li>
+										(2순위) 자녀가 없는 분
+									</li>
+								</ul>
+								
+								<b class="mt_20 dis_b">③ 순위 내 경쟁이 있는 경우</b>
+								<ul class="inde_txt black_list">
+									<li>(1) 지역우선 공급기준 적용</li>
+									<li>(2) 미성년 자녀수가 많은 분 (<button type="button" class="btn_org btnPopWord" onclick="fn_pop('mnrtyChldrnDcsStdr');">미성년자녀 판단기준</button> 참고)</li>
+									<li>(3) 미성년 자녀수가 같은 경우 추첨</li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div id="tab_012" class="tab_content">
+			 <h5 class="sub_sub_tit mt_20">신혼부부(국민주택)</h5>
+				<table class="tbl_st tbl_pd_lg mt_10">
+					<caption class="blind">신혼부부(국민주택) 상세정보가 나와있는 테이블입니다.</caption>
+					<colgroup>
+						<col style="width:20%">
+						<col style="width:auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>대상주택</th>
+							<td>
+								<p>전용면적 85m&sup2; 이하의 분양주택</p>
+							</td>
+						</tr>
+						<tr>
+							<th >공급 물량</th>
+							<td>건설량의 20% 내</td>
+						</tr>
+						<tr>
+							<th>대상자</th>
+							<td>
+								<p>입주자모집공고일 현재 혼인기간이 7년 이내인 분</p>
+							</td>
+						</tr>
+						<tr>
+							<th>청약자격</th>
+							<td>
+								<p>1. 무주택세대구성원</p>
+								<ul class="bul_list line_list black_list">
+									<li>
+										무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small>
+									</li>
+									<li>
+										청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는(배우자 분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+										<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+									</li>
+								</ul>
+								<p class="mt_20">2. 소득기준 및 자산기준</p>
+								<ul class="bul_list line_list black_list">
+									<li>소득기준 : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 140% 이하 (부부 모두 소득이 있는 경우 160% 이하)</li>
+									<li>
+										<p>자산기준 : 위 소득기준은 초과하나, 세대가 소유하고 있는 부동산(토지 및 건물)의 합계액이 3억 3,100만원 이하인 경우 추첨제로 청약 가능	</p>										
+										* 부동산가액 산출기준 :「공공주택 특별법 시행규칙」 제13조제2항 및 「공공주택 입주자 보유 자산 관련 업무처리기준」 제4조에 따라 산출된 금액으로서 「국민건강보험법 시행령」 제42조제1항에 따른 보험료 부과점수의 산정방법에서 정한 재산등급 29등급에 해당하는 재산금액의 상한과 하한을 산술평균한 금액
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약통장</th>
+							<td>
+								<p>주택별 청약가능한 청약통장에 가입한지 6개월이 경과하고 아래의 요건을 충족한 분</p>
+								<ul class="bul_list line_list black_list mt_10">
+									<li>주택청약종합저축 : 주택종류에 따라 청약저축 및 청약예금과 동일</li>
+									<li>청약저축 : 매월 약정납입일에 월 납입금 6회 이상 납부</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th>선정방법</th>
+							<td>
+								<b>① 소득구분</b>							
+								<ul class="bul_list line_list black_list">
+									<li>
+										(1단계) 우선공급 (50%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 이하(부부 모두 소득이 있는 경우 120% 이하)인 분
+										<p class="mt_5">* 경쟁이 있는 경우 아래 ② → ③의 순서에 따라 입주자 선정</p>
+									</li>
+								</ul>								
+								<ul class="bul_list line_list black_list">
+									<li>
+										(2단계) 일반공급 (20%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 초과 140% 이하(부부 모두 소득이 있는 경우 120% 초과 160% 이하)인 분
+										<p class="mt_5">* 1단계 낙첨자를 포함하며, 경쟁이 있는 경우 아래 ② → ③의 순서에 따라 입주자 선정</p>
+									</li>
+								</ul>								
+								<ul class="bul_list line_list black_list">
+									<li>
+										(3단계) 추첨공급 : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 140% (부부 모두 소득이 있는 경우 160%) 초과하나, 부동산 가액이 3억 3,100만원 이하인 분
+										<p class="mt_5">* 2단계 낙첨자를 포함하며, 경쟁이 있는 경우 아래 지역우선 → 추첨으로 입주자 선정</p>
+									</li>
+								</ul>								
+								<b class="mt_20 dis_b">② 순위</b>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(1순위) 입주자모집공고일 현재 혼인관계에 있는 배우자와의 사이에서 출산한 미성년 자녀가 있는 경우
+										<p class="mt_5">* 임신 및 입양자녀 포함, 전혼자녀 제외</p>
+										<p>* 「민법」제855조제2항에 따라 혼인 중의 출생자로 인정되는 혼인외의 출생자가 있는 경우를 포함</p>
+									</li>
+									<li>
+										(2순위) 자녀가 없는 분
+									</li>
+								</ul>
+								
+								<b class="mt_20 dis_b">③ 순위 내 경쟁이 있는 경우</b>
+								<ul class="inde_txt black_list">
+									<li>(1) 지역우선 공급기준 적용</li>
+									<li>(2) 미성년 자녀수가 많은 분 (<button type="button" class="btn_org btnPopWord" onclick="fn_pop('mnrtyChldrnDcsStdr');">미성년자녀 판단기준</button> 참고)</li>
+									<li>(3) 미성년 자녀수가 같은 경우 추첨</li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			 <div id="tab_013" class="tab_content">
+			 <h5 class="sub_sub_tit mt_20">신혼부부(공공주택-일반형,선택형)</h5>			 
+			 <table class="tbl_st tbl_pd_lg mt_10">
+					<caption class="blind">신혼부부(공공주택-일반형,선택형) 상세정보가 나와있는 테이블입니다.</caption>
+					<colgroup>
+						<col style="width:20%">
+						<col style="width:auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>대상주택</th>
+							<td>
+								<p>전용면적 85m&sup2; 이하의 공공분양주택&middot;분양전환공공임대주택 </p>
+							</td>
+						</tr>
+						<tr>
+							<th>공급 물량</th>
+							<td>건설량의 10% 내</td>
+						</tr>
+						<tr>
+							<th>대상자</th>
+							<td>
+								<ul class="bul_list black_list">
+									<li>신혼부부 : 입주자모집공고일 현재 혼인기간이 7년 이내이거나 만6세 이하(만7세 미만) 자녀가 있는 분</li>									
+									<li>예비신혼부부 : 혼인을 계획 중이며 해당 주택의 입주 전까지 혼인사실을 증명할 수 있는 분</li>
+									<li>한부모가족 : 입주자모집공고일 현재 만6세 이하(만7세 미만)의 자녀를 둔 한부모가족</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th>청약자격</th>
+							<td>
+								<p>1. 무주택세대구성원</p>
+								<ul class="bul_list line_list black_list">
+									<li>
+										무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small>
+									</li>
+									<li>
+										청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는(배우자 분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+										<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+									</li>
+								</ul>
+								<p class="mt_20">2. 소득기준 : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 이하(부부 모두 소득이 있는 경우 200% 이하)</p>
+								<p class="mt_20">3. 자산기준</p>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(일반형) 세대의 부동산가액 및 자동차가액이 각각 아래 기준 이하일 것
+										<p><button type="button" class="btn_org btnPopWord" onclick="fn_pop('assetsHoldStdr');">공공주택(일반형) 입주자 보유 자산 기준</button> 참조</p>
+									</li>
+									<li>(선택형) 세대의 총자산가액이 통계청에서 발표하는 가계금융복지조사에 따른 소득3분위 순자산 평균값의 일정 비율 이하일 것 (입주자모집공고문 참조)</li>
+								</ul>
+								<p class="mt_10">&#8251; 분양전환 공공임대주택으로서 가구원 수가 2명인 경우에는 소득요건 비율이 10%p 완화 적용되오니(소득요건 비율이 200%인 경우 제외), 입주자모집공고문을 통해 정확한 소득요건을 확인하시기 바랍니다.</p>
+								<p class="mt_10">&#8251; 2023년 3월 28일 이후 출산한 자녀(임신 중이거나 2023년 3월 28일 이후 출생한 입양자를 포함하며 미성년 자녀로 한정)가 있는 가구의 경우 소득요건 및 자산요건이 기준 대비 최대 20%p 비율을 가산한 금액까지 완화될 수 있으니 입주자 모집공고문을 통해 확인하시기 바랍니다.</p>
+							</td>
+						</tr>
+						<tr>
+							<th>청약통장</th>
+							<td>
+								<p>주택청약종합저축 또는 청약저축에 가입하여 6개월이 지난 경우로서 매월 약정납입일에 월납입금을 6회이상 납입한 분</p>
+							</td>
+						</tr>
+						<tr>
+							<th>선정방법</th>
+							<td>
+								<b>① 소득구분</b>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(1단계) 우선공급 (70%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 이하(부부 모두 소득이 있는 경우 120% 이하)인 분
+										<p class="mt_5">* 경쟁이 있는 경우 아래 ②의 순위에 따르고, 순위 내 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 ③의 배점 순으로 입주자 선정</p>
+									</li>
+								</ul>								
+								<ul class="bul_list line_list black_list">
+									<li>
+										(2단계) 일반공급 (20%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 초과 130% 이하(부부 모두 소득이 있는 경우 120% 초과 140% 이하)인 분
+										<p class="mt_5">* 1단계 낙첨자를 포함</p>
+										<p>* 경쟁이 있는 경우 아래 ②의 순위에 따르고, 순위 내 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>								
+								<ul class="bul_list line_list black_list">
+									<li>
+										(3단계) 추첨공급 : 부부 모두 소득이 있는 신청자 중 세대의 월평균소득이 전년도 도시근로자 월평균소득의 140% 초과 200% 이하인 분
+										<p class="mt_5">* 2단계 낙첨자를 포함</p>
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>								
+								<b class="mt_20 dis_b">② 순위</b>
+								<ul class="bul_list line_list black_list">
+									<li>
+										<p class="mt_5">(1순위)</p>
+										<ul class="bul_list black_list">
+											<li>
+												신혼부부 : 입주자모집공고일 현재 혼인관계에 있는 배우자와의 사이에서 출산한 미성년인 자녀가 있는 경우
+												<p class="mt_5">* 임신 및 입양자녀 포함, 전혼자녀 제외</p>
+												<p>* 「민법」제855조제2항에 따라 혼인 중의 출생자로 인정되는 혼인외의 출생자가 있는 경우를 포함</p>
+											</li>
+											<li>한부모가족 : 입주자모집공고일 현재 만6세 이하의 자녀(태아 포함)를 둔 경우</li>
+										</ul>
+									</li>
+									<li>
+										<p class="mt_5">(2순위)</p>
+										<ul class="bul_list black_list">
+											<li>1순위에 해당하지 않는 신혼부부</li>
+											<li>예비신혼부부 (예비신혼부부는 자녀가 있는 경우에도 2순위에 해당)</li>
+										</ul>
+									</li>
+								</ul>								
+								<b class="mt_20 dis_b">③ 배점 : <button type="button" class="btn_org btnPopWord" onclick="fn_pop_r('pointNewcoupleSpecial');"><span>신혼부부(일반형,선택형) 특별공급 배점항목</span></button> 참조</b>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+		     </div>
+		     
+			<div id="tab_014" class="tab_content">
+				<h5 class="sub_sub_tit mt_20">신혼부부(공공주택-나눔형)</h5>
+				<table class="tbl_st tbl_pd_lg mt_10">
+					<caption class="blind">신혼부부(공공주택-나눔형) 상세정보가 나와있는 테이블입니다.</caption>
+					<colgroup>
+						<col style="width:20%">
+						<col style="width:auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th>대상주택</th>
+							<td>
+								<p>전용면적 85m&sup2; 이하의 나눔형 공공분양주택 (<button type="button" class="btn_voca" data-vocaid="gonggongLay"><span>공공주택</span></button>)</p>
+							</td>
+						</tr>
+						<tr>
+							<th>공급 물량</th>
+							<td>건설량의 15% 내</td>
+						</tr>
+						<tr>
+							<th>대상자</th>
+							<td>
+								<ul class="bul_list black_list">
+									<li>신혼부부 : 입주자모집공고일 현재 혼인기간이 7년 이내이거나 만6세 이하(만7세 미만) 자녀가 있는 분</li>									
+									<li>예비신혼부부 : 혼인을 계획 중이며 해당 주택의 입주자모집공고일로부터 1년 이내(입주자모집공고일로부터 1년이 되기 전에 입주하는 경우에는 입주 전까지)에 혼인사실을 증명할 수 있는 분</li>
+									<li>한부모가족 : 입주자모집공고일 현재 만6세 이하(만7세 미만)의 자녀를 둔 부 또는 모</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th>청약자격</th>
+							<td>
+								<p>1. 무주택세대구성원</p>
+								<ul class="bul_list line_list black_list">
+									<li>
+										무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>(예비신혼부부는 혼인으로 구성될 세대를 말함)을 포함. 
+									</li>
+									<li>
+										<p><small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small></p>
+									</li>
+									<li>
+										단, 신혼부부 및 예비신혼부부는 청약신청자의 (예비)배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는((예비)배우자 분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함.
+										<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+									</li>
+								</ul>
+								<p class="mt_20">2. 소득기준 : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 이하(부부 모두 소득이 있는 경우 200% 이하)</p>
+								<p class="mt_20">3. 자산기준 : 해당 세대가 소유하고 있는 총자산가액이 통계청에서 발표하는 가계금융복지조사에 따른 소득3분위의 순자산 평균값의 105% 이하(십만원 단위에서 반올림)</p>
+								<p class="mt_10">&#8251; 2023년 3월 28일 이후 출산한 자녀(임신 중이거나 2023년 3월 28일 이후 출생한 입양자를 포함하며 미성년 자녀로 한정)가 있는 가구의 경우 소득요건 및 자산요건이 기준 대비 최대 20%p 비율을 가산한 금액까지 완화될 수 있으니 입주자 모집공고문을 통해 확인하시기 바랍니다.</p>
+							</td>
+						</tr>
+						<tr>
+							<th>선정방법</th>
+							<td>
+								<b>① 소득구분</b>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(1단계) 우선공급 (30%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 이하(부부 모두 소득이 있는 경우 140% 이하)인 신청자 중 아래에 해당하는 분
+										<p class="mt_5">1. 입주자모집공고일 현재 혼인기간이 2년 이내이거나 2세 이하의 자녀(태아 포함)를 둔 신혼부부</p>
+										<p>2. 예비신혼부부</p>
+										<p>3. 입주자모집공고일 현재 2세 이하의 자녀(태아 포함)를 둔 한부모가족</p>
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 아래 ②의 배점에 따르고, 배점이 같은 경우 추첨으로 입주자 선정</p>
+									</li>
+								</ul>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(2단계) 일반공급 (60%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 이하(부부 모두 소득이 있는 경우 140% 이하)인 신청자 중 아래에 해당하는 분
+										<p class="mt_5">1. 입주자모집공고일 현재 혼인기간이 2년 초과 7년 이내이거나 3세 이상 6세 이하의 자녀를 둔 신혼부부</p>
+										<p>2. 입주자모집공고일 현재 3세 이상 6세 이하의 자녀를 둔 한부모가족</p>
+										<p>* 1단계 낙첨자를 포함</p>
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 아래 ②의 배점에 따르고, 배점이 같은 경우 추첨으로 입주자 선정</p>
+									</li>
+								</ul>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(3단계) 추첨공급 : 부부 모두 소득이 있는 신청자 중 세대의 월평균소득이 전년도 도시근로자 월평균소득의 140% 초과 200% 이하이면서 아래에 해당하는 분
+										<p class="mt_5">1. 입주자모집공고일 현재 혼인기간이 7년 이내이거나 6세 이하의 자녀(태아 포함)를 둔 신혼부부</p>
+										<p>2. 예비신혼부부</p>
+										<p>3. 입주자모집공고일 현재 6세 이하의 자녀(태아 포함)를 둔 한부모가족</p>
+										<p>* 2단계 낙첨자를 포함</p>
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>									
+								<b class="mt_20 dis_b">② 배점 : <button type="button" class="btn_org btnPopWord" onclick="fn_pop_r('pointNWHTSpecial');"><span>신혼부부(나눔형) 특별공급 배점항목</span></button> 참조</b>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			</div>
+
+			<!-- ## 다자녀가구 -->
+			<div id="cate5" class="cateWrap">
+				<div class="tab_wrap">
+		            <ul class="tab_box">
+		                <li data-show="tab_051" class="active"><a href="#tab_051"><span>다자녀가구(민영주택, 국민주택)</span><b class="blind">현재 선택된 메뉴</b></a></li>
+		                <li data-show="tab_052"><a href="#tab_052"><span>다자녀가구(공공주택)</span></a></li>
+		             </ul>
+				</div>
+				
+				<div id="tab_051" class="tab_content" style="display:block">
+					<h5 class="sub_sub_tit mt_50">다자녀가구(민영주택, 국민주택)</h5>
+					<table class="tbl_st tbl_pd_lg mt_10">
+						<caption class="blind">다자녀가구(민영주택, 국민주택) 상세정보가 나와있는 테이블입니다.</caption>
+						<colgroup>
+							<col style="width:25%">
+							<col style="width:auto">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row">대상주택</th>
+								<td>
+									<p>민영주택, 국민주택(공공주택 특별법 미적용)</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">공급 물량</th>
+								<td>건설량의 10%내(승인권자가 인정하는 경우 15%)</td>
+							</tr>
+							<tr>
+								<th scope="row">대상자</th>
+								<td>입주자모집공고일 현재 미성년인 자녀 2명 이상을 둔 자(태아, 입양자녀 포함)</td>
+							</tr>
+							<tr>
+								<th scope="row">청약자격</th>
+								<td>
+									<p>1. 무주택세대구성원</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small>
+										</li>
+										<li>
+											다만, 청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는 (배우자분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+											<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+										</li>
+									</ul>
+									<p class="mt_20">2. 소득기준</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											<b>① 국민주택(공공주택 특별법 미적용) 중</b>
+											<p>「주택공급에 관한 규칙」 제18조 각호 어느 하나에 해당하는 사업주체*가 공급하는 주택</p>
+											<p>: 해당 세대의 월평균소득이 전년도 도시근로자 월평균소득의 120% 이하</p>
+											<p class="mt_10">&#8251; 주택공급에 관한 규칙 제18조</p>
+											<ul class="inde_txt black_list mt_0">
+												<li>1. 국가, 지방자치단체, 한국토지주택공사 또는 지방공사</li>
+												<li>2. 제1호에 해당하는 자가 단독 또는 공동으로 총지분의 50퍼센트를 초과하여 출자한 부동산투자회사</li>
+											</ul>
+										</li>
+										<li>
+											<b>② 민영주택 및 위 ① 이외의 국민주택(공공주택 특별법 미적용)</b>
+											<p>: 소득기준 미적용</p>
+										</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약통장</th>
+								<td>
+									<p>주택별 청약가능한 청약통장에 가입한지 6개월이 경과하고 아래의 요건을 충족한 분</p>
+									<ul class="bul_list line_list black_list mt_10">
+										<li>주택청약종합저축 : 주택종류에 따라 청약저축 및 청약예금과 동일</li>
+										<li>청약저축 : 매월 약정납입일에 월 납입금 6회 이상 납부</li>
+										<li>청약예금 : 지역별 청약예금 예치금액에 상당하는 금액 예치</li>
+										<li>청약부금 : 매월 약정납입일에 납입한 금액이 지역별 85m&sup2; 이하 청약예금 예치금액 이상</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">선정방법</th>
+								<td>
+									<p>① 지역우선 공급기준 적용</p>
+									<p>② 지역 내 경쟁 시 배점이 높은 순서대로 입주자 선정 (<button type="button" class="btn_org btnPopWord" onclick="fn_pop_r('pointKid');"><span>다자녀가구 배점기준표</span></button> 참고)</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<div id="tab_052" class="tab_content">
+					<h5 class="sub_sub_tit mt_50">다자녀가구 (공공주택)</h5>
+					<table class="tbl_st tbl_pd_lg mt_10">
+						<caption class="blind">다자녀가구(공공주택) 상세정보가 나와있는 테이블입니다.</caption>
+						<colgroup>
+							<col style="width:25%">
+							<col style="width:auto">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row">대상주택</th>
+								<td>
+									<p>공공주택 (공공주택 특별법 적용 국민주택)</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">공급 물량</th>
+								<td>건설량의 10%내</td>
+							</tr>
+							<tr>
+								<th scope="row">대상자</th>
+								<td>입주자모집공고일 현재 미성년인 자녀 2명 이상을 둔 자(태아, 입양자녀 포함)</td>
+							</tr>
+							<tr>
+								<th scope="row">청약자격</th>
+								<td>
+									<p>1. 무주택세대구성원</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small>
+										</li>
+										<li>
+											다만, 청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는 (배우자분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+											<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+										</li>
+									</ul>
+									<p class="mt_20">2. 소득기준 : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 120% 이하(부부 모두 소득이 있는 경우 200% 이하)</p>
+									<p class="mt_20">3. 자산기준</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											(일반형) 세대의 부동산가액 및 자동차가액이 각각 아래 기준 이하일 것
+											<p><button type="button" class="btn_org btnPopWord" onclick="fn_pop('assetsHoldStdr');">공공주택(일반형) 입주자 보유 자산 기준</button> 참조</p>
+										</li>
+										<li>(선택형,나눔형) 세대의 총자산가액이 통계청에서 발표하는 가계금융복지조사에 따른 소득3분위 순자산 평균값의 일정 비율 이하일 것 (입주자모집공고문 참조)</li>
+									</ul>
+									<p class="mt_10">&#8251; 2023년 3월 28일 이후 출산한 자녀(임신 중이거나 2023년 3월 28일 이후 출생한 입양자를 포함하며 미성년 자녀로 한정)가 있는 가구의 경우 소득요건 및 자산요건이 기준 대비 최대 20%p 비율을 가산한 금액까지 완화될 수 있으니 입주자 모집공고문을 통해 확인하시기 바랍니다.</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약통장</th>
+								<td>
+									<p>주택별 청약가능한 청약통장에 가입한지 6개월이 경과하고 아래의 요건을 충족한 분</p>
+									<ul class="bul_list line_list black_list mt_10">
+										<li>주택청약종합저축 : 주택종류에 따라 청약저축 및 청약예금과 동일</li>
+										<li>청약저축 : 매월 약정납입일에 월 납입금 6회 이상 납부</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">선정방법</th>
+								<td>
+									<ul class="bul_list line_list black_list">
+										<li>
+											(1단계) 우선공급 (90%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 120% 이하(부부 모두 소득이 있는 경우 130% 이하)인 분
+											<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 배점이 높은 순서대로 입주자 선정</p>
+											<p>(<button type="button" class="btn_org btnPopWord" onclick="fn_pop_r('pointKid');"><span>다자녀가구 배점기준표</span></button> 참고)</p>
+										</li>
+									</ul>
+									<ul class="bul_list line_list black_list">
+										<li>
+											(2단계) 추첨공급 : 부부 모두 소득이 있는 신청자 중 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 초과 200% 이하인 분
+											<p class="mt_5">* 1단계 낙첨자를 포함</p>
+											<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시  추첨으로 입주자 선정</p>
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<!-- ## 노부모부양 -->
+			<div id="cate6" class="cateWrap">
+				<div class="tab_wrap">
+		            <ul class="tab_box">
+		                <li data-show="tab_061" class="active"><a href="#tab_061"><span>노부모부양(민영주택, 국민주택)</span><b class="blind">현재 선택된 메뉴</b></a></li>
+		                <li data-show="tab_062"><a href="#tab_062"><span>노부모부양(공공주택)</span></a></li>
+		             </ul>
+				</div>
+				
+				<div id="tab_061" class="tab_content" style="display:block">
+					<h5 class="sub_sub_tit mt_50">노부모부양(민영주택, 국민주택)</h5>
+					<table class="tbl_st tbl_pd_lg mt_10">
+						<caption class="blind">노부모부양(민영주택, 국민주택) 상세정보가 나와있는 테이블입니다.</caption>
+						<colgroup>
+							<col style="width:25%">
+							<col style="width:auto">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row">대상주택</th>
+								<td>
+									<p>민영주택, 국민주택(공공주택 특별법 미적용)</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">공급 물량</th>
+								<td>국민주택 : 5%, 민영주택 : 3%</td>
+							</tr>
+							<tr>
+								<th scope="row">대상자</th>
+								<td>
+									<p>일반공급 1순위에 해당하는 자로서 만65세 이상의 직계존속(배우자의 직계존속 포함)을 3년 이상 계속하여 부양(같은 세대별 주민등록표등본에 등재)하고 있는 세대주</p>
+									<p>* 노부모부양 특별공급은 <b>무주택세대주만이 신청</b>할 수 있음 <b>(세대구성원은 청약 불가)</b></p>
+									<p>** <button type="button" class="btn_voca" data-vocaid="hotareaLay"><span>투기과열지구</span></button> 또는 <button type="button" class="btn_voca" data-vocaid="adjustareaLay"><span>청약과열지역</span></button>의 주택에 청약 시 과거 5년 이내에 다른 주택에 당첨된 자가 속해 있는 세대에 속한 자는 청약불가</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약자격</th>
+								<td>
+									<p>1. 무주택세대구성원</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <p><small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small></p>
+										</li>
+										<li>
+											다만, 청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는 (배우자분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+											<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+										</li>
+									</ul>
+									<p class="mt_20">2. 소득기준</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											① 국민주택(공공주택 특별법 미적용) 중
+										    <p>「주택공급에 관한 규칙」 제18조 각호 어느 하나에 해당하는 사업주체*가 공급하는 주택</p>
+										    <p>: 해당 세대의 월평균소득이 전년도 도시근로자 월평균소득의 120% 이하</p>
+											<p class="mt_10">&#8251; 주택공급에 관한 규칙 제18조</p>
+											<ul class="inde_txt black_list mt_0">
+												<li>1. 국가, 지방자치단체, 한국토지주택공사 또는 지방공사</li>
+												<li>2. 제1호에 해당하는 자가 단독 또는 공동으로 총지분의 50퍼센트를 초과하여 출자한 부동산투자회사</li>
+											</ul>
+										</li>
+										<li>
+											② 민영주택 및 위 ① 이외의 국민주택(공공주택 특별법 미적용)
+										    <p>: 소득기준 미적용</p>
+										</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약통장</th>
+								<td>
+									<p>주택별 청약 가능한 청약통장에 가입한지 24개월(지역 및 주택에 따라 6~24개월)이 경과하고 아래의 요건을 충족하는 분</p>
+									<ul class="bul_list line_list black_list mt_10">
+										<li>주택청약종합저축 : 주택종류에 따라 청약저축 및 청약예금과 동일</li>
+										<li>청약저축 : 매월 약정납입일에 월 납입금을 24회(지역에 따라 6~24회) 이상 납입한 분</li>
+										<li>청약예금 : 지역별 청약예금 예치금액에 상당하는 금액 예치</li>
+										<li>매월 약정납입일에 납입한 금액이 지역별 85㎡이하 청약예금 예치금액 이상</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">선정방법</th>
+								<td>
+									<b class="dis_b">민영주택 : 지역우선 공급기준에 따르며, 지역 내 경쟁 시 가점제 적용</b>
+									<table class="tbl_st tbl_pd_lg tbl_center mt_10">
+										<caption class="blind">민영주택 선정방법이 나와있는 테이블입니다.</caption>
+										<colgroup>
+											<col style="width:16%">
+											<col style="width:28%">
+											<col style="width:28%">
+											<col style="width:28%">
+										</colgroup>
+										<thead>
+											<tr>
+												<th scope="col">구분</th>
+												<th scope="col">무주택기간</th>
+												<th scope="col">부양가족수</th>
+												<th scope="col">청약통장 가입기간</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>가점항목</td>
+												<td>최저 : 2점(1년 미만)<br>~ 최대 : 32점(15년 이상)</td>
+												<td>최저 : 5점(0명)<br>~ 최대 : 35점(6명)</td>
+												<td>최저 : 1점(6개월 미만)<br>~ 최대 : 17점(15년 이상)</td>
+											</tr>
+										</tbody>
+									</table>
+									<p class="mt_5">&#8251; (노부모부양 특별공급 무주택기간) 피부양자 및 피부양자의 배우자가 주택을 소유하고 있었던 기간은 무주택기간에서 제외</p>
+									<p class="mt_5">&#8251; 가점이 동일한 경우 입주자저축 가입기간이 긴 자가 우선함</p>
+									<p class="mt_20"><b>국민주택(공공주택 특별법 미적용) : 지역우선 공급기준에 따르며, 지역 내 경쟁 시 순차제 적용</b></p>
+									<table class="tbl_st tbl_pd_lg tbl_center mt_10">
+										<caption class="blind">국민주택(공공주택 특별법 미적용) 선정방법이 나와있는 테이블입니다.</caption>
+										<colgroup>
+											<col style="width:16%">
+											<col style="width:42%">
+											<col style="width:42%">
+										</colgroup>
+										<thead>
+											<tr>
+												<th scope="col">순차</th>
+												<th scope="col">전용면적 40m&sup2; 초과 주택</th>
+												<th scope="col">전용면적 40m&sup2; 이하 주택</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td>①</td>
+												<td>무주택기간이 3년 이상이며<br>저축총액이 많은 자</td>
+												<td>무주택기간이 3년 이상이며<br>납입횟수가 많은 자</td>
+											</tr>
+											<tr>
+												<td>②</td>
+												<td>저축총액이 많은 자</td>
+												<td>납입횟수가 많은 자</td>
+											</tr>
+										</tbody>
+									</table>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<div id="tab_062" class="tab_content">
+					<h5 class="sub_sub_tit mt_50">노부모부양 (공공주택)</h5>
+					<table class="tbl_st tbl_pd_lg mt_10">
+						<caption class="blind">노부모부양(공공주택) 상세정보가 나와있는 테이블입니다.</caption>
+						<colgroup>
+							<col style="width:25%">
+							<col style="width:auto">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row">대상주택</th>
+								<td>
+									<p>공공주택 (공공주택 특별법 적용 국민주택)</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">공급 물량</th>
+								<td>건설량의 5% 내</td>
+							</tr>
+							<tr>
+								<th scope="row">대상자</th>
+								<td>
+									<p>일반공급 1순위에 해당하는 자로서 만65세 이상의 직계존속(배우자의 직계존속 포함)을 3년 이상 계속하여 부양(같은 세대별 주민등록표등본에 등재)하고 있는 세대주</p>
+									<p>* 노부모부양 특별공급은 <b>무주택세대주만이 신청</b>할 수 있음 <b>(세대구성원은 청약 불가)</b></p>
+									<p>** <button type="button" class="btn_voca" data-vocaid="hotareaLay"><span>투기과열지구</span></button> 또는 <button type="button" class="btn_voca" data-vocaid="adjustareaLay"><span>청약과열지역</span></button>의 주택에 청약 시 과거 5년 이내에 다른 주택에 당첨된 자가 속해 있는 세대에 속한 자는 청약불가</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약자격</th>
+								<td>
+									<p>1. 무주택세대구성원</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <p><small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small></p>
+										</li>
+										<li>
+											다만, 청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는 (배우자분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+											<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+										</li>
+									</ul>
+									<p class="mt_20">2. 소득기준 : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 120% 이하(부부 모두 소득이 있는 경우 200% 이하)</p>
+									<p class="mt_20">3. 자산기준</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											(일반형) 세대의 부동산가액 및 자동차가액이 각각 아래 기준 이하일 것
+											<p><button type="button" class="btn_org btnPopWord" onclick="fn_pop('assetsHoldStdr');">공공주택(일반형) 입주자 보유 자산 기준</button> 참조</p>
+										</li>
+										<li>(선택형,나눔형) 세대의 총자산가액이 통계청에서 발표하는 가계금융복지조사에 따른 소득3분위 순자산 평균값의 일정 비율 이하일 것 (입주자모집공고문 참조)</li>
+									</ul>
+									<p class="mt_10">&#8251; 분양전환 공공임대주택으로서 가구원 수가 2명인 경우에는 소득요건 비율이 10%p 완화 적용되오니(소득요건 비율이 200%인 경우 제외), 입주자모집공고문을 통해 정확한 소득요건을 확인하시기 바랍니다.</p>
+									<p class="mt_10">&#8251; 2023년 3월 28일 이후 출산한 자녀(임신 중이거나 2023년 3월 28일 이후 출생한 입양자를 포함하며 미성년 자녀로 한정)가 있는 가구의 경우 소득요건 및 자산요건이 기준 대비 최대 20%p 비율을 가산한 금액까지 완화될 수 있으니 입주자 모집공고문을 통해 확인하시기 바랍니다.</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약통장</th>
+								<td>
+									<p>주택별 청약 가능한 청약통장에 가입한지 24개월(지역 및 주택에 따라 6~24개월)이 경과하고 아래의 요건을 충족하는 분</p>
+									<ul class="bul_list line_list black_list mt_10">
+										<li>주택청약종합저축 : 주택종류에 따라 청약저축 및 청약예금과 동일</li>
+										<li>청약저축 : 매월 약정납입일에 월 납입금을 24회(지역에 따라 6~24회) 이상 납입한 분</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">선정방법</th>
+								<td>
+									<ul class="bul_list line_list black_list mt_10">
+										<li>
+											(1단계) 우선공급 (90%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 120% 이하(부부 모두 소득이 있는 경우 130% 이하)인 분
+											<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 순차제 적용</p>
+											<table class="tbl_st tbl_pd_lg tbl_center mt_10">
+												<caption class="blind">우선공급 (90%) 선정방법이 나와있는 테이블입니다.</caption>
+												<colgroup>
+													<col style="width:16%">
+													<col style="width:42%">
+													<col style="width:42%">
+												</colgroup>
+												<thead>
+													<tr>
+														<th scope="col">순차</th>
+														<th scope="col">전용면적 40m&sup2; 초과 주택</th>
+														<th scope="col">전용면적 40m&sup2; 이하 주택</th>
+													</tr>
+												</thead>
+												<tbody>
+													<tr>
+														<td>①</td>
+														<td>무주택기간이 3년 이상이며<br> 저축총액이 많은 자</td>
+														<td>무주택기간이 3년 이상이며 <br>납입횟수가 많은 자</td>
+													</tr>
+													<tr>
+														<td>②</td>
+														<td>저축총액이 많은 자</td>
+														<td>납입횟수가 많은 자</td>
+													</tr>
+												</tbody>
+											</table>
+										</li>
+										<li>
+											(2단계) 추첨공급 : 부부 모두 소득이 있는 신청자 중 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 초과 200% 이하인 분
+											<p>* 1단계 낙첨자를 포함</p>
+											<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+										</li>
+									</ul>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<!-- ## 생애최초 주택구입 -->
+			<div id="cate7" class="cateWrap">
+			
+				<div class="tab_wrap">
+    	            <ul class="tab_box">
+    	                <li data-show="tab_071"  class="active"><a href="#tab_071"><span>생애최초 주택구입(민영주택)</span><b class="blind">현재 선택된 메뉴 </b></a></li>
+    	                <li data-show="tab_072"><a href="#tab_072"><span>생애최초 주택구입(국민주택)</span></a></li>
+    	                <li data-show="tab_073"><a href="#tab_073"><span>생애최초 주택구입(공공주택)</span></a></li>
+    	             </ul>
+    			</div>
+    			
+    			<!-- 생애최초 주택구입 민영주택 탭 -->
+    			<div id="tab_071" class="tab_content" style="display:block">
+    				<h5 class="sub_sub_tit mt_50">생애최초 주택구입(민영주택)</h5>
+    				<table class="tbl_st tbl_pd_lg mt_10">
+					<caption class="blind">생애최초 주택구입(민영주택) 상세정보가 나와있는 테이블입니다.</caption>
+					<colgroup>
+						<col style="width:25%">
+						<col style="width:auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row">대상주택</th>
+							<td>
+								<p>전용면적 85m&sup2; 이하의 분양주택 </p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">공급 물량</th>
+							<td>- 민영주택 : 건설량의 7%(공공택지 : 17%) 내</td>
+						</tr>
+						<tr>
+							<th scope="row">대상자</th>
+							<td>
+								<p>생애 최초(세대구성원 모두 과거 주택을 소유한 사실이 없는 경우로 한정)로 주택을 구입하는 분으로서 다음의 요건을 충족하는 분</p>
+								<p>* 투기과열지구 또는 청약과열지역의 주택에 청약 시 과거 5년 이내에 다른 주택에 당첨된 자가 속해 있는 세대에 속한 분은 청약불가</p>
+								<ul class="bul_list line_list black_list">
+									<li>일반공급 1순위인 무주택 세대의 세대주 또는 세대구성원</li>
+									<li>
+										아래 ① 또는 ②에 해당하는 분
+										<p>① 입주자모집공고일 현재 혼인 중이거나 미혼인 자녀(임신 및 입양 포함, 신청자가 혼인 중이 아닌 경우에는 동일한 주민등록표등본에 올라 있는 자녀를 말함)가 있는 분</p>
+										<p>② 위 ①에 해당하지 않는 1인가구</p>
+										<p>* 1인가구는 추첨제로만 청약 가능</p>
+										<p>* 1인가구 중 '단독세대가 아닌 자'(주민등록표등본에 직계존속과 함께 등재된 경우)는 전 주택형에 청약 가능</p>
+										<p>* 1인가구 중 '단독세대'(주민등록표등본에 직계존속이 함께 등재되지 않은 경우)는 전용면적 60㎡ 이하 주택형에 한해 청약 가능</p>
+									</li>
+									<li>입주자모집공고일 현재 근로자 또는 자영업자(과거 1년 내에 소득세를 납부한 경우 포함)로서 5년 이상 소득세를 납부한 분</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약자격</th>
+							<td>
+								<p>1. 무주택세대구성원</p>
+								<ul class="bul_list line_list black_list">
+									<li>
+										무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small>
+									</li>
+									<li>
+										다만, 청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는 (배우자분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+										<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+									</li>
+								</ul>
+								<p class="mt_20">2. 소득기준 및 자산기준</p>
+								<ul class="bul_list line_list black_list">
+									<li>소득기준 : 세대의 월평균소득이 전년도 도시근로자 가구당 월평균 소득의 160% 이하</li>
+									<li>
+										자산기준 : 위 소득기준은 초과하나, 세대가 소유하고 있는 부동산(토지 및 건물)의 합계액이 3억 3,100만원 이하인 경우 추첨제로 청약 가능
+										<p>* 부동산가액 산출기준 : 「공공주택 특별법 시행규칙」 제13조제2항 및 「공공주택 입주자 보유 자산 관련 업무처리기준」 제4조에 따라 산출된 금액으로서 「국민건강보험법 시행령」제42조제1항에 따른 보험료 부과점수의 산정방법에서 정한 재산등급 29등급에 해당하는 재산금액의 상한과 하한을 산술평균한 금액</p>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약통장</th>
+							<td>
+								<p>주택별 청약 가능한 청약통장에 가입한지 24개월(지역 및 주택에 따라 6~24개월)이 경과하고 아래의 요건을 충족하는 분</p>
+								<ul class="bul_list line_list black_list">
+									<li>주택청약종합저축(청약예금) : 1순위자로서 지역별 신청 가능한 예치금액 이상 납입한 자  </li>
+									<li>청약부금 : 1순위자로서 매월 약정납입일에 월납입금을 납입하여 납입인정금액이 지역별 신청 가능한 예치금액 이상인 자</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">선정방법</th>
+							<td>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(1단계) 우선공급(50%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 이하인 분
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(2단계) 일반공급 (20%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 초과 160% 이하인 분
+										<p>* 1단계 낙첨자를 포함</p>
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(3단계) 추첨공급 : 아래 ① 또는 ②에 해당하는 분
+										<p>① 입주자모집공고일 현재 혼인 중이거나 미혼인 자녀(태아 및 입양 포함, 신청자가 혼인 중이 아닌 경우에는 동일한 주민등록표등본에 올라 있는 자녀를 말함)가 있는 분으로서, 세대의 월평균소득이 전년도 도시근로자 월평균소득의 160% 초과하나, 부동산 가액이 3억 3,100만원 이하인 분</p>
+										<p>② 1인가구로서, 세대의 월평균소득이 전년도 도시근로자 월평균소득의 160% 이하이거나, 부동산 가액이 3억 3,100만원 이하인 분</p>
+										<p>* 2단계 낙첨자를 포함</p>
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>			
+							</td>
+						</tr>
+					</tbody>
+				</table>
+    			</div>
+    			<!-- 생애최초 주택구입 민영주택 탭 -->
+    			<!-- 생애최초 주택구입 국민주택 탭 -->
+    			<div id="tab_072" class="tab_content">
+    				<h5 class="sub_sub_tit mt_50">생애최초 주택구입(국민주택 - 공공주택 특별법 미적용)</h5>
+    				<table class="tbl_st tbl_pd_lg mt_10">
+					<caption class="blind">생애최초 주택구입(국민주택 - 공공주택 특별법 미적용) 주택구입 상세정보가 나와있는 테이블입니다.</caption>
+					<colgroup>
+						<col style="width:25%">
+						<col style="width:auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row">대상주택</th>
+							<td>
+								<p>전용면적 85m&sup2; 이하의 분양주택</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">공급 물량</th>
+							<td>건설량의 20% 내</td>
+						</tr>
+						<tr>
+							<th scope="row">대상자</th>
+							<td>
+								<p>생애 최초(세대구성원 모두 과거 주택을 소유한 사실이 없는 경우로 한정)로 주택을 구입하는 분으로서 다음의 요건을 충족하는 분</p>
+								<p>* 투기과열지구 또는 청약과열지역의 주택에 청약 시 과거 5년 이내에 다른 주택에 당첨된 자가 속해 있는 세대에 속한 분은 청약불가</p>
+								<ul class="bul_list line_list black_list">
+									<li>일반공급 1순위인 무주택 세대의 세대주 또는 세대구성원으로서 <b>저축액이 선납금을 포함하여 600만원 이상인 분</b></li>
+									<li>
+										아래 ① 또는 ②에 해당하는 분
+										<p>① 입주자모집공고일 현재 혼인 중이거나 미혼인 자녀(임신 및 입양 포함, 신청자가 혼인 중이 아닌 경우에는 동일한 주민등록표등본에 올라 있는 자녀를 말함)가 있는 분</p>
+										<p>② 위 ①에 해당하지 않는 1인가구</p>
+										<p>* 1인가구는 추첨제로만 청약 가능</p>
+										<p>* 1인가구 중 '단독세대가 아닌 자'(주민등록표등본에 직계존속과 함께 등재된 경우)는 전 주택형에 청약 가능</p>
+										<p>* 1인가구 중 '단독세대'(주민등록표등본에 직계존속이 함께 등재되지 않은 경우)는 전용면적 60㎡ 이하 주택형에 한해 청약 가능</p>
+									</li>
+									<li>입주자모집공고일 현재 근로자 또는 자영업자(과거 1년 내에 소득세를 납부한 경우 포함)로서 5년 이상 소득세를 납부한 분</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약자격</th>
+							<td>
+								<p>1. 무주택세대구성원</p>
+								<ul class="bul_list line_list black_list">
+									<li>
+										무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small>
+									</li>
+									<li>
+										다만, 청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는 (배우자분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+										<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+									</li>
+								</ul>
+								<p class="mt_20">2. 소득기준 및 자산기준</p>
+								<ul class="bul_list line_list black_list">
+									<li>소득기준 : 세대의 월평균소득이 전년도 도시근로자 가구당 월평균 소득의 130% 이하</li>
+									<li>자산기준 : 위 소득기준은 초과하나, 세대가 소유하고 있는 부동산(토지 및 건물)의 합계액이 3억 3,100만원 이하인 경우 추첨제로 청약 가능
+										<p>* 부동산가액 산출기준 : 「공공주택 특별법 시행규칙」 제13조제2항 및 「공공주택 입주자 보유 자산 관련 업무처리기준」 제4조에 따라 산출된 금액으로서 「국민건강보험법 시행령」 제42조제1항에 따른 보험료 부과점수의 산정방법에서 정한 재산등급 29등급에 해당하는 재산금액의 상한과 하한을 산술평균한 금액</p>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약통장</th>
+							<td>
+								<p>주택별 청약 가능한 청약통장에 가입한지 24개월(지역 및 주택에 따라 6~24개월)이 경과하고 아래의 요건을 충족하는 분</p>
+								<ul class="bul_list line_list black_list">
+									<li>주택청약종합저축(청약저축) : 1순위자로서 매월 약정납입일에 월납입금을 24회(지역에 따라 6~24회) 이상 납입하고 저축액이 선납금을 포함하여 600만원 이상인 자 </li>
+								</ul>
+								
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">선정방법</th>
+							<td>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(1단계) 우선공급 (50%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 이하인 분
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(2단계) 일반공급 (20%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 초과 130% 이하인 분
+										<p>* 1단계 낙첨자를 포함</p>
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(3단계) 추첨공급 : 아래 ① 또는 ②에 해당하는 분
+										<p>① 입주자모집공고일 현재 혼인 중이거나 미혼인 자녀(태아 및 입양 포함, 신청자가 혼인 중이 아닌 경우에는 동일한 주민등록표등본에 올라 있는 자녀를 말함)가 있는 분으로서, 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 초과하나, 부동산 가액이 3억 3,100만원 이하인 분</p>
+										<p>② 1인가구로서, 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 이하이거나, 부동산 가액이 3억 3,100만원 이하인 분</p>
+										<p>* 2단계 낙첨자를 포함</p>
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+    			</div>
+    			<!-- 생애최초 주택구입 국민주택 탭 -->
+    			<div id="tab_073" class="tab_content">
+    				<h5 class="sub_sub_tit mt_50">생애최초 주택구입(공공주택)</h5>
+    				<table class="tbl_st tbl_pd_lg mt_10">
+					<caption class="blind">생애최초 주택구입(공공주택) 상세정보가 나와있는 테이블입니다.</caption>
+					<colgroup>
+						<col style="width:25%">
+						<col style="width:auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row">대상주택</th>
+							<td>
+								<p>전용면적 85m&sup2; 이하의 분양주택</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">공급 물량</th>
+							<td>건설량의 15% 내</td>
+						</tr>
+						<tr>
+							<th scope="row">대상자</th>
+							<td>
+								<p>생애 최초(세대구성원 모두 과거 주택을 소유한 사실이 없는 경우로 한정)로 주택을 구입하는 분으로서 다음의 요건을 충족하는 분</p>
+								<p>* 투기과열지구 또는 청약과열지역의 주택에 청약 시 과거 5년 이내에 다른 주택에 당첨된 자가 속해 있는 세대에 속한 분은 청약불가</p>
+								<ul class="bul_list line_list black_list">
+									<li>일반공급 1순위인 무주택 세대의 세대주 또는 세대구성원으로서 <b>저축액이 선납금을 포함하여 600만원 이상인 분</b></li>
+									<li>입주자모집공고일 현재 혼인 중이거나 미혼인 자녀(임신 및 입양 포함, 신청자가 혼인 중이 아닌 경우에는 동일한 주민등록표등본에 올라 있는 자녀를 말함)가 있는 분</li>
+									<li>입주자모집공고일 현재 근로자 또는 자영업자(과거 1년 내에 소득세를 납부한 경우 포함)로서 5년 이상 소득세를 납부한 분</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약자격</th>
+							<td>
+								<p>1. 무주택세대구성원</p>
+								<ul class="bul_list line_list black_list">
+									<li>
+										무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small>
+									</li>
+									<li>
+										다만, 청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는 (배우자분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+										<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+									</li>
+								</ul>
+								<p class="mt_20">2. 소득기준  : 세대의 월평균소득이 전년도 도시근로자 가구당 월평균 소득의 130% 이하(부부 모두 소득이 있는 경우 200% 이하)</p>
+								<p class="mt_20">3. 자산기준</p>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(일반형) 세대의 부동산가액 및 자동차가액이 각각 아래 기준 이하일 것
+										<p><button type="button" class="btn_org btnPopWord" onclick="fn_pop('assetsHoldStdr');">공공주택(일반형) 입주자 보유 자산 기준</button> 참조</p>
+									</li>
+									<li>(선택형, 나눔형) 세대의 총자산가액이 통계청에서 발표하는 가계금융복지조사에 따른 소득3분위 순자산 평균값의 일정 비율 이하일 것 (입주자모집공고문 참조)</li>
+								</ul>
+								<p class="mt_10">&#8251; 분양전환 공공임대주택으로서 가구원 수가 2명인 경우에는 소득요건 비율이 10%p 완화 적용되오니(소득요건 비율이 200%인 경우 제외), 입주자모집공고문을 통해 정확한 소득요건을 확인하시기 바랍니다.</p>
+								<p class="mt_10">&#8251; 2023년 3월 28일 이후 출산한 자녀(임신 중이거나 2023년 3월 28일 이후 출생한 입양자를 포함하며 미성년 자녀로 한정)가 있는 가구의 경우 소득요건 및 자산요건이 기준 대비 최대 20%p 비율을 가산한 금액까지 완화될 수 있으니 입주자 모집공고문을 통해 확인하시기 바랍니다.</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약통장</th>
+							<td>
+								<p>주택별 청약 가능한 청약통장에 가입한지 24개월(지역 및 주택에 따라 6~24개월)이 경과하고 아래의 요건을 충족하는 분</p>
+								<ul class="bul_list line_list black_list">
+									<li>주택청약종합저축(청약저축) : 1순위자로서 매월 약정납입일에 월납입금을 24회(지역에 따라 6~24회) 이상 납입하고 저축액이 선납금을 포함하여 600만원 이상인 자 </li>
+								</ul>
+								
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">선정방법</th>
+							<td>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(1단계) 우선공급 (70%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 이하(부부 모두 소득이 있는 경우 120% 이하)인 분
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(2단계) 일반공급 (20%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 초과 130% 이하(부부 모두 소득이 있는 경우 120% 초과 140% 이하)인 분
+										<p>* 1단계 낙첨자를 포함</p>
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>
+								<ul class="bul_list line_list black_list">
+									<li>
+										(3단계) 추첨공급 : 부부 모두 소득이 있는 신청자 중 세대의 월평균소득이 전년도 도시근로자 월평균소득의 140% 초과 200% 이하인 분
+										<p>* 2단계 낙첨자를 포함</p>
+										<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+									</li>
+								</ul>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+    			</div>				
+			</div>
+			<!-- ## 청년 -->
+			<div id="cate10">
+				<h5 class="sub_sub_tit mt_50">청년</h5>
+				<table class="tbl_st tbl_pd_lg mt_10">
+					<caption class="blind">청년 상세정보가 나와있는 테이블입니다.</caption>
+					<colgroup>
+						<col style="width:25%">
+						<col style="width:auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row">대상주택</th>
+							<td>
+								<p>공공주택 중 전용면적 60m² 이하의 분양주택 또는 분양전환임대주택(<button type="button" class="btn_voca" data-vocaid="gonggongLay"><span>공공주택</span></button>)</p>
+								<ul class="bul_list line_list black_list">
+									<li>「공공주택 특별법 시행규칙」 별표 6의2에 따라 공급하는 "분양전환공공임대주택 중 임대의무기간이 6년인 주택"</li>
+									<li>「공공주택 특별법 시행규칙」 별표 6의6에 따라 공급하는 "이익공유형 분양주택 및 토지임대부 분양주택"</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">공급 물량</th>
+							<td>
+								<p>건설량의 15퍼센트</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">대상자</th>
+							<td>
+								<p>입주자모집공고일 현재 청년(만19세 이상 만39세 이하로 혼인 중이 아니며, 과거 주택을 소유한 사실이 없는 사람)인 자</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약자격</th>
+							<td>
+								<p><b>1. 무주택자</b></p>
+								<ul class="bul_list line_list black_list">
+									<li>신청자(청년) 본인이 입주자모집공고일 현재 주택 또는 분양권등을 소유하고 있지 않으며, 과거 주택 또는 분양권등을 소유한 이력이 없어야 합니다.</li>
+									<li>분양권등 : 주택소유로 보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</li>
+								</ul>
+								<p class="mt_10"><b>2. 소득기준 충족</b></p>
+								<ul class="bul_list line_list black_list">
+									<li>신청자(청년) 본인의 월평균소득이 전년도 도시근로자 가구원수별 가구당 월평균소득의 140퍼센트 이하인 분</li>
+								</ul>
+								<p class="mt_10"><b>3. 자산기준 충족</b></p>
+								<ul class="bul_list line_list black_list">
+									<li>신청자(청년) 본인의 총자산가액이 통계청에서 발표하는 가계금융복지조사에 따른 소득3분위의 순자산 평균값의 80% 이하(십만원 단위에서 반올림)인 분</li>
+									<li>
+										신청자(청년)의 부모의 총자산가액이 소득 3분위의 순자산 평균값의 300%이하인 분
+										<p><small>* 세부사항은 입주자모집공고문 참조</small></p>
+									</li>
+								</ul>
+								<p class="mt_10"><b>4. 기타</b></p>
+								<ul class="bul_list line_list black_list">
+									<li>
+										당첨자 발표일이 동일한 주택 전체에 대하여 1인 1건만 신청 가능하며, 1인 2건 이상 청약신청 할 경우에는 모두 무효
+										<p><small>* 단, 동일 주택에 대하여 1인이 특별공급과 일반공급 중복신청이 가능하나 특별공급 당첨자로 선정될 경우 일반공급 당첨자 선정에서 제외됩니다.</small></p>
+									</li>
+								</ul>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약통장</th>
+							<td>
+								<p>주택청약종합저축 또는 청약저축에 가입하여 6개월이 지난 경우로서 매월 약정납입일에 월납입금을 6회 이상 납입한 분</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">선정방법</th>
+							<td>
+								<p><b>&lt; 우선공급 &gt;</b></p>
+								<ul class="bul_list line_list black_list">
+									<li>입주자모집공고일 현재 근로자 또는 자영업자[과거 1년 내에 소득세(「소득세법」 제19조 또는 제20조에 해당하는 소득세를 말하며, 납부할 세액이 없는 경우를 포함)를 납부한 자를 포함]로서 5년 이상 소득세를 납부한 청년에게 배정물량의 30퍼센트(소수점 이하는 올림)를 우선 공급</li>
+								</ul>
+								<p class="mt_10"><b>&lt; 잔여공급 &gt;</b></p>
+								<ul class="bul_list line_list black_list">
+									<li>우선공급하고 남은 주택에 대해 우선공급에서 입주자로 선정되지 않은 자를 포함하여 공급</li>
+								</ul>
+								<p class="mt_10"><b>&lt; 우선공급 및 잔여공급에서 경쟁이 있는 경우 입주자 선정 순서 &gt;</b></p>
+								<p>1. 지역우선 공급기준 (해당 주택건설지역 거주자)</p>
+								<p>2. 배점 다득점순 (우선공급 9점 만점, 잔여공급 12점 만점)</p>
+								<p><button type="button" class="btn_org btnPopWord" onclick="fn_pop_r('pointYMSpecial');"><span>청년 특별공급 배점 항목</span></button> 참조</p>
+								<p>3. 추첨</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- 신생아 -->
+			<div id="cate11" class="cateWrap">
+				<div class="tab_wrap">
+		            <ul class="tab_box">
+		            	<li data-show="tab_113" class="active"><a href="#tab_113"><span>신생아(민영주택,국민주택)</span><b class="blind">현재 선택된 메뉴</b></a></li>
+		                <li data-show="tab_111"><a href="#tab_111"><span>신생아(공공주택-일반형,선택형)</span></a></li>
+		                <li data-show="tab_112"><a href="#tab_112"><span>신생아(공공주택-나눔형)</span></a></li>
+		             </ul>
+				</div>
+				
+				<div id="tab_113" class="tab_content" style="display:block">
+					<h5 class="sub_sub_tit mt_50">신생아(민영주택,국민주택)</h5>
+					<table class="tbl_st tbl_pd_lg mt_10">	
+						<caption class="blind">신생아(공공주택,국민주택) 상세정보가 나와있는 테이블입니다.</caption>
+						<colgroup>
+							<col style="width:25%">
+							<col style="width:auto">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row">대상주택</th>
+								<td>
+									<ul class="bul_list line_list black_list">
+										<li>전용면적 85㎡이하의 분양주택</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">공급 물량</th>
+								<td>
+									<ul class="bul_list line_list black_list">
+										<li>민영주택 : 건설량의 10% 범위</li>
+										<li>국민주택 : 건설량의 15% 범위</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">대상자</th>
+								<td>
+									<p>아래 요건을 모두 충족하는 분</p>
+									<ul class="bul_list line_list black_list">
+										<li>입주자모집공고일 현재 2세 미만(2세가 되는 날을 포함)의 자녀(임신 및 입양 포함)가 있는 분</li>
+										<li>일반공급 1순위 요건을 충족하는 무주택세대구성원</li>
+										<li>소득기준 또는 자산기준을 충족하는 분</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약자격</th>
+								<td>
+									<p>1. 무주택세대구성원</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <p><small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small></p>
+										</li>
+										<li>
+											다만, 청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는 (배우자분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+											<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+										</li>
+									</ul>
+									<p class="mt_20">2. 소득기준 및 자산기준</p>
+									<ul class="bul_list line_list black_list">
+										<li style="display:flex;"> 
+											<span style="white-space:nowrap;"> 소득기준 :</span>
+											<span style="margin-left:5px;"> 
+											(민영주택)세대의 월평균소득이 전년도 도시근로자 가구당 월평균 소득의 160% 이하<br>
+											(국민주택)세대의 월평균소득이 전년도 도시근로자 가구당 월평균 소득의 130% 이하
+											</span>
+										</li>
+										<li> 자산기준 : 위 소득기준은 초과하나, 세대가 소유하고 있는 부동산(토지 및 건물)의 합계액이 3억 3,100만원 이하인 경우 추첨제로 청약 가능
+										<p> * 부동산가액 산출기준 : 「공공주택 특별법 시행규칙」 제13조제2항 및 「공공주택 입주자 보유 자산 관련 업무처리기준」 제4조에 따라 산출된 금액으로서
+										「국민건강보험법 시행령」제42조제1항에 따른 보험료 부과점수의 산정방법에서 정한 재산등급 29등급에 해당하는 재산금액의 상한과 하한을 산술평균한 금액</p>
+										</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약통장</th>
+								<td>
+									<p>주택별 청약 가능한 청약통장에 가입한지 일정 기간(지역 및 주택에 따라 6~24개월)이 경과하고 아래의 요건을 충족하는 분</p>
+									<p class="mt_20">1. 민영주택</p>
+									<ul class="bul_list line_list black_list">
+										<li>주택청약종합저축(청약예금) : 1순위자로서 지역별 신청 가능한 예치금액 이상 납입한 자</li>
+										<li>청약부금 : 1순위자로서 매월 약정납입일에 월납입금을 납입하여 납입인정금액이 지역별 신청 가능한 예치금액 이상인 자</li>
+									</ul>
+									<p class="mt_20">2. 국민주택</p>
+									<ul class="bul_list line_list black_list">
+										<li>주택청약종합저축(청약저축) : 1순위자로서 매월 약정납입일에 월납입금을 일정 회차(지역 및 주택에 따라 6~24회) 이상 납입한 자</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">선정방법</th>
+								<td>
+									<ul class="bul_list line_list black_list">
+										<li>(1단계) 우선공급 (50%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 이하 (국민주택인 경우 100% 이하) 인 분
+											<p class="mt_5">* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+										</li>
+									</ul>									
+									<ul class="bul_list line_list black_list">
+										<li>(2단계) 일반공급 (20%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 130% 초과 160% 이하 (국민주택인 경우 100% 초과 130% 이하) 인 분
+											<p class="mt_5">* 1단계 낙첨자를 포함</p>
+											<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+										</li>
+									</ul>									
+									<ul class="bul_list line_list black_list">
+										<li>(3단계) 추첨공급 : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 160%를 초과 (국민주택인 경우 130% 초과) 하나, 자산기준을 충족하는 분
+											<p class="mt_5">* 2단계 낙첨자를 포함</p>
+											<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+										</li>
+									</ul>	
+									&#8251; 소득구분별 공급 대상 주택 수 계산 시 소수점 이하는 올림 처리하되, 공급물량이 3세대인 경우 우선공급·일반공급·추첨공급에 각 1세대씩 배정함								
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div id="tab_111" class="tab_content">
+					<h5 class="sub_sub_tit mt_50">신생아(공공주택-일반형,선택형)</h5>
+					<table class="tbl_st tbl_pd_lg mt_10">	
+						<caption class="blind">신생아(공공주택-일반형,선택형) 상세정보가 나와있는 테이블입니다.</caption>
+						<colgroup>
+							<col style="width:25%">
+							<col style="width:auto">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row">대상주택</th>
+								<td>
+									<ul class="bul_list line_list black_list">
+										<li>「공공주택 특별법 시행규칙」 별표6에 따라 공급하는 "분양전환공공임대주택 및 공공분양주택" (일반형)</li>
+										<li>「공공주택 특별법 시행규칙」 별표6의2에 따라 공급하는 "분양전환공공임대주택 중 임대의무기간이 6년인 주택" (선택형)</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">공급 물량</th>
+								<td>
+									<ul class="bul_list line_list black_list">
+										<li>일반형 : 20%</li>
+										<li>선택형 : 30%</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">대상자</th>
+								<td>
+									<p>입주자모집공고일 현재 2세 미만(2세가 되는 날을 포함)의 자녀가 있는 분</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약자격</th>
+								<td>
+									<p>1. 무주택세대구성원</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <p><small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small></p>
+										</li>
+										<li>
+											다만, 청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는 (배우자분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+											<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+										</li>
+									</ul>
+									<p class="mt_20">2. 소득기준 : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 140% 이하(부부 모두 소득이 있는 경우 200% 이하)</p>
+									<p class="mt_20">3. 자산기준</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											(일반형) 세대의 부동산가액 및 자동차가액이 각각 아래 기준 이하일 것
+											<p><button type="button" class="btn_org btnPopWord" onclick="fn_pop('assetsHoldStdr');">공공주택(일반형) 입주자 보유 자산 기준</button> 참조</p>
+										</li>
+										<li>(선택형) 세대의 총자산가액이 통계청에서 발표하는 가계금융복지조사에 따른 소득3분위 순자산 평균값의 일정 비율 이하일 것 (입주자모집공고문 참조)</li>
+									</ul>
+									<p class="mt_10">&#8251; 분양전환 공공임대주택으로서 가구원 수가 2명인 경우에는 소득요건 비율이 10%p 완화 적용되오니(소득요건 비율이 200%인 경우 제외), 입주자모집공고문을 통해 정확한 소득요건을 확인하시기 바랍니다.</p>
+									<p class="mt_10">&#8251; 2023년 3월 28일 이후 출산한 자녀(임신 중이거나 2023년 3월 28일 이후 출생한 입양자를 포함하며 미성년 자녀로 한정)가 있는 가구의 경우 소득요건 및 자산요건이 기준 대비 최대 20%p 비율을 가산한 금액까지 완화될 수 있으니 입주자 모집공고문을 통해 확인하시기 바랍니다.</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약통장</th>
+								<td>
+									<p>주택청약종합저축 또는 청약저축에 가입하여 6개월이 지난 경우로서 매월 약정납입일에 월납입금을 6회이상 납입한 분</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">선정방법</th>
+								<td>
+									<b>① 소득구분</b>
+									<ul class="bul_list line_list black_list">
+										<li>
+											(1단계) 우선공급 (70%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 이하(부부 모두 소득이 있는 경우 120% 이하)인 분
+											<p class="mt_5">* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 아래 배점 순으로 입주자 선정</p>
+										</li>
+									</ul>									
+									<ul class="bul_list line_list black_list">
+										<li>
+											(2단계) 일반공급 (20%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 초과 140% 이하(부부 모두 소득이 있는 경우 120% 초과 150% 이하)인 분
+											<p class="mt_5">* 1단계 낙첨자를 포함</p>
+											<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 아래 배점 순으로 입주자 선정</p>
+										</li>
+									</ul>									
+									<ul class="bul_list line_list black_list">
+										<li>
+											(3단계) 추첨공급 : 부부 모두 소득이 있는 신청자 중 세대의 월평균소득이 전년도 도시근로자 월평균소득의 150% 초과 200% 이하인 분
+											<p class="mt_5">* 2단계 낙첨자를 포함</p>
+											<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+										</li>
+									</ul>									
+									<b class="mt_20 dis_b">② 배점 : <button type="button" class="btn_org btnPopWord" onclick="fn_pop_r('pointNWBBSpecial');"><span>신생아(일반형,선택형) 특별공급 배점항목</span></button> 참조</b>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				
+				<div id="tab_112" class="tab_content">
+					<h5 class="sub_sub_tit mt_50">신생아(공공주택-나눔형)</h5>
+					<table class="tbl_st tbl_pd_lg mt_10">
+						<caption class="blind">신생아(공공주택-나눔형) 상세정보가 나와있는 테이블입니다.</caption>
+						<colgroup>
+							<col style="width:25%">
+							<col style="width:auto">
+						</colgroup>
+						<tbody>
+							<tr>
+								<th scope="row">대상주택</th>
+								<td>
+									<ul class="bul_list line_list black_list">
+										<li>「공공주택 특별법 시행규칙」 별표6의6에 따라 공급하는 "이익공유형 분양주택 및 토지임대부 분양주택" (나눔형)</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">공급 물량</th>
+								<td>
+									<ul class="bul_list line_list black_list">
+										<li>나눔형 : 35%</li>
+									</ul>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">대상자</th>
+								<td>
+									<p>입주자모집공고일 현재 2세 미만(2세가 되는 날을 포함)의 자녀가 있는 분</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약자격</th>
+								<td>
+									<p>1. 무주택세대구성원</p>
+									<ul class="bul_list line_list black_list">
+										<li>
+											무주택세대구성원은 동일한 주민등록표등본에 함께 등재된 <span class="color_lb">세대</span>[청약신청자의 배우자, 직계존속(배우자의 직계존속포함) 및 직계비속(직계비속의 배우자포함)] <span class="color_lb">전원이 주택 또는 분양권등을 소유하고 있지 아니한 세대구성원</span>을 말합니다. <p><small class="dis_b">* 분양권등 : 주택소유로  보는 경우 등 세부사항은 <button type="button" class="btn_voca" data-vocaid="rightSellHouseLay"><span>분양권등</span></button> 참조</small></p>
+										</li>
+										<li>
+											다만, 청약신청자의 배우자가 별도의 주민등록표등본에 등재되어 있는 경우에는 (배우자분리세대) 그 배우자와 배우자의 주민등록표등본에 등재된 직계존&middot;비속을 포함합니다.
+											<p><small>* 세부사항은 <button type="button" class="btn_org btnPopWord" data-popword="noHouseMemberLay"><span>무주택세대구성원</span></button> 참조</small></p>
+										</li>
+									</ul>
+									<p class="mt_20">2. 소득기준 : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 140% 이하(부부 모두 소득이 있는 경우 200% 이하)</p>
+									<p class="mt_20">3. 자산기준 : 세대의 총자산가액이 통계청에서 발표하는 가계금융복지조사에 따른 소득3분위 순자산 평균값의 일정 비율 이하일 것 (입주자모집공고문 참조)</p>									
+									<p class="mt_10">&#8251; 분양전환 공공임대주택으로서 가구원 수가 2명인 경우에는 소득요건 비율이 10%p 완화 적용되오니(소득요건 비율이 200%인 경우 제외), 입주자모집공고문을 통해 정확한 소득요건을 확인하시기 바랍니다.</p>
+									<p class="mt_10">&#8251; 2023년 3월 28일 이후 출산한 자녀(임신 중이거나 2023년 3월 28일 이후 출생한 입양자를 포함하며 미성년 자녀로 한정)가 있는 가구의 경우 소득요건 및 자산요건이 기준 대비 최대 20%p 비율을 가산한 금액까지 완화될 수 있으니 입주자 모집공고문을 통해 확인하시기 바랍니다.</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">청약통장</th>
+								<td>
+									<p>주택청약종합저축 또는 청약저축에 가입하여 6개월이 지난 경우로서 매월 약정납입일에 월납입금을 6회이상 납입한 분</p>
+								</td>
+							</tr>
+							<tr>
+								<th scope="row">선정방법</th>
+								<td>
+									<b>① 소득구분</b>
+									<ul class="bul_list line_list black_list">
+										<li>
+											(1단계) 우선공급 (70%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 이하(부부 모두 소득이 있는 경우 120% 이하)인 분
+											<p class="mt_5">* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 아래 배점 순으로 입주자 선정</p>
+										</li>
+									</ul>									
+									<ul class="bul_list line_list black_list">
+										<li>
+											(2단계) 일반공급 (20%) : 세대의 월평균소득이 전년도 도시근로자 월평균소득의 100% 초과 140% 이하(부부 모두 소득이 있는 경우 120% 초과 150% 이하)인 분
+											<p class="mt_5">* 1단계 낙첨자를 포함</p>
+											<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 아래 배점 순으로 입주자 선정</p>
+										</li>
+									</ul>									
+									<ul class="bul_list line_list black_list">
+										<li>
+											(3단계) 추첨공급 : 부부 모두 소득이 있는 신청자 중 세대의 월평균소득이 전년도 도시근로자 월평균소득의 150% 초과 200% 이하인 분
+											<p class="mt_5">* 2단계 낙첨자를 포함</p>
+											<p>* 경쟁이 있는 경우 지역우선 공급기준에 따르며, 지역 내 경쟁 시 추첨으로 입주자 선정</p>
+										</li>
+									</ul>									
+									<b class="mt_20 dis_b">② 배점 : <button type="button" class="btn_org btnPopWord" onclick="fn_pop_r('pointNWBBShrSpecial');"><span>신생아(나눔형) 특별공급 배점항목</span></button> 참조</b>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!-- 신생아 -->
+			<!-- ## 이전기관종사자 -->
+			<div id="cate8">
+				<h5 class="sub_sub_tit mt_50">이전기관종사자</h5>
+				<table class="tbl_st tbl_pd_lg mt_10">
+					<caption class="blind">이전기관종사자 상세정보가 나와있는 테이블입니다.</caption>
+					<colgroup>
+						<col style="width:25%">
+						<col style="width:auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row">대상주택</th>
+							<td>
+								<p>도청이전도시, 혁신도시 등 비수도권으로 이전하는 공공기관&middot;학교&middot;의료연구기관&middot;기업의 종사자, 이전(移轉)하는 주한미군기지의 고용원, 산업단지 및 기업도시 종사자 등에게 공급하는 분양 및 임대주택</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약자격</th>
+							<td>
+								<p>입주자모집공고일 현재 해당기관 종사자로서 해당기관에서 &lsquo;주택 특별공급대상자 확인서&rsquo;를 발급받은 분</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">선정방법</th>
+							<td>
+								<p>경쟁이 있을 경우 추첨으로 선정</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약제한사항</th>
+							<td>
+								<p>산업단지, 기업도시, 혁신도시, 주한미군 이전도시의 경우 특별공급 대상인 <b>종사자와 그 세대에 속한 자</b> (배우자 분리세대 포함)가 <b>해당 주택건설지역에 주택을 소유하고 있는 경우</b>와 <b>해당 지역에서 공급한 주택의 일반공급에 당첨된 사실이 있는 경우에는 특별공급 대상자에서 제외됨</b></p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<!-- ## 외국인 -->
+			<div id="cate9">
+				<h5 class="sub_sub_tit mt_50">외국인</h5>
+				<table class="tbl_st tbl_pd_lg mt_10">
+					<caption class="blind">외국인 상세정보가 나와있는 테이블입니다.</caption>
+					<colgroup>
+						<col style="width:25%">
+						<col style="width:auto">
+					</colgroup>
+					<tbody>
+						<tr>
+							<th scope="row">대상주택</th>
+							<td>
+								<p>외국인 투자의 촉진을 위한 시책을 추진하기 위하여 외국인에게 공급하는 분양 및 임대주택</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">청약자격</th>
+							<td>
+								<p>입주자모집공고일 현재 시도지사가 정한 외국인 중 무주택자</p>
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">선정방법</th>
+							<td>
+								<p>경쟁이 있을 경우 추첨으로 선정</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+		</div>
+
+	</div>
+</div>
+<script>
+$(document).on('click', '.btn_voca, .btn_normal', function(e){
+	e.preventDefault();
+	
+	var divids = $(this).data('vocaid');
+	var title = $(this).children('span').text();
+	if ( $(this).attr('class') === 'btn_normal' ) {
+		title = this.innerText
+	}
+	
+	gfn_popupWordDc( divids, title );
+});
+
+
+$(".btnPopWord").click(function(){
+	var pId = $(this).data("popword");
+	var pTit = $(this).children('span').text();
+	gfn_popupWordDc(pId, pTit);
+});
+
+
+/**
+ * 설명		: 팝업을 호출한다.
+ * 사용방식	: fn_pop()
+ * 주의		: 
+ * 리턴		:
+ */
+function fn_pop(popId) {
+	if($("#popDiv"+popId).length > 0 && $("#"+popId).length > 0) {
+		gfn_popupDiv(popId);
+	} else {
+		$("body").append("<div id='popDiv"+popId+"' style='display:none;'/>");
+		$("#popDiv"+popId).load("/html/kabhom/ap/"+popId+".html"
+				,function(responseTxt, statusTxt, xhr){
+					if(statusTxt == "success") {
+						gfn_popupDiv(popId);
+						$("#popDiv"+popId).on("click", ".onClose", function(){
+							$("#popDiv"+popId).dialog("close");
+						});
+						
+						// 닫기버튼 이벤트
+                        $(".ui-dialog-titlebar-close").on("click", function(){  
+                            $("#popDiv"+popId).remove();
+                        });
+					}
+				}
+		);
+	}
+}
+
+function fn_pop_r(popId) {
+	if($("#popDiv"+popId).length > 0 && $("#"+popId).length > 0) {
+		gfn_popupDiv(popId);
+	} else {
+		$("body").append("<div id='popDiv"+popId+"' style='display:none;'/>");
+		$("#popDiv"+popId).load("/html/kabhom/ar/"+popId+".html"
+				,function(responseTxt, statusTxt, xhr){
+					if(statusTxt == "success") {
+						gfn_popupDiv(popId);
+						$("#popDiv"+popId).on("click", ".onClose", function(){
+							$("#popDiv"+popId).dialog("close");
+						});
+					}
+				}
+		);
+	}
+}
+
+$(function() {
+	$('.arfile').on('click', function(e) {
+		e.preventDefault();
+		window.open('/form/ar/' + $(this).attr('href'), '_blank');
+// 		gfn_formDownload('/form/ar/' + $(this).attr('href'), '_blank');
+	});
+});
+
+
+$(function() {
+    
+    let paramhash = window.location.hash;
+    
+    if (paramhash != null && paramhash.trim() != '') {
+        let obj = $("li a[href='" + paramhash + "']")[0];
+    
+        $('.cate_list cate_4 li').removeClass('active');
+        $(obj).parent().addClass('active').find('.blind').text('현재 선택 메뉴');
+        
+        obj.click();
+    }
+});
+
+
+function fn_popIncome(popId) {
+	var today = new Date();
+    var reformOpertnDe = "";  // 규칙개정시행일자
+    var rcritPblancDe = "";	   		   // 모집공고일자
+    var spsplyKndCode = "";    // 특별공급유형코드
+    var publicHouseSpclwApplcAt = "Y";  // 공공주택특별법적용여부(공공주택여부)
+    var houseDetailSecd = "";
+    var	subscrptChk = "N";
+    var publicHouseSelType = "3";//선택형
+    var rentSecd = "1"; //분양전환
+
+    rcritPblancDe = today.getFullYear().toString() + ("0" + (today.getMonth()+1)).slice(-2).toString() + ("0" + today.getDate()).slice(-2).toString();
+    
+    var incomeUrl = "/co/coz/popupHouseMmAvrgIncomeStdr.do"; // 도시근로자 가구원수별 월평균소득기준 팝업 URL
+    
+    var incomeParam = "?rcritPblancDe=" + rcritPblancDe 
+                      + "&spsplyKndCode=" + spsplyKndCode
+                      + "&publicHouseSpclwApplcAt=" + publicHouseSpclwApplcAt
+                      + "&houseDetailSecd=" + houseDetailSecd
+    				  + "&subscrptChk=" + subscrptChk
+    				  + "&publicHouseSelType=" + publicHouseSelType
+    				  + "&rentSecd=" + rentSecd;
+
+    incomeUrl += incomeParam;
+    
+    $("body").append("<div id='popDiv"+popId+"' style='display:none;' />");
+    $("#popDiv"+popId).load(incomeUrl
+            ,function(responseTxt, statusTxt, xhr){
+                if(statusTxt == "success") {
+                    gfn_popupDiv(popId);
+					
+                    //$("#Scincome").remove();//배점항목 표기
+                    
+                    $("#popDiv"+popId).on("click", ".onClose", function(){
+                        $("#popDiv"+popId).dialog("close");
+                    });
+                    
+                    // 닫기버튼 이벤트
+                    $(".ui-dialog-titlebar-close").on("click", function(){  
+                        $("#popDiv"+popId).remove();
+                    });
+                }
+            }
+    );
+}
+
+</script>
+
+
+
+	</div>
+	<ul class="navigation-wrap txt-indent"></ul>
+	<div class="shadow"></div>
+</div>
+<div id="divForPopup"></div>
+
+
+<div class="loding_wrap" id="commonProgressBar">
+	<div class="lod_wrap_box">
+		<div class="lod_box">
+			<i class="xi-spinner-2 xi-spin"></i>
+			<p>처리중입니다.</p>
+		</div>
+	</div>
+</div>
+
+	
+<script>
+	var gvPgmId = "ARA04M01";
+</script>
+<script src="/js/kabhom/com/hom.core.js"></script>
+<script src="/js/kabhom/util/hom.all.js"></script>
+<script src="/js/kabhom/main/leftMenucommon.js"></script>
+</body>
+</html>

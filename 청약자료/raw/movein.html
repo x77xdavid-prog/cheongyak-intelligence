@@ -1,0 +1,1694 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1" />
+	<meta name="format-detection" content="telephone=no" />
+	<link rel="icon" type="image/ico" href="https://static.applyhome.co.kr/images/kabhom/common/favicon.ico" />
+	<link rel="apple-touch-icon" href="https://static.applyhome.co.kr/images/kabhom/common/phone.png"/>
+	<link rel="shortcut icon" href="https://static.applyhome.co.kr/images/kabhom/common/phone.png"/> 
+	
+	<link rel="stylesheet" type="text/css" href="/css/kabhom/main/leftSubMenu.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/kabhom/main/hom.css"/>	
+	<link rel="stylesheet" type="text/css" href="/css/kabhom/main/scrap/virtual.css"/>
+	
+	
+	
+	<!-- 배너 슬라이드 추가링크 -->
+	<!-- <link rel="stylesheet" href="/css/kabhom/main/vendors/swiper.min.css">
+    <script src="/js/kabhom/plugin/swiper.min.js"></script> -->
+   
+	<title>청약홈 | 입주(예정)정보 조회</title>
+	
+	
+	<!-- 운영일 경우에만 -->
+	
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143621263-1"></script>
+	
+	
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'UA-143621263-1');
+	</script>
+	
+	<script src="https://static.applyhome.co.kr/js/kabhom/plugin/jquery.3.1.1.min.js"></script>
+	<script src="https://static.applyhome.co.kr/js/kabhom/plugin/jquery-ui.min.js"></script>
+	<script src="/js/kabhom/main/site.js"></script>
+	
+	<!-- 성능제어 Netfunnel, 키보드보안 -->
+	<script src="/js/kabhom/com/com.js"></script>
+	
+	<!-- 성능제어 Netfunnel -->
+	<script src="https://static.applyhome.co.kr/netfunnel/netfunnel.js"></script>
+	<script src="https://static.applyhome.co.kr/netfunnel/netfunnel_skin.js"></script>
+	
+	<script>
+	document.domain = "applyhome.co.kr";
+	
+	window.onpageshow = function(event) {
+		if(event.persisted) {
+			
+			window.location.reload(true);
+		}
+	}
+	$(document).ready(function() {
+		if(gfn_isMobile()) {
+			$('#divTab').css("display","none");
+		}
+		
+		var gnbTree = $("#gnbTree > li > button");
+		$(gnbTree).on("click", function() {
+				 $(this).parents("li").siblings("li").children("ul").slideUp();
+				 $(this).parents("li").siblings("li").children("button").removeClass("on");
+				 $(this).siblings("ul").slideToggle();
+				 $(this).addClass("on");
+		 });
+	});
+	
+		
+		var strPopupYn = 'N';
+		
+		
+		if(window.name == "iframeDialog" && strPopupYn == 'Y')
+		{
+			parent.document.location.href = "/co/coz/selectComplexLoginView.do";
+		}
+
+		$(function(){
+			 
+			 /**
+			 * Description	: 상단 lnb_wrap setting
+			 */
+			$navi = $("#naviUl li").last();
+			var umid = $navi.data("umid");
+			if(umid != null) {
+				$navi.append($("#menu"+umid).next("ul").clone());
+				$navi.find('a').removeAttr('id');
+			}
+			
+			
+			var strMenuId = "menu" + $("#naviUl li").eq(1).data('mid');
+			$('#gnb #' + strMenuId).addClass('lnb_active');
+			
+			
+			
+			
+			if(gfn_getCookie("COA01M04_POPUP02") == "Y")
+			{
+			    $("#snb .info-wrap").addClass("hide");
+			}
+		});
+		
+	// Form input을 name=value 형식의 object로 변환	
+	$.fn.formToObject = function() {
+		var obj = null;
+		try {
+			if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+				var arr = this.serializeArray();
+				if(arr) {
+					obj = {};
+					$.each(arr, function(){
+						obj[this.name] = this.value;
+					})
+				}
+			}
+		} catch (e) {
+			alert(e.message);
+		} finally {
+			return obj;
+		}
+	};
+	
+	function formToString(form) {
+		var formData = new FormData($form);
+		
+		var object = {};
+		formData.forEach(function(value, key){
+		    object[key] = value;
+		});
+		var json = JSON.stringify(object);
+	}
+	
+	function fn_openPopup(url, title) {
+//	    if(gfn_isMobile() == false) {
+	        window.open(url, title);
+//	    }
+	}
+	
+	//팝업창에서 excepion 화면 닫기
+	function fn_closeKabExceptionDialog(){
+    	$(".ui-dialog").remove();
+    }
+	
+	</script>
+</head>
+<body>
+<div id="wrap">
+	<a href="#gnb" class="skip-link">주메뉴 바로가기</a>
+	<a href="#subContent" class="skip-link">본문 바로가기</a>	
+	<div id="snb">
+		<div class="info-wrap">
+			<div>
+				<p><span>청약문의 1644-7445</span>(월~금 09:00~17:30)</p>
+				<button class="btn-close txt-indent color-wh">닫기</button>
+			</div>
+		</div>
+		<div id="header">
+			<div class="my-area">
+				<h1><a href="javascript:$net.href('/co/coa/selectMainView.do');" class="txt-indent">청약HOME</a></h1>
+				<div>
+					
+						<button type="button" class="btn-search txt-indent">검색</button>
+					
+					<button type="button" class="btn-menu txt-indent">메인 메뉴</button>
+				</div>
+			</div>
+			
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	
+			<div class="search-area">
+				<div class="search-wrap">
+					<div class="search-btn"><button type="button" class="btn-close txt-indent">닫기</button></div>
+					<div class="search-box">
+						<form name="konanSearchform" id="konanSearchform" action="" method="POST"></form>
+						<input type="search" id="mainSchTxt" name="mainSchTxt" placeholder="검색어 입력" autocomplete="off" />
+						<!-- <button type="button" class="btn-search-delete txt-indent">삭제</button> -->
+						<button type="button" id="btnKonanSearch" class="btn-search txt-indent">검색</button>
+					</div>
+					<div class="search-autobox">
+						<div class="left-box">
+							<ul id="autolist"></ul>
+						</div>
+					</div>
+				</div>
+				
+				<div class="search-txt">찾으시는 메뉴명과 관심 지역명을 검색해보세요(순위확인서, 대구, 역삼 등)</div>
+			</div>
+			<div class="search-shadow"></div>
+			
+			<script>
+			$(function () {
+			    var searchTerm = "";
+			    $("#mainSchTxt").autocomplete({
+			        source: function (request, response) {
+			            searchTerm = request.term;
+			            $.ajax({
+			                url: "/co/coz/searchSuggestResult.do",
+			                data: { term: searchTerm },
+			                type: "GET",
+			                success: function(data) {
+			                    //console.log(data);
+			                    var jsonData = (typeof data === "string") ? JSON.parse(data) : data;
+			                    var html = "";
+			                    $.each(jsonData.suggestions.s || [], function(index, item) {
+			                        var itemTxt = item.keyword || '';
+			                        //자동완성 API 호출값에 URL이 포함되어지면 해당 ID값 호출 처리
+			                        //console.log(item.addtional || '');
+			                        var url = item.addtional[0] || '';			                        
+			                        var searchRegex = searchTerm.replace(/[.*+?^$()|[]\\]/g, '\\$&');
+			                        var highlighted = itemTxt.replace(new RegExp('(' + searchRegex + ')', 'gi'),'<span>$1</span>');
+			                        html += '<li data-url="'+url+'"><a href="'+url+'">';
+			                        if(!url || url.length === 0) {
+			                            html += highlighted;
+			                        }else {
+			                            html += highlighted + ' ≫';
+			                        }
+			                        html += '<div class="url-box"></div></a></li>';
+			                    });
+			                    $("#autolist").html(html).show();
+			                    //response(data);
+			                    response([]);
+			                }
+			            });
+			        },
+			        minLength: 1,
+			        delay: 300
+			    });
+			    $("#mainSchTxt").on("keydown", function(e) {
+			        if(e.keyCode === 13) {
+			            e.preventDefault();
+			            var chkArr = search.checkSearchCondition();
+			            var searchTxt = $("#mainSchTxt").val();
+			            var recordCountPerPage = 10;
+			            if(searchTxt.length > 1) {
+			                if ( chkArr ) {
+				                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'schTxt', name:'schTxt', value:searchTxt}) );
+				                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'recordCountPerPage', name:'recordCountPerPage', value:recordCountPerPage}) );
+					    		$net.submit("konanSearchform", "/co/coz/integratedSearchResultView.do");
+			                }
+			            }else {
+			                alert('검색어를 2글자 이상 입력해주세요.');
+			                return false;
+			            }
+			        }
+			    });
+			    $("#btnKonanSearch").on("click", function(e) {
+			        e.preventDefault();
+			        var chkArr = search.checkSearchCondition();
+			        var searchTxt = $("#mainSchTxt").val();
+			        var recordCountPerPage = 10;
+		            if(searchTxt.length > 1) {
+		                if ( chkArr ) {
+			                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'schTxt', name:'schTxt', value:searchTxt}) );
+			                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'recordCountPerPage', name:'recordCountPerPage', value:recordCountPerPage}) );
+				    		$net.submit("konanSearchform", "/co/coz/integratedSearchResultView.do");
+		                }
+		            }else {
+		                alert('검색어를 2글자 이상 입력해주세요.');
+		                return false;
+		            }
+			    });
+			    $(document).on("mouseenter", "#autolist li", function(e) {
+			        var $currentLi = $(this);
+			        $("#autolist li").not(this).find("div").empty().removeData("inited"); //다른 li의 div값을 비움
+			        
+			        if($currentLi.find("div").data("inited")) return; //이미 만들었다면 스킵하기
+			        
+			        var selectedTxt = $(this).children("a").first().text().replace("≫", "").trim();
+			        var url = $(this).data("url");
+			        if(url){
+			            var html = '<span>'+url+'</spna><span class="search-url">'+selectedTxt+'로 바로 이동</span>';
+				        $currentLi.find("div").html(html).data("inited", true);
+			        }
+			    });
+			    $(document).on("click", "#autolist li a", function(e) {
+			        e.preventDefault();
+			        var chkArr = search.checkSearchCondition();
+			        var selectedTxt = $(this).text().replace("≫", "").trim();
+			        var url = $(this).closest("li").data("url");
+			        var recordCountPerPage = 10;
+			        $("#autolist").val(selectedTxt);
+			        if(url){
+			            $net.href(""+url+"");
+			        }else{
+			            if ( chkArr ) {
+				            $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'schTxt', name:'schTxt', value:selectedTxt}) );
+				            $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'recordCountPerPage', name:'recordCountPerPage', value:recordCountPerPage}) );
+				    		$net.submit("konanSearchform", "/co/coz/integratedSearchResultView.do");
+			            }
+			        }
+			    });
+			    $(document).on("click", function(e) {
+			        if(!$(e.target).closest(".search-area").length) {
+			            $("#mainSchTxt").val("");
+			            $("#autolist").hide();
+			        }
+			    });
+			    $("#mainSchTxt").on("input", function(e) {
+					if(!e.target.value) {
+						$("#autolist").empty();
+					}
+				});
+			});
+			
+			var search = {
+			    checkSearchCondition : function() {
+					
+		    		var regApct = /[\%\&\<\>\"\']/gi;		
+		    		if(regApct.test($('#mainSchTxt').val()))
+		    		{
+		    			alert("검색어에 허용되지 않는 특수문자가 존재합니다.");	
+		    			$('#mainSchTxt').focus();
+		    			return false;
+		    		}
+		    		
+		    		var regApct = /(<([^>]+)>)/gi;		
+		    		if(regApct.test($('#mainSchTxt').val()))
+		    		{
+		    			alert("검색어에 허용되지 않는 문자스크립트가 존재합니다.");	
+		    			$('#mainSchTxt').val('');
+		    			$('#mainSchTxt').focus();
+		    			return false;
+		    		}
+		    		return true;
+		    	}
+			}
+			</script>
+		</div>
+		<div class="scrolling">
+			<nav id="gnb">
+				<div class="btn-box">
+					<div>
+					
+						
+							<a href="javascript:$net.href('/co/cob/selectSubscrptBnkbSbscrbDesc.do');" class="btn-login">마이페이지</a>
+						
+						
+					
+					</div>
+					<button type="button" class="btn-close txt-indent">닫기</button>
+				</div>
+				
+	<ul class="main">
+		<li>
+			<a href="#">청약신청</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" id="menu639">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" id="menu667">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=01&ty=10');" id="menu100085">1순위/2순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=04&ty=10');" id="menu100133">무순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=11&ty=10');" id="menu100337">임의공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=06&ty=20');" id="menu100164">불법행위재공급</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptReqstList.do');" id="menu668">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptCanclList.do');" id="menu669">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" id="menu640">오피스텔/생활숙박시설/도시형/민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" id="menu670">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptReqstList.do');" id="menu671">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptCanclList.do');" id="menu672">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" id="menu641">공공지원민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" id="menu673">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptReqstList.do');" id="menu674">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptCanclList.do');" id="menu675">청약취소</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약당첨조회</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinDescList.do');" id="menu646">APT</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wab/selectOfctlUrbtyPrzwinHouseList.do');" id="menu647">오피스텔/생활숙박시설/도시형/민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wac/selectPrvateRentPrzwinHouseList.do');" id="menu648">공공지원민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wad/selectMxtrHouseDrwtList.do');" id="menu649">주택조합 동·호수 추첨결과</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약자격확인</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldInfoProvdAgreRequestView.do');" id="menu100022">세대구성원 등록/조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldMbInfoProvdAgreView.do');" id="menu100127">세대구성원 동의</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/cob/selectSubscrptLmttCnList.do');" id="menu100128">청약제한사항확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectHousePosesnList.do');" id="menu100129">주택소유확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do');" id="menu100276">청약통장</a>
+						<ul>
+							<li><a href="javascript:NetFunnel.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do', '');" id="menu100277">가입내역</a></li>
+							<li><a href="javascript:$net.href('/cu/cud/selectRankCnfrmnIssuView.do');" id="menu100278">순위확인서 발급</a></li>
+							<li><a href="javascript:$net.href('/cu/cue/selectRankCnfrmnIssuView.do');" id="menu100279">순위확인서 발급내역</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/coc/selectSubscrptQualfDiagMain.do');" id="menu100312">청약자격진단</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">공고단지 청약연습</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" id="menu100280">공고단지</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" id="menu100281">청약연습</a></li>
+							<li><a href="javascript:$net.href('/ra/raa/selectAptSpsplyPreparSubscrptReqstList.do');" id="menu100282">연습내역 조회</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apg/selectAddpntCalculatorView.do');" id="menu100125">청약가점계산기</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/app/reqst/selectSubscrtReqstAptMainView.do');" id="menu100126">청약가상체험</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약일정 및 통계</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ai/aib/selectSubscrptCalenderView.do');" id="menu651">청약캘린더(청약일정)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cuc/selectSubscrptAllimiView.do');" id="menu652">청약알리미 신청</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" id="menu650">분양정보/경쟁률</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" id="menu686">APT</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectOtherLttotPblancListView.do');" id="menu687">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTRemndrLttotPblancListView.do');" id="menu818">APT 잔여세대</a></li>
+							<li><a href="javascript:$net.href('/ap/apk/selectAPTLttotPblancListView.do');" id="menu100383">민간사전청약</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" id="menu654">청약통장 통계</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" id="menu688">전체 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAcctoSbscrbStusView.do');" id="menu689">통장별 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbSbscrbPdAcctoStusView.do');" id="menu690">가입기간별 현황</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약제도안내</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" id="menu655">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" id="menu692">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroBnkbView.do');" id="menu693">청약통장</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroQualfView.do');" id="menu694">청약자격</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroSpetialView.do');" id="menu695">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHowToReqstView.do');" id="menu696">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroPreawnerSlctnView.do');" id="menu697">당첨자 선정</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroRemndrHshldView.do');" id="menu761">잔여세대</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" id="menu656">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" id="menu698">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionReqstMthInfoView.do');" id="menu699">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscrptIntroPreawnerSlctn.do');" id="menu700">당첨자 선정</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectsubscriptionDepositInfoView.do');" id="menu657">주택청약 상품정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aic/selectSpecltSubscrptRndAreaList.do');" id="menu100121">규제지역정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/ard/selectSubscriptVocabularyView.do');" id="menu658">주택청약 용어설명</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약소통방</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/cu/cua/selectNoticeListView.do');" id="menu660">공지사항</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cub/selectFAQList.do');" id="menu661">자주묻는질문</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinCnfrmnList.do');" id="menu100156">APT당첨사실조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cui/selectAdvPrzwnerCanclView.do');" id="menu100382">사전청약 당첨취소자 조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/rs/rsa/selectResaleListView.do');" id="menu100174">분양권 정보(전매제한등)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTMvnPrearngeHsHldcoList.do');" id="menu100267">입주(예정)정보</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+	</ul>
+
+			</nav>
+			<footer>
+				<div class="cs-box">
+					<strong class="txt-phone">청약문의</strong>
+					<div>
+						<strong class="num-phone">1644-칠사사오</strong>
+						<span>문의 시간  <strong>월~금 09:00 ~ 17:30</strong> </span>
+						<p>상담은 법적 효력 없는 참고용입니다.</p>
+					</div>
+				</div>
+				<div class="family-box">
+					<ul>
+						<li><a href="javascript:$net.href('/kabbnk/cn/cna/selectMainView.do');">대행은행</a></li>
+						<li><a href="javascript:$net.href('/kabbiz/cm/cma/selectMainView.do');">사업주체</a></li>
+					</ul>
+				</div>
+				<h2><a href="javascript:$net.href('/co/coa/selectMainView.do');" class="logo-bottom txt-indent">한국부동산원 청약 HOME</a></h2>
+				<div class="policy-box">
+					<ul>
+						<li><a href="javascript:$net.href('/co/coz/selectIndvdlinfoPolicyView.do');">개인정보처리방침</a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectMobileUseInfoView.do');">모바일 사용에 대한 안내</a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectMailColctDenialView.do');">이메일 추출방지정책 </a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectSecurityProgrmView.do');">보안프로그램</a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectCrtfctCopyView.do');">공동인증서 관리</a></li>
+						<li><a href="http://remote.kais.kr" target="_blank">원격연결</a></li>
+						<li><a href="#" class="menu-sitemap">사이트맵</a></li>
+					</ul>
+					<div class="info-sitemap">
+ 						<div class="site-wrap">
+							<a class="btn-close txt-indent color-wh">닫기</a>            	
+							
+	<ul class="main">
+		<li>
+			<a href="#">청약신청</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" class="title" id="menu639">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" id="menu667">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=01&ty=10');" id="menu100085">1순위/2순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=04&ty=10');" id="menu100133">무순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=11&ty=10');" id="menu100337">임의공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=06&ty=20');" id="menu100164">불법행위재공급</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptReqstList.do');" id="menu668">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptCanclList.do');" id="menu669">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" class="title" id="menu640">오피스텔/생활숙박시설/도시형/민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" id="menu670">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptReqstList.do');" id="menu671">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptCanclList.do');" id="menu672">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" class="title" id="menu641">공공지원민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" id="menu673">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptReqstList.do');" id="menu674">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptCanclList.do');" id="menu675">청약취소</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약당첨조회</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinDescList.do');" class="title" id="menu646">APT</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wab/selectOfctlUrbtyPrzwinHouseList.do');" class="title" id="menu647">오피스텔/생활숙박시설/도시형/민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wac/selectPrvateRentPrzwinHouseList.do');" class="title" id="menu648">공공지원민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wad/selectMxtrHouseDrwtList.do');" class="title" id="menu649">주택조합 동·호수 추첨결과</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약자격확인</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldInfoProvdAgreRequestView.do');" class="title" id="menu100022">세대구성원 등록/조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldMbInfoProvdAgreView.do');" class="title" id="menu100127">세대구성원 동의</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/cob/selectSubscrptLmttCnList.do');" class="title" id="menu100128">청약제한사항확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectHousePosesnList.do');" class="title" id="menu100129">주택소유확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do');" class="title" id="menu100276">청약통장</a>
+						<ul>
+							<li><a href="javascript:NetFunnel.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do', '');" id="menu100277">가입내역</a></li>
+							<li><a href="javascript:$net.href('/cu/cud/selectRankCnfrmnIssuView.do');" id="menu100278">순위확인서 발급</a></li>
+							<li><a href="javascript:$net.href('/cu/cue/selectRankCnfrmnIssuView.do');" id="menu100279">순위확인서 발급내역</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/coc/selectSubscrptQualfDiagMain.do');" class="title" id="menu100312">청약자격진단</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">공고단지 청약연습</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" class="title" id="menu100280">공고단지</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" id="menu100281">청약연습</a></li>
+							<li><a href="javascript:$net.href('/ra/raa/selectAptSpsplyPreparSubscrptReqstList.do');" id="menu100282">연습내역 조회</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apg/selectAddpntCalculatorView.do');" class="title" id="menu100125">청약가점계산기</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/app/reqst/selectSubscrtReqstAptMainView.do');" class="title" id="menu100126">청약가상체험</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약일정 및 통계</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ai/aib/selectSubscrptCalenderView.do');" class="title" id="menu651">청약캘린더(청약일정)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cuc/selectSubscrptAllimiView.do');" class="title" id="menu652">청약알리미 신청</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" class="title" id="menu650">분양정보/경쟁률</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" id="menu686">APT</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectOtherLttotPblancListView.do');" id="menu687">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTRemndrLttotPblancListView.do');" id="menu818">APT 잔여세대</a></li>
+							<li><a href="javascript:$net.href('/ap/apk/selectAPTLttotPblancListView.do');" id="menu100383">민간사전청약</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" class="title" id="menu654">청약통장 통계</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" id="menu688">전체 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAcctoSbscrbStusView.do');" id="menu689">통장별 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbSbscrbPdAcctoStusView.do');" id="menu690">가입기간별 현황</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약제도안내</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" class="title" id="menu655">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" id="menu692">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroBnkbView.do');" id="menu693">청약통장</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroQualfView.do');" id="menu694">청약자격</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroSpetialView.do');" id="menu695">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHowToReqstView.do');" id="menu696">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroPreawnerSlctnView.do');" id="menu697">당첨자 선정</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroRemndrHshldView.do');" id="menu761">잔여세대</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" class="title" id="menu656">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" id="menu698">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionReqstMthInfoView.do');" id="menu699">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscrptIntroPreawnerSlctn.do');" id="menu700">당첨자 선정</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectsubscriptionDepositInfoView.do');" class="title" id="menu657">주택청약 상품정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aic/selectSpecltSubscrptRndAreaList.do');" class="title" id="menu100121">규제지역정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/ard/selectSubscriptVocabularyView.do');" class="title" id="menu658">주택청약 용어설명</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약소통방</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/cu/cua/selectNoticeListView.do');" class="title" id="menu660">공지사항</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cub/selectFAQList.do');" class="title" id="menu661">자주묻는질문</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinCnfrmnList.do');" class="title" id="menu100156">APT당첨사실조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cui/selectAdvPrzwnerCanclView.do');" class="title" id="menu100382">사전청약 당첨취소자 조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/rs/rsa/selectResaleListView.do');" class="title" id="menu100174">분양권 정보(전매제한등)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTMvnPrearngeHsHldcoList.do');" class="title" id="menu100267">입주(예정)정보</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+	</ul>
+
+						</div>
+					</div>
+				</div>
+				<p class="txt-address">(우)41068 대구광역시 동구 이노밸리로 291 (신서동)</p>
+				<p class="txt-copyright">COPYRIGHT ⓒ KOREA REAL ESTATE BOARD, ALL RIGHTS RESERVED.</p>
+			</footer>
+		</div>
+	</div>
+
+	<div id="content" class="sub_content">
+		<div class="sub_visu customer">
+			<div class="sub_visu_box">
+				<div class="sub_visu_txt">
+					<h5>
+				
+					
+						청약소통방
+					
+					
+				
+					</h5>
+					
+					
+					<div class="lnb_wrap">
+						<ul class="lnb_box" id="naviUl">
+							<li><a href="javascript:$net.href('/co/coa/selectMainView.do');"><i class="xi-home"></i><span class="blind">홈으로</span></a></li>
+							<li class="mo_none" data-mid="638"><i class="xi-angle-right-thin"></i> 청약소통방</li>
+					
+						
+						
+							<li class="" data-mid="100267" data-umid="638">
+								<i class="xi-angle-right-thin"></i> 입주(예정)정보
+							</li>
+						
+						
+						
+						
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+<!-- 배너 슬라이드 추가 스크립트 -->
+    <!-- <script>
+    var swiper = new Swiper('.swiper-container',{
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        spaceBetween: 30,
+        effect: 'fade',
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+  </script> -->
+
+
+<style>
+.bank_list table{border-left:1px solid #c9c9c9;border-right:1px solid #c9c9c9;}
+.bank_list table thead tr th{height:49px !important;}
+.bank_list li:last-child table thead tr th{background-color: #edf4ff !important;}
+.bank_list table tbody tr td{padding:5px !important}
+.bank_list table tbody tr td.txt_r {padding-right:15px !important}
+</style>
+<div class="sub_content_box" id="subContent">
+	<h4 class="sub_tit">입주(예정)정보</h4>
+	<div class="line_box noti_line">
+		<div class="line_content">
+			<p>향후 2년간(`26년 1월 ~ `27년 12월) 공동주택 입주예정물량입니다.</p>
+			<br/>
+			<p>ㅇ 공동주택 입주예정물량은 주택건설 실적정보, 입주자모집공고 정보, 정비사업 추진실적, 부동산R114 자료 등을 활용하여 산정함</p>
+			<p>ㅇ 해당 자료는 정확성 제고를 위해 전국 지차체 검증, 공사 중단·일정 변경 등 변동 사항을 반영하였으며 산정 특성상 기준 시점 이후에 발생하는 변경 정보는 반영되지 않음</p>
+			<p>ㅇ 향후 건설사업계획 변경 및 추가 입주자모집공고 물량 등에 따라 예측치는 변동될 가능성이 있음</p>
+			<p>ㅇ 공개된 입주예정물량은 30세대 이상 공동주택 기준</p>
+			<p>ㅇ 기준 시점 : 2025년 12월 말</p>
+			<br/>
+			<p>&#8251; 자료문의 : 한국부동산원 부동산분석처 (053-663-8717)</p>
+		</div>
+	</div>
+	
+	<h5 class="sub_sub_tit mb_10">조회 결과</h5>
+	<!-- <ul class="bul_list line_list">
+		<li>지역명을 클릭하시면 해당지역의 입주(예정) 정보를 확인하실 수 있습니다.</li>
+	</ul> -->
+	<div class="useBrow txt_r" style="padding-right:10px"><button class="btn_org" data-file="입주예정물량 공개용.xlsx">입주물량 첨부파일 다운로드</button></div>
+	
+	<div class="mt_10">
+		<ul class="bank_list">
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">서울특별시 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="서울">
+							
+							<th colspan="2">서울특별시</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">27,158</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">17,197</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>44,355</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">경기도 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="경기">
+							
+							<th colspan="2">경기도</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">62,893</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">83,169</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>146,062</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">인천광역시 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="인천">
+							
+							<th colspan="2">인천광역시</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">15,161</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">15,376</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>30,537</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">부산광역시 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="부산">
+							
+							<th colspan="2">부산광역시</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">11,489</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">17,750</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>29,239</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">광주광역시 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="광주">
+							
+							<th colspan="2">광주광역시</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">11,490</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">8,427</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>19,917</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">대구광역시 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="대구">
+							
+							<th colspan="2">대구광역시</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">10,752</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">1,686</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>12,438</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">대전광역시 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="대전">
+							
+							<th colspan="2">대전광역시</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">6,179</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">17,441</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>23,620</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">울산광역시 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="울산">
+							
+							<th colspan="2">울산광역시</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">4,478</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">5,177</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>9,655</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">세종특별자치 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="세종">
+							
+							<th colspan="2">세종특별자치시</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">42</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">0</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>42</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">강원특별자치 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="강원">
+							
+							<th colspan="2">강원특별자치도</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">7,875</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">4,543</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>12,418</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">경상남도 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="경남">
+							
+							<th colspan="2">경상남도</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">7,245</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">2,473</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>9,718</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">경상북도 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="경북">
+							
+							<th colspan="2">경상북도</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">4,739</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">8,095</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>12,834</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">전라남도 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="전남">
+							
+							<th colspan="2">전라남도</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">4,381</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">6,266</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>10,647</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">전북특별자치 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="전북">
+							
+							<th colspan="2">전북특별자치도</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">6,349</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">2,370</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>8,719</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">충청북도 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="충북">
+							
+							<th colspan="2">충청북도</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">7,314</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">12,466</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>19,780</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">충청남도 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="충남">
+							
+							<th colspan="2">충청남도</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">10,474</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">11,689</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>22,163</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">제주특별자치 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr data-arnm="제주">
+							
+							<th colspan="2">제주특별자치도</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">564</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">2,198</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>2,762</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+			
+		
+		
+		
+			
+			
+			<li>
+				<table class="tbl_st tbl_tb tbl_center">
+					<caption class="blind">전국합계 입주예정 년도별 공급세대수</caption>
+					<colgroup>
+						<col style="width:45%">
+						<col style="width:auto">
+					</colgroup>
+					<thead>
+						<tr>
+							<th colspan="2">전국합계</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>년도</td>
+							<td>입주예정 세대수</td>
+						</tr>
+						<tr>
+							
+							<td>2026년</td>
+							<td class="txt_r">198,583</td>
+						</tr> 
+						<tr>
+							
+							<td>2027년</td>
+							<td class="txt_r">216,323</td>
+						</tr>
+						<tr>
+							<td><b>합계</b></td>
+							<td class="txt_r"><b>414,906</b></td>
+						</tr>
+					</tbody>
+				</table>
+			</li>
+			
+		
+		
+	</ul>
+	</div>
+</div>
+<script>
+$(function() {
+	
+	$(".tbl_st").on('click', 'a', function() {
+		if($('#pbDeFrm')){
+			$('#pbDeFrm').remove();
+		}
+
+		if(!$(this).parent().parent().data('arnm')){
+		    alert('지역명이 존재하지 않습니다.');
+		    return false;
+		}
+		
+		var pbDeFrm = $('<form/>', {name:'pbDeFrm', id:'pbDeFrm'});
+
+		$('.line_content').after(pbDeFrm);
+		pbDeFrm.append( $('<input/>', {type:'hidden', name:'suplyAreaCode', id:'suplyAreaCode', value:$(this).parent().parent().data('arnm')}));
+		
+		$net.submit("pbDeFrm", "/ai/aia/selectAPTMvnPrearngeInfoList.do");
+	});
+	
+	
+	$('.btn_org').on('click', function(e) {
+    		
+    	var fileNm = $(this).data('file');
+    		
+    	if(fileNm == ''){
+    		alert('다운받을 파일이 없습니다. 관리자에게 문의해주세요.');
+    		return;
+    	}
+    		
+    	gfn_formDownload('/form/ai/' + encodeURIComponent(fileNm));
+    		
+	});
+});
+</script>
+
+
+
+	</div>
+	<ul class="navigation-wrap txt-indent"></ul>
+	<div class="shadow"></div>
+</div>
+<div id="divForPopup"></div>
+
+
+<div class="loding_wrap" id="commonProgressBar">
+	<div class="lod_wrap_box">
+		<div class="lod_box">
+			<i class="xi-spinner-2 xi-spin"></i>
+			<p>처리중입니다.</p>
+		</div>
+	</div>
+</div>
+
+	
+<script>
+	var gvPgmId = "AIA04M01";
+</script>
+<script src="/js/kabhom/com/hom.core.js"></script>
+<script src="/js/kabhom/util/hom.all.js"></script>
+<script src="/js/kabhom/main/leftMenucommon.js"></script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+# 검증/비교용 스크린샷 (재생성 가능, 앱 동작에 불필요)
+*.jpeg
+*.jpg
+*.png
+
+# 브라우저 자동화 세션 아티팩트
+.playwright-mcp/
+
+# 개인정보·비밀 (혹시 생성될 경우 커밋 방지)
+subscribers.json
+.env
+.env.*
+secrets.json
+*.key
+
+# OS/에디터
+Thumbs.db
+.DS_Store
+.vscode/

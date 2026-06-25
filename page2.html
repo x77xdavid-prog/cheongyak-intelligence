@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>청약 도우미 · 내 통장으로 당첨까지</title>
+<meta name="description" content="내 청약통장으로 가점·당첨 가능성 진단, 당첨 자금 리포트, 결격 셀프체크, 맞춤 현장 매칭까지. 모든 데이터는 이 브라우저에만 저장됩니다.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ── 2026 trend system · electric cobalt → violet, glassmorphism, bento (index.html과 동일) ── */
+  --primary:#3D5AFE; --primary-2:#7B5BFC; --primary-ink:#1E36D8; --primary-soft:#EDF0FF;
+  --grad:linear-gradient(120deg,#3D5AFE,#7B5BFC);
+  --grad-hero:linear-gradient(135deg,#2E4BFF 0%,#6D4DFB 52%,#9B53F2 100%);
+  --grad-mesh:radial-gradient(circle at 18% 20%,rgba(61,90,254,.18),transparent 45%),radial-gradient(circle at 85% 12%,rgba(123,91,252,.16),transparent 42%);
+
+  --ink:#0C1124; --ink-2:#1A2138; --ink-deep:#1A2138;
+  --mut:#5A6379; --faint:#98A1B6; --line:#E8ECF6; --line-2:#F1F4FB;
+  --bg:#F4F6FC; --surface:#FFFFFF; --surface-2:#F8FAFF;
+
+  /* semantic — JS가 var(--live)/var(--bad)를 인라인 참조하므로 별칭 유지 */
+  --ok:#06C270; --ok-soft:#E1F8EC; --live:#06C270;
+  --hot:#FB3B68; --hot-soft:#FFE9EF; --bad:#FB3B68;
+  --amber:#FF9E2C; --warn:#C2740B; --warn-soft:#FFF1DC; --amber-soft:#FFF1DC;
+  --under:#7C5CFC; --under-soft:#EEEAFF;
+
+  --r-2xl:26px; --r-xl:20px; --r-lg:16px; --r-md:12px; --r-sm:9px;
+  --sh-xs:0 1px 2px rgba(12,17,36,.05);
+  --sh-sm:0 2px 8px -2px rgba(12,17,36,.10);
+  --sh-md:0 10px 30px -12px rgba(20,30,70,.22);
+  --sh-lg:0 28px 70px -28px rgba(20,30,80,.40);
+  --sh-glow:0 18px 50px -16px rgba(61,90,254,.45);
+  --mono:"Fira Code",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Pretendard",system-ui,sans-serif;background:var(--bg);color:var(--ink);
+  -webkit-font-smoothing:antialiased;line-height:1.55;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+.tnum{font-variant-numeric:tabular-nums;font-family:var(--mono)}
+.wrap{max-width:1120px;margin:0 auto;padding:0 clamp(16px,3.4vw,34px)}
+
+/* ── 입력 요소 공통 ── */
+input,select,textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--surface);
+  border:1px solid var(--line);border-radius:var(--r-md);padding:11px 13px;width:100%;
+  transition:border .18s var(--ease),box-shadow .18s var(--ease)}
+input[type=checkbox]{width:auto;accent-color:var(--primary)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(61,90,254,.14)}
+input[type=date]{font-family:var(--mono)}
+code{font-family:var(--mono);font-size:.92em;background:var(--primary-soft);color:var(--primary-ink);padding:2px 6px;border-radius:6px}
+
+/* ── 상단 유틸바 (index.html과 동일) ── */
+.util{background:var(--ink);color:#C9D0E4;font-size:12.5px}
+.util-in{display:flex;align-items:center;gap:18px;height:38px}
+.util-l{display:flex;align-items:center;gap:7px;font-weight:500}
+.util-l svg{width:14px;height:14px;color:#8E9ABF}
+.util-r{margin-left:auto;display:flex;align-items:center;gap:18px}
+.util .live{display:flex;align-items:center;gap:7px;color:#E6EAF6;font-weight:600}
+.util .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);position:relative}
+.util .dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;background:var(--ok);opacity:.4;animation:pulse 2.2s var(--ease) infinite}
+.util-r a{color:#AAB4D0;transition:color .2s}
+.util-r a:hover{color:#fff}
+@keyframes pulse{0%{transform:scale(.7);opacity:.5}70%{transform:scale(2.6);opacity:0}100%{opacity:0}}
+
+/* ── 헤더 / GNB (글래스모피즘, index.html과 동일) ── */
+header.gnb{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.72);
+  backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);
+  border-bottom:1px solid rgba(20,30,70,.08)}
+.gnb-in{display:flex;align-items:center;gap:14px;height:70px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:18px;letter-spacing:-.03em}
+.brand .logo{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  background:var(--grad);box-shadow:var(--sh-glow)}
+.brand .logo svg{width:21px;height:21px}
+.brand .gtxt .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+nav.menu{display:flex;gap:2px;margin-left:14px}
+nav.menu a{padding:9px 15px;border-radius:10px;font-size:14.5px;font-weight:600;color:var(--ink-2);
+  transition:color .2s var(--ease),background .2s var(--ease)}
+nav.menu a:hover{color:var(--primary);background:var(--primary-soft)}
+nav.menu a.on{color:var(--primary);background:var(--primary-soft)}
+.gnb-act{margin-left:auto;display:flex;align-items:center;gap:9px}
+.icon-btn{width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:var(--surface);
+  display:grid;place-items:center;cursor:pointer;color:var(--mut);transition:all .2s var(--ease)}
+.icon-btn:hover{color:var(--primary);border-color:var(--primary);box-shadow:var(--sh-sm)}
+.icon-btn svg{width:18px;height:18px}
+.btn-my{padding:10px 18px;border-radius:11px;font-size:14px;font-weight:700;color:#fff;background:var(--grad);
+  box-shadow:var(--sh-glow);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.btn-my:hover{transform:translateY(-1px);box-shadow:0 22px 44px -16px rgba(61,90,254,.6)}
+.burger{display:none;width:42px;height:42px;border-radius:11px;border:1px solid var(--line);background:var(--surface);
+  cursor:pointer;color:var(--ink);place-items:center}
+.burger svg{width:20px;height:20px}
+
+/* ── 히어로 ── */
+.hero{position:relative;padding:clamp(38px,5vw,64px) 0 clamp(28px,3.4vw,42px);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:var(--grad-mesh);z-index:0;pointer-events:none}
+.hero .glow{position:absolute;inset:-80px -60px auto;height:520px;z-index:0;pointer-events:none}
+.hero .glow b{position:absolute;display:block;border-radius:50%;filter:blur(72px);will-change:transform}
+.hero .glow .a{width:520px;height:520px;left:-40px;top:-150px;opacity:.45;
+  background:radial-gradient(circle,rgba(61,90,254,.55),transparent 62%);animation:drift1 19s var(--ease) infinite alternate}
+.hero .glow .b{width:440px;height:440px;right:-10px;top:-120px;opacity:.4;
+  background:radial-gradient(circle,rgba(155,83,242,.5),transparent 62%);animation:drift2 24s var(--ease) infinite alternate}
+.hero-in{position:relative;z-index:1;max-width:760px}
+.kicker{display:inline-flex;align-items:center;gap:7px;font-size:12px;letter-spacing:.04em;font-weight:700;
+  color:var(--primary-ink);background:rgba(255,255,255,.75);border:1px solid var(--line);
+  padding:7px 13px;border-radius:99px;box-shadow:var(--sh-xs)}
+.kicker .pp{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(6,194,112,.18)}
+.hero h1{font-size:clamp(28px,4.4vw,48px);margin:16px 0 10px;letter-spacing:-.045em;line-height:1.06;font-weight:800}
+.hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;background-size:220% 100%;animation:hue 6.5s linear infinite}
+.hero .sub{color:var(--mut);font-size:clamp(14px,1.5vw,16px);max-width:62ch;margin:0}
+.hero .sub b{color:var(--ink);font-weight:700}
+.hero .privacy{display:inline-flex;align-items:center;gap:7px;margin-top:18px;font-size:12.5px;font-weight:600;
+  color:var(--ok);background:var(--ok-soft);border:1px solid #BFEFD5;padding:7px 13px;border-radius:99px}
+.hero .privacy svg{width:14px;height:14px}
+
+/* ── 본문 레이아웃 ── */
+main{padding-bottom:clamp(40px,5vw,72px)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-2xl);box-shadow:var(--sh-sm);
+  padding:24px clamp(18px,2.4vw,26px);margin-top:18px}
+.card h2{font-size:17px;margin:0 0 4px;font-weight:800;letter-spacing:-.025em;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.card .tag{font-size:11px;font-weight:700;color:var(--primary);background:var(--primary-soft);border:1px solid #DCE2FF;
+  padding:4px 10px;border-radius:99px;margin-left:auto;letter-spacing:0}
+.card .d{margin:0 0 16px;color:var(--mut);font-size:13px;line-height:1.55}
+.card h4{letter-spacing:-.02em}
+
+.f{margin-bottom:13px}
+.f label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-2);margin-bottom:6px}
+.money-kor{margin:7px 0 0;font-size:13px;font-weight:700;font-family:var(--mono);color:var(--primary-ink);letter-spacing:-.01em;display:flex;align-items:center;gap:6px}
+.money-kor::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--primary)}
+.money-kor:empty{display:none}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.chkrow{display:flex;align-items:center;gap:9px;margin:6px 0 4px;font-size:13.5px}
+.chkrow input{margin:0}
+.save{margin-top:16px;width:100%;padding:13px;border:0;border-radius:13px;font:inherit;font-size:14.5px;font-weight:700;
+  color:#fff;background:var(--grad);box-shadow:var(--sh-glow);cursor:pointer;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.save:hover{transform:translateY(-2px);box-shadow:0 26px 50px -18px rgba(61,90,254,.62)}
+.hint{font-size:12.5px;color:var(--mut);line-height:1.55;margin:12px 0 0}
+.hint b{color:var(--ink);font-weight:700}
+
+/* ── 가점 결과 패널 (glass + 그라데이션 깊이) ── */
+.res{position:relative;border-radius:var(--r-xl);padding:22px;overflow:hidden;
+  background:var(--grad-hero);color:#fff;box-shadow:var(--sh-glow)}
+.res::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 12%,rgba(255,255,255,.25),transparent 55%);pointer-events:none}
+.res .t{position:relative;font-size:54px;font-weight:800;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+.res .t small{font-size:18px;font-weight:700;color:rgba(255,255,255,.8);font-family:"Pretendard",sans-serif}
+.band{position:relative;display:inline-block;margin:12px 0 16px;padding:6px 14px;border-radius:99px;
+  font-size:12.5px;font-weight:700;background:rgba(255,255,255,.18);color:#fff}
+.br{position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.br>div{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18);border-radius:var(--r-md);
+  padding:11px 8px;text-align:center;font-size:12px;font-weight:600;color:rgba(255,255,255,.86)}
+.br b{display:block;font-size:22px;font-weight:800;color:#fff;margin:2px 0;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+
+/* ── 아코디언/리스트(전략·특공·가이드) ── */
+.acc{display:flex;flex-direction:column;gap:10px}
+.acc .it{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px;
+  transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+.acc .it:hover{border-color:#D7DEF6;box-shadow:var(--sh-xs)}
+.acc .it b{font-size:14px;font-weight:700;letter-spacing:-.01em}
+.acc .it .for{font-size:11px;font-weight:700;color:var(--primary);background:var(--primary-soft);padding:2px 8px;border-radius:99px;margin-left:6px}
+.acc .it p{margin:6px 0 0;font-size:12.5px;color:var(--mut);line-height:1.6}
+
+/* ── 절차/할일 스텝 ── */
+.step{display:grid;grid-template-columns:34px 1fr;gap:13px;padding:13px 0;border-bottom:1px solid var(--line-2)}
+.step:last-child{border-bottom:0}
+.step .n{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;font-family:var(--mono);font-weight:700;
+  font-size:14px;color:#fff;background:var(--grad);box-shadow:var(--sh-xs)}
+.step b{font-size:14px;font-weight:700;letter-spacing:-.01em}
+.step p{margin:5px 0 0;font-size:12.5px;color:var(--mut);line-height:1.6}
+
+/* ── 희망조건 칩 ── */
+.prefs{display:flex;flex-wrap:wrap;gap:8px}
+.pref-chip{cursor:pointer}
+.pref-chip input{position:absolute;opacity:0;width:0;height:0}
+.pref-chip span{display:inline-block;padding:8px 14px;border-radius:99px;font-size:13px;font-weight:600;
+  color:var(--mut);background:var(--surface);border:1px solid var(--line);transition:all .18s var(--ease)}
+.pref-chip:hover span{border-color:var(--primary);color:var(--primary)}
+.pref-chip input:checked+span{background:var(--grad);color:#fff;border-color:transparent;box-shadow:var(--sh-glow)}
+
+/* ── 매칭 패널 ── */
+.match-panel{display:flex;flex-direction:column;gap:10px}
+.match-item{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
+  background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-lg);padding:14px 16px;
+  transition:transform .2s var(--ease),box-shadow .2s var(--ease),border-color .2s var(--ease)}
+.match-item:hover{transform:translateY(-2px);box-shadow:var(--sh-sm);border-color:#D7DEF6}
+.match-item b{font-size:14px;font-weight:700;letter-spacing:-.01em}
+.match-item .meta{font-size:12px;color:var(--mut);margin-top:4px;line-height:1.5}
+.match-item .right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;white-space:nowrap}
+.fit{font-size:12px;font-weight:700;padding:4px 11px;border-radius:99px}
+.fit-hi{background:var(--ok-soft);color:#069a59} .fit-mid{background:var(--warn-soft);color:var(--warn)} .fit-lo{background:var(--under-soft);color:var(--under)}
+.match-item .dday{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--ink-2)}
+.pending{color:var(--faint);font-size:13px;text-align:center;padding:22px 10px;margin:0}
+
+/* ── 자금 리포트 ── */
+.rep{margin-top:4px;border:1px solid var(--line);border-radius:var(--r-xl);overflow:hidden;background:var(--surface)}
+.rep .line{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:13px 16px;
+  border-bottom:1px solid var(--line-2);font-size:13px;color:var(--mut)}
+.rep .line:last-of-type{border-bottom:0}
+.rep .line b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:700;color:var(--ink);font-size:13.5px}
+.rep .line.big{background:var(--surface-2);font-weight:700;color:var(--ink)}
+.rep .line.big b{font-size:15px}
+.rep .pos{color:var(--ok)!important} .rep .neg{color:var(--hot)!important}
+.rep .hint{padding:13px 16px;margin:0;background:var(--surface-2);border-top:1px solid var(--line-2)}
+
+/* ── 셀프체크 ── */
+.progress{height:9px;background:var(--surface-2);border:1px solid var(--line-2);border-radius:99px;overflow:hidden;margin:4px 0 10px}
+.progress i{display:block;height:100%;background:var(--grad);border-radius:99px;width:0;transition:width .5s var(--ease)}
+.check{display:grid;grid-template-columns:22px 1fr;gap:12px;align-items:start;padding:13px 0;border-bottom:1px solid var(--line-2);cursor:pointer}
+.check:last-child{border-bottom:0}
+.check input{margin-top:2px;width:18px;height:18px}
+.c-t{font-size:13.5px;font-weight:600;letter-spacing:-.01em}
+.c-w{font-size:12px;color:var(--mut);margin-top:3px;line-height:1.5}
+.c-r{font-size:11.5px;color:var(--hot);font-weight:600;margin-top:4px}
+
+/* ── 자료 업로드 ── */
+.doc{display:grid;grid-template-columns:1fr auto auto auto;gap:12px;align-items:center;
+  padding:11px 14px;border:1px solid var(--line);border-radius:var(--r-md);margin-bottom:9px;font-size:13px}
+.doc .nm{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doc select{width:auto;padding:6px 10px;font-size:12.5px}
+.doc .del{cursor:pointer;color:var(--faint);font-size:20px;line-height:1;width:24px;text-align:center;transition:color .15s}
+.doc .del:hover{color:var(--hot)}
+input[type=file]{font-size:13px;padding:10px;background:var(--surface-2);border-style:dashed}
+
+.disc{font-size:12px;color:var(--faint);line-height:1.6;margin:22px 0 0;text-align:center}
+
+/* ── 푸터 (index.html과 동일) ── */
+footer.site{background:var(--ink);color:#AEB7CF;padding:46px 0 36px;margin-top:14px}
+.foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;padding-bottom:28px;border-bottom:1px solid rgba(255,255,255,.09)}
+.foot-brand .brand{color:#fff;margin-bottom:12px}
+.foot-brand p{font-size:12.5px;line-height:1.7;margin:0;max-width:34ch;color:#8E98B5}
+.foot-col h4{font-size:13px;color:#E6EAF6;margin:0 0 13px;font-weight:700}
+.foot-col a{display:block;font-size:13px;color:#9AA4C0;padding:5px 0;transition:color .18s}
+.foot-col a:hover{color:#fff}
+.foot-bot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:20px;font-size:12px;color:#7A85A6}
+.foot-bot .ds{display:flex;align-items:center;gap:7px}
+.foot-bot .ds svg{width:14px;height:14px;color:var(--ok)}
+
+/* ── 애니메이션 ── */
+@keyframes drift1{to{transform:translate(110px,56px) scale(1.16)}}
+@keyframes drift2{to{transform:translate(-86px,40px) scale(1.12)}}
+@keyframes hue{to{background-position:220% 0}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.hero .kicker{animation:rise .7s var(--ease) both}
+.hero h1{animation:rise .8s var(--ease) .08s both}
+.hero .sub{animation:rise .8s var(--ease) .16s both}
+.hero .privacy{animation:rise .8s var(--ease) .24s both}
+[data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+[data-reveal].in{opacity:1;transform:none}
+
+/* ── 반응형 ── */
+@media (max-width:980px){
+  nav.menu{display:none} .burger{display:grid}
+  .grid{grid-template-columns:1fr} .foot-top{grid-template-columns:1fr 1fr}
+}
+@media (max-width:600px){
+  .util-l{display:none} .util-in{justify-content:center}
+  .gnb-in{height:62px;gap:10px} .brand{font-size:16px;white-space:nowrap} .brand .logo{width:34px;height:34px}
+  .icon-btn{display:none} .btn-my{padding:9px 14px;font-size:13px;white-space:nowrap}
+  .two{grid-template-columns:1fr} .doc{grid-template-columns:1fr auto;row-gap:8px}
+  .foot-top{grid-template-columns:1fr 1fr}
+}
+/* ── 청약 기준표 · 체크리스트 (자료집 주입) ── */
+.refgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:4px}
+.refblock h4{margin:0 0 9px;font-size:13px;font-weight:800;color:var(--ink-deep);display:flex;align-items:center;gap:7px;letter-spacing:-.01em}
+.refblock h4 .rb-dot{width:7px;height:7px;border-radius:3px;background:var(--grad)}
+.reftbl{width:100%;border-collapse:collapse;font-size:12px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden}
+.reftbl caption{caption-side:bottom;text-align:left;font-size:11px;color:var(--faint);margin-top:7px;line-height:1.5}
+.reftbl th,.reftbl td{padding:7px 10px;text-align:right;border-bottom:1px solid var(--line-2)}
+.reftbl th:first-child,.reftbl td:first-child{text-align:left}
+.reftbl thead th{background:var(--primary-soft);color:var(--primary-ink);font-weight:700;font-size:11.5px}
+.reftbl tbody tr:last-child td{border-bottom:0}
+.reftbl tbody tr:hover{background:#fff}
+.reftbl .num{font-family:var(--mono);font-weight:600}
+.reftbl .tot td{background:#F3F1FF;font-weight:800;color:var(--primary-ink)}
+.refnote{margin:10px 0 0;font-size:11.5px;color:var(--mut);line-height:1.6}
+.chklist{list-style:none;margin:6px 0 0;padding:0;display:grid;gap:9px;counter-reset:ck}
+.chklist li{position:relative;padding:13px 15px 13px 46px;background:var(--surface-2);border:1px solid var(--line);
+  border-radius:var(--r-lg);font-size:12.7px;line-height:1.55;color:var(--ink-2);transition:border-color .25s,box-shadow .25s}
+.chklist li:hover{border-color:#D7DEF6;box-shadow:var(--sh-xs)}
+.chklist li::before{counter-increment:ck;content:counter(ck);position:absolute;left:12px;top:12px;
+  width:24px;height:24px;border-radius:8px;background:var(--grad);color:#fff;font-family:var(--mono);font-weight:700;
+  font-size:12px;display:grid;place-items:center;box-shadow:var(--sh-xs)}
+.chklist li b{color:var(--ink-deep);font-weight:700}
+.chklist li .ex{display:block;margin-top:3px;color:var(--mut);font-size:11.5px}
+@media (max-width:760px){.refgrid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto}
+  .hero .glow{display:none}
+  [data-reveal]{opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ── 상단 유틸바 ── -->
+<div class="util">
+  <div class="wrap util-in">
+    <span class="util-l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg> 청약 문의 1644-7445 · 평일 09:00–17:30</span>
+    <span class="util-r">
+      <span class="live"><span class="dot" aria-hidden="true"></span><span>내 데이터는 이 브라우저에만 저장</span></span>
+      <a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">청약홈 바로가기</a>
+      <a href="index.html#notice">공지사항</a>
+    </span>
+  </div>
+</div>
+
+<!-- ── 헤더 / GNB ── -->
+<header class="gnb">
+  <div class="wrap gnb-in">
+    <a class="brand" href="index.html">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg></span>
+      <span class="gtxt">청약<span class="grad">인텔리전스</span></span>
+    </a>
+    <nav class="menu" aria-label="주 메뉴">
+      <a href="index.html#journey">청약 여정</a>
+      <a class="on" href="page2.html">청약 준비</a>
+      <a href="index.html#board">분양현장</a>
+      <a href="manage.html">내 청약 관리</a>
+      <a href="board.html">게시판</a>
+    </nav>
+    <div class="gnb-act">
+      <a class="icon-btn" href="index.html" aria-label="분양현장 보기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></a>
+      <a class="btn-my" href="manage.html">내 청약 관리</a>
+      <button class="burger" id="burger" aria-label="전체 메뉴"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<!-- ── 히어로 ── -->
+<section class="hero">
+  <span class="glow" aria-hidden="true"><b class="a"></b><b class="b"></b></span>
+  <div class="wrap hero-in">
+    <span class="kicker"><span class="pp" aria-hidden="true"></span> 청약 도우미</span>
+    <h1>내 통장으로,<br>원하는 아파트 <em>청약까지</em>.</h1>
+    <p class="sub">내 청약통장 데이터를 입력하면 가점·당첨 가능성을 진단하고, 당첨 시 필요 자금을 현재 자금 기준으로 계산합니다. 신청 전 결격 셀프체크와 실제 진행 절차, 맞춤 현장 매칭까지 한 곳에서.</p>
+    <span class="privacy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> 모든 데이터는 이 브라우저에만 저장 (서버 전송 없음)</span>
+  </div>
+</section>
+
+<main class="wrap">
+  <div class="grid">
+    <!-- 내 청약통장 -->
+    <section class="card" style="margin-top:0" data-reveal>
+      <h2>내 청약통장 데이터</h2>
+      <p class="d">실제 가입일·생년월일로 가점을 자동 계산합니다.</p>
+      <div class="f"><label>청약통장 가입일</label><input type="date" id="i-join"></div>
+      <div class="two">
+        <div class="f"><label>생년월일</label><input type="date" id="i-birth"></div>
+        <div class="f"><label>혼인신고일 <span style="color:var(--mut);font-weight:400">(선택)</span></label><input type="date" id="i-marry"></div>
+      </div>
+      <div class="two">
+        <div class="f"><label>부양가족 수 (본인 제외)</label><input type="number" id="i-fam" min="0" max="10" value="0"></div>
+        <div class="f"><label>거주 지역</label><select id="i-region">
+          <option value="">선택</option><option>서울</option><option>경기</option><option>인천</option><option>지방광역시</option><option>기타</option></select></div>
+      </div>
+      <div class="chkrow"><input type="checkbox" id="i-own"><label for="i-own" style="margin:0;font-weight:500">현재 주택 보유 (분양권·입주권 포함)</label></div>
+      <button class="save" id="btn-save">내 통장 정보 저장</button>
+    </section>
+
+    <!-- 가점/당첨 가능성 -->
+    <section class="card" style="margin-top:0" data-reveal>
+      <h2>가점 & 당첨 가능성</h2>
+      <p class="d">청약 가점제 84점 만점 기준 자동 산정.</p>
+      <div class="res">
+        <div class="t"><span id="g-tot">0</span><small> / 84</small></div>
+        <div class="band" id="g-band">정보 입력 필요</div>
+        <div class="br">
+          <div>무주택<b id="g1">0</b>/32</div><div>부양가족<b id="g2">0</b>/35</div><div>가입기간<b id="g3">0</b>/17</div>
+        </div>
+      </div>
+      <p class="hint" id="g-hint">가입일·생년월일을 입력하면 자동 계산됩니다.</p>
+    </section>
+  </div>
+
+  <!-- 통장 가입 + 할일 -->
+  <section class="card" data-reveal>
+    <h2>청약통장 가입 & 점수 올리기 <span class="tag">STEP 1·2</span></h2>
+    <p class="d">통장이 없으면 가입부터, 있으면 내 가점 약점에 맞춘 할 일을 제시합니다.</p>
+    <div id="todo-list"></div>
+    <h4 style="font-size:13px;margin:18px 0 6px;color:var(--ink-deep)">청약통장 가입 가이드</h4>
+    <div class="acc">
+      <div class="it"><b>어디서 가입?</b><p>주택청약종합저축 — 국민·신한·우리·하나·농협 등 시중은행 어디서나 1인 1계좌. 월 2만~50만원 자유납입(가점은 가입기간이 만듭니다).</p></div>
+      <div class="it"><b>예치금 충족</b><p>1순위는 거주지역·신청면적 기준 예치금 필요(서울·부산 전용 85㎡ 이하 300만원, 모든 면적 1,500만원 등). 입주자모집공고일까지 충족하면 되고 부족분은 당일 일시납도 인정.</p></div>
+      <div class="it"><b>미성년 자녀 통장</b><p>미성년 가입기간도 일정 한도까지 가점에 인정됩니다 → 자녀 통장을 일찍 만들면 성년 후 가점을 미리 확보. 정확한 인정 한도는 청약홈에서 확인하세요.</p></div>
+    </div>
+  </section>
+
+  <!-- 청약 기준표 · 체크리스트 (자료집 주입) -->
+  <section class="card" data-reveal id="reftables">
+    <h2>청약 기준표 · 핵심 체크리스트 <span class="tag">청약홈 자료집</span></h2>
+    <p class="d">민영 예치금, 가점 <b>84점</b> 구간(무주택 32 · 부양가족 35 · 통장 17), 신청 전 점검 11항목을 한 곳에. 최종 기준은 개별 <b>입주자모집공고문</b>이 우선합니다.</p>
+
+    <div class="refgrid">
+      <div class="refblock">
+        <h4><span class="rb-dot"></span>지역·면적별 예치금 (민영 1순위)</h4>
+        <table class="reftbl">
+          <thead><tr><th>전용면적</th><th>서울/부산</th><th>광역시</th><th>시·군</th></tr></thead>
+          <tbody>
+            <tr><td>85㎡ 이하</td><td class="num">300</td><td class="num">250</td><td class="num">200</td></tr>
+            <tr><td>102㎡ 이하</td><td class="num">600</td><td class="num">400</td><td class="num">300</td></tr>
+            <tr><td>135㎡ 이하</td><td class="num">1,000</td><td class="num">700</td><td class="num">400</td></tr>
+            <tr><td>모든 면적</td><td class="num">1,500</td><td class="num">1,000</td><td class="num">500</td></tr>
+          </tbody>
+          <caption>단위 만원 · 거주지는 모집공고일 현재 주민등록 기준. 공고일까지 충족하면 되고 부족분 당일 일시납도 인정.</caption>
+        </table>
+      </div>
+      <div class="refblock">
+        <h4><span class="rb-dot"></span>가점 ① 무주택기간 (최고 32점)</h4>
+        <table class="reftbl">
+          <thead><tr><th>기간</th><th>점</th><th>기간</th><th>점</th></tr></thead>
+          <tbody>
+            <tr><td>유주택·30세미만</td><td class="num">0</td><td>7~8년</td><td class="num">16</td></tr>
+            <tr><td>1년 미만</td><td class="num">2</td><td>8~9년</td><td class="num">18</td></tr>
+            <tr><td>1~2년</td><td class="num">4</td><td>9~10년</td><td class="num">20</td></tr>
+            <tr><td>2~3년</td><td class="num">6</td><td>10~11년</td><td class="num">22</td></tr>
+            <tr><td>3~4년</td><td class="num">8</td><td>11~12년</td><td class="num">24</td></tr>
+            <tr><td>4~5년</td><td class="num">10</td><td>12~13년</td><td class="num">26</td></tr>
+            <tr><td>5~6년</td><td class="num">12</td><td>13~14년</td><td class="num">28</td></tr>
+            <tr><td>6~7년</td><td class="num">14</td><td>14~15년</td><td class="num">30</td></tr>
+            <tr class="tot"><td>—</td><td class="num">—</td><td>15년 이상</td><td class="num">32</td></tr>
+          </tbody>
+          <caption>1년당 2점 가산 · 미혼은 만 30세부터 산정.</caption>
+        </table>
+      </div>
+      <div class="refblock">
+        <h4><span class="rb-dot"></span>가점 ② 부양가족수 (최고 35점)</h4>
+        <table class="reftbl">
+          <thead><tr><th>부양가족 수</th><th>점수</th></tr></thead>
+          <tbody>
+            <tr><td>0명</td><td class="num">5</td></tr>
+            <tr><td>1명</td><td class="num">10</td></tr>
+            <tr><td>2명</td><td class="num">15</td></tr>
+            <tr><td>3명</td><td class="num">20</td></tr>
+            <tr><td>4명</td><td class="num">25</td></tr>
+            <tr><td>5명</td><td class="num">30</td></tr>
+            <tr class="tot"><td>6명 이상</td><td class="num">35</td></tr>
+          </tbody>
+          <caption>본인 제외 · 모집공고일 현재 세대 구성원 기준(배우자·직계존비속).</caption>
+        </table>
+      </div>
+      <div class="refblock">
+        <h4><span class="rb-dot"></span>가점 ③ 청약통장 가입기간 (최고 17점)</h4>
+        <table class="reftbl">
+          <thead><tr><th>기간</th><th>점</th><th>기간</th><th>점</th></tr></thead>
+          <tbody>
+            <tr><td>6월 미만</td><td class="num">1</td><td>8~9년</td><td class="num">10</td></tr>
+            <tr><td>6월~1년</td><td class="num">2</td><td>9~10년</td><td class="num">11</td></tr>
+            <tr><td>1~2년</td><td class="num">3</td><td>10~11년</td><td class="num">12</td></tr>
+            <tr><td>2~3년</td><td class="num">4</td><td>11~12년</td><td class="num">13</td></tr>
+            <tr><td>3~4년</td><td class="num">5</td><td>12~13년</td><td class="num">14</td></tr>
+            <tr><td>4~5년</td><td class="num">6</td><td>13~14년</td><td class="num">15</td></tr>
+            <tr><td>5~6년</td><td class="num">7</td><td>14~15년</td><td class="num">16</td></tr>
+            <tr><td>6~7년</td><td class="num">8</td><td class="tot">15년 이상</td><td class="num tot">17</td></tr>
+            <tr><td>7~8년</td><td class="num">9</td><td></td><td></td></tr>
+          </tbody>
+          <caption>본인 기준 · 배우자는 50%·최대 3점 추가(합산 최대 17점).</caption>
+        </table>
+      </div>
+    </div>
+
+    <h4 style="font-size:13px;margin:22px 0 10px;color:var(--ink-deep)">신청 전 핵심 체크리스트 11</h4>
+    <ol class="chklist">
+      <li><b>통장 종류·가입기간 확인.</b> 신규 가입은 주택청약종합저축뿐 — 청약하려는 주택(국민/민영)에 그 통장이 쓸 수 있는지 먼저 맞춘다.</li>
+      <li><b>국민주택 vs 민영주택 구분.</b> 국민주택은 무주택세대구성원만, 민영주택은 통장+예치금 기준으로 신청한다.</li>
+      <li><b>규제지역 여부 확인.</b> 투기과열·청약과열이면 1순위 가입기간 2년·국민주택 납입 24회로 강화되고 1순위 제한자 규정이 적용된다.</li>
+      <li><b>단지 기준 순위 재확인.</b> 가입내역조회는 기본 24개월 기준 표시 — 주택명을 선택해 그 주택 기준 순위를 확인한다.</li>
+      <li><b>예치금 충족(민영).</b> 거주지·면적별 예치금을 확인한다. <span class="ex">예: 서울/부산 85㎡↓ 300만원, 모든 면적 1,500만원.</span></li>
+      <li><b>1순위 제한자 점검.</b> 세대주 여부·과거 5년 내 당첨 이력·2주택 이상 소유면 2순위로 신청한다.</li>
+      <li><b>가점 직접 계산.</b> 무주택기간 32 + 부양가족 35 + 통장기간 17. 배우자 통장 점수는 순위확인서로 확인한다.</li>
+      <li><b>거주지 일치 확인.</b> 통장 가입지역이 현 주민등록 거주지와 같은지 — 불일치 시 마이페이지/가입은행에서 변경한다.</li>
+      <li><b>본인 명의 인증서 준비.</b> 공동·금융·네이버·KB국민·토스·신한·카카오 중 1개. 무순위·임의공급·불법행위재공급은 공동·금융인증서만 가능.</li>
+      <li><b>신청 시간·마감 준수.</b> 09:00~17:30. 당일 17:30 전 취소·재신청 가능, 종료 후 불가. 잔여세대는 청약기간이 하루뿐인 경우가 많으니 [알림 신청] 활용.</li>
+      <li><b>모집공고문 최종 확인.</b> 본 수치·요건은 참고용이며, 모든 최종 기준은 개별 입주자모집공고문이 우선한다.</li>
+    </ol>
+  </section>
+
+  <!-- 희망 조건 -->
+  <section class="card" data-reveal>
+    <h2>내 청약 희망 조건</h2>
+    <p class="d">저장하면 아래 <b>매칭</b>과 (추후) <b>알림</b>이 이 기준으로 동작합니다.</p>
+    <div class="f"><label>희망 지역 <span style="color:var(--mut);font-weight:400">(복수 선택)</span></label><div class="prefs" id="pref-regions"></div></div>
+    <div class="two">
+      <div class="f"><label>주택 구분</label><select id="pref-htype"><option>무관</option><option>민영</option><option>국민</option></select></div>
+      <div class="f"><label>희망 분양가 상한 (만원, 선택)</label><input type="text" inputmode="numeric" id="pref-price" placeholder="예: 70,000" oninput="onMoney(this,'pref-price-kor')"><p class="money-kor" id="pref-price-kor"></p></div>
+    </div>
+    <div class="f"><label>해당되는 특별공급 <span style="color:var(--mut);font-weight:400">(저가점 우회 — 자격 있는 것만)</span></label><div class="prefs" id="pref-special"></div></div>
+    <button class="save" id="pref-save">희망 조건 저장</button>
+  </section>
+
+  <!-- 매칭 -->
+  <section class="card" data-reveal>
+    <h2>내게 맞는 현장 <span class="tag" id="match-cnt"></span></h2>
+    <p class="d">희망 조건 + 내 가점 기준 적합도 순. 가점이 낮아도 추첨·특공 유망 현장을 함께 보여줍니다.</p>
+    <div class="match-panel" id="match-panel"><p class="pending">희망 조건을 저장하면 매칭됩니다.</p></div>
+  </section>
+
+  <!-- 이메일 알림 구독 -->
+  <section class="card" data-reveal>
+    <h2>이메일 알림 받기 <span class="tag">모바일</span></h2>
+    <p class="d">위 <b>희망 조건</b>에 맞는 청약 임박 현장을 이메일로 보내드립니다. 휴대폰 메일앱으로 받아보세요.</p>
+    <div class="two">
+      <div class="f"><label>이메일</label><input type="email" id="sub-email" placeholder="you@example.com"></div>
+      <div class="f"><label>알림 시점</label><select id="sub-dday"><option value="7">청약 7일 전부터</option><option value="3">3일 전부터</option><option value="14">14일 전부터</option></select></div>
+    </div>
+    <label class="chkrow"><input type="checkbox" id="sub-consent"><span style="font-weight:500">청약 정보 수신에 동의합니다 <span style="color:var(--mut)">(정보통신망법 · 언제든 수신거부 가능)</span></span></label>
+    <button class="save" id="sub-btn">이메일 알림 구독</button>
+    <p class="hint" id="sub-msg"></p>
+  </section>
+
+  <!-- 자금 리포트 -->
+  <section class="card" data-reveal>
+    <h2>당첨 자금 리포트 <span class="tag" id="fund-src">표준 추정</span></h2>
+    <p class="d">분양가와 보유 자금을 넣으면, 당첨 시 단계별로 필요한 현금과 부족액을 계산합니다.</p>
+    <div class="two">
+      <div class="f"><label>분양가 (만원)</label><input type="text" inputmode="numeric" id="m-price" placeholder="예: 60,000" oninput="onMoney(this,'m-price-kor');fund()"><p class="money-kor" id="m-price-kor"></p></div>
+      <div class="f"><label>현재 보유 자금 (만원)</label><input type="text" inputmode="numeric" id="m-cash" placeholder="예: 15,000" oninput="onMoney(this,'m-cash-kor');fund()"><p class="money-kor" id="m-cash-kor"></p></div>
+    </div>
+    <div class="two">
+      <div class="f"><label>발코니확장·옵션 (만원, 선택)</label><input type="text" inputmode="numeric" id="m-opt" placeholder="예: 2,000" oninput="onMoney(this,'m-opt-kor');fund()"><p class="money-kor" id="m-opt-kor"></p></div>
+      <div class="f"><label>중도금 대출 비율 (%)</label><input type="number" id="m-loan" value="100" oninput="fund()"></div>
+    </div>
+    <div class="rep" id="fund-rep"><p class="pending">분양가와 보유 자금을 입력하세요.</p></div>
+  </section>
+
+  <!-- 셀프 체크리스트 -->
+  <section class="card" data-reveal>
+    <h2>신청 전 결격 셀프체크 <span class="tag" id="chk-src"></span></h2>
+    <p class="d">부적격 당첨·청약 제한을 피하려면 신청 전에 모두 확인하세요.</p>
+    <div class="progress"><i id="chk-bar" style="width:0"></i></div>
+    <p class="hint" id="chk-stat">항목 로딩 중…</p>
+    <div id="chk-list"></div>
+  </section>
+
+  <div class="grid">
+    <!-- 당첨 전략 -->
+    <section class="card" data-reveal>
+      <h2>당첨 확률 높이는 전략</h2>
+      <div class="acc" id="strat-list"><p class="pending">검증 지식베이스 생성 중…</p></div>
+      <h2 style="margin-top:18px;font-size:14px">특별공급 (저가점 우회)</h2>
+      <div class="acc" id="ss-list"></div>
+    </section>
+    <!-- 진행 절차 -->
+    <section class="card" data-reveal>
+      <h2>실제 진행 절차</h2>
+      <div id="proc-list"><p class="pending">검증 지식베이스 생성 중…</p></div>
+    </section>
+  </div>
+
+  <!-- 자료 업로드/검증 -->
+  <section class="card" data-reveal>
+    <h2>청약 자료 업로드 · 검증</h2>
+    <p class="d">청약통장 캡처, 주민등록등본, 무주택 증빙 등을 등록해 상태를 관리하세요. <b>파일은 업로드되지 않고 목록만 이 브라우저에 저장</b>됩니다.</p>
+    <input type="file" id="doc-file" multiple style="margin-bottom:12px">
+    <div id="doc-list"></div>
+  </section>
+
+  <p class="disc" id="disclaimer">본 도구는 참고용입니다. 가점·자금·세금·자격은 단지별 입주자모집공고와 청약홈/관계기관 안내가 우선합니다.</p>
+</main>
+
+<!-- ── 푸터 ── -->
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg></span> <span style="color:#fff">청약 인텔리전스</span></div>
+        <p>내 통장으로 당첨까지 — 가점·자금·매칭을 한 곳에서. 모든 개인 데이터는 이 브라우저에만 저장되며 청약 신청은 청약홈에서 진행하세요.</p>
+      </div>
+      <div class="foot-col"><h4>청약 도우미</h4><a href="page2.html">가점 계산기</a><a href="page2.html">자금 리포트</a><a href="page2.html">결격 셀프체크</a><a href="page2.html">맞춤 현장 매칭</a></div>
+      <div class="foot-col"><h4>분양정보</h4><a href="index.html">분양현장·경쟁률</a><a href="index.html#types">주택 유형별 정보</a><a href="manage.html">내 청약 관리</a></div>
+      <div class="foot-col"><h4>안내</h4><a href="index.html#notice">공지사항</a><a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">자주묻는 질문</a><a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">청약제도 안내</a></div>
+    </div>
+    <div class="foot-bot">
+      <span class="ds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg> 개인 데이터 로컬 저장 · 서버 전송 없음 · 공식 사이트 아님</span>
+      <span>© 2026 청약 인텔리전스 · 정보 제공 목적의 비공식 서비스</span>
+    </div>
+  </div>
+</footer>
+
+<script src="bunyang.js" onerror="window.__noB=1"></script>
+<script src="matching.js"></script>
+<script src="kb.js" onerror="window.__noKB=1"></script>
+<script>
+const $=id=>document.getElementById(id), W=Math.round;
+const LS={get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch{return d}},set:(k,v)=>localStorage.setItem(k,JSON.stringify(v))};
+
+/* ---------- 금액 입력: 천단위 콤마 + 한글 단위(만원 기준) 표기 ---------- */
+const onlyDigits=s=>String(s==null?"":s).replace(/[^\d]/g,"");
+const numVal=s=>+onlyDigits(s)||0;            // 콤마 제거 후 숫자(자금 계산용)
+function manToKor(man){                        // man=만원 단위 → "4억 5,000만원"
+  man=Math.floor(+man||0); if(!man)return"";
+  const eok=Math.floor(man/10000), m4=man%10000; let o="";
+  if(eok)o+=eok.toLocaleString("ko-KR")+"억";
+  if(m4)o+=(eok?" ":"")+m4.toLocaleString("ko-KR")+"만원";
+  else if(eok)o+="원";                         // 정확히 N억 → "N억원"
+  return o;
+}
+function onMoney(el,korId){                     // 입력값 콤마 포맷 + 한글 단위 갱신
+  const d=onlyDigits(el.value);
+  el.value=d?(+d).toLocaleString("ko-KR"):"";
+  const k=korId&&document.getElementById(korId);
+  if(k)k.textContent=d?("= "+manToKor(+d)):"";
+}
+
+/* ---------- 가점 (계산은 matching.js의 MATCH.computeGajeom 사용) ---------- */
+function band(s){
+  if(s>=64)return["서울 인기지역 가능권","#2f8f5b"];
+  if(s>=54)return["수도권 경쟁력 양호","#3a7d9a"];
+  if(s>=40)return["지방·비규제 유망","#c8702a"];
+  return["가점 불리 — 특공·추첨 우회","#b23b3b"];}
+function calcGajeom(){
+  const join=$("i-join").value,birth=$("i-birth").value,own=$("i-own").checked;
+  const G=MATCH.computeGajeom({"i-join":join,"i-birth":birth,"i-marry":$("i-marry").value,"i-fam":+$("i-fam").value||0,"i-own":own});
+  const g1=G.g1,g2=G.g2,g3=G.g3,tot=G.total;
+  $("g1").textContent=g1;$("g2").textContent=g2;$("g3").textContent=g3;$("g-tot").textContent=tot;
+  const[t,c]=band(tot),bd=$("g-band");bd.textContent=t;bd.style.background=c;bd.style.color="#fff";
+  $("g-hint").textContent=own?"주택 보유 시 무주택기간 0점. 추첨제·특공을 활용하세요.":
+    (birth&&join?"내 입력 기준 자동 산정값입니다. 실제 산정은 청약홈 자가진단으로 최종 확인하세요.":"가입일·생년월일을 입력하면 자동 계산됩니다.");
+  if(window.renderMatch)renderMatch();
+  if(window.renderTodos)renderTodos();
+  return tot;
+}
+["i-join","i-birth","i-marry","i-fam","i-own","i-region"].forEach(id=>$(id).addEventListener("input",calcGajeom));
+$("btn-save").onclick=()=>{
+  const v={};["i-join","i-birth","i-marry","i-fam","i-region"].forEach(id=>v[id]=$(id).value);
+  v["i-own"]=$("i-own").checked; LS.set("cy.bankbook",v); $("btn-save").textContent="저장됨 ✓";
+  setTimeout(()=>$("btn-save").textContent="내 통장 정보 저장",1500);
+};
+(function load(){const v=LS.get("cy.bankbook");if(v){Object.keys(v).forEach(id=>{if(id==="i-own")$(id).checked=v[id];else if($(id))$(id).value=v[id];});}calcGajeom();})();
+
+/* ---------- 자금 리포트 ---------- */
+const KB=window.KB||null;
+function ratio(name,def){ // KB.funding.phases에서 % 추출
+  if(KB&&KB.funding&&KB.funding.phases){const p=KB.funding.phases.find(x=>x.name&&x.name.includes(name));
+    if(p){const m=String(p.typicalPct).match(/\d+/);if(m)return +m[0]/100;}}
+  return def;
+}
+function acquTax(price){ // 만원 단위 분양가 → 취득세(만원) 추정 (주택 유상취득 일반)
+  const eok=price/10000;
+  let r; if(eok<=6)r=0.011; else if(eok<=9)r=(eok*2/3-3)/100+0.001; else r=0.033;
+  return price*r;
+}
+function fund(){
+  const price=numVal($("m-price").value),cash=numVal($("m-cash").value),opt=numVal($("m-opt").value),loanPct=(+$("m-loan").value||0)/100;
+  const rep=$("fund-rep");
+  if(!price){rep.innerHTML='<p class="pending">분양가와 보유 자금을 입력하세요.</p>';return;}
+  const rC=ratio("계약",0.2),rM=ratio("중도",0.6),rR=Math.max(0,1-rC-rM);
+  const down=price*rC, mid=price*rM, midLoan=mid*loanPct, midSelf=mid-midLoan, bal=price*rR, tax=acquTax(price);
+  const needNow=down+opt;                 // 계약 시 즉시
+  const needMid=midSelf;                  // 중도금 자기부담(분납)
+  const needTotal=down+midSelf+bal+tax+opt; // 대출 제외 총 자기자금(잔금 자력 가정)
+  const gap=cash-needNow;
+  const f=n=>n.toLocaleString()+"만원";
+  rep.innerHTML=`
+    <div class="line"><span>계약금 (${W(rC*100)}%) · 계약 시 즉시</span><b>${f(W(down))}</b></div>
+    <div class="line"><span>발코니확장·옵션</span><b>${f(opt)}</b></div>
+    <div class="line"><span>중도금 (${W(rM*100)}%) · 중 ${W(loanPct*100)}% 집단대출</span><b>${f(W(mid))}</b></div>
+    <div class="line"><span>└ 중도금 자기부담 (분납)</span><b>${f(W(midSelf))}</b></div>
+    <div class="line"><span>잔금 (${W(rR*100)}%) · 입주 시(잔금대출·매도 등)</span><b>${f(W(bal))}</b></div>
+    <div class="line"><span>취득세 등 (추정)</span><b>${f(W(tax))}</b></div>
+    <div class="line big"><span>대출 제외 총 자기자금</span><b>${f(W(needTotal))}</b></div>
+    <div class="line big"><span>${gap>=0?"계약 단계 여유":"계약 단계 부족"}</span><b class="${gap>=0?'pos':'neg'}">${f(W(Math.abs(gap)))}</b></div>
+    <p class="hint">계약 즉시 필요(계약금+옵션) <b>${f(W(needNow))}</b> · 보유 <b>${f(cash)}</b>.
+      ${gap>=0?"계약금은 충당 가능합니다. 중도금 자기부담과 잔금 계획을 점검하세요.":"계약금부터 부족합니다. 자금 계획이 필요합니다."}
+      ${KB&&KB.funding&&KB.funding.loan&&KB.funding.loan.dsrNote?"<br>※ "+KB.funding.loan.dsrNote:""}</p>`;
+}
+if(KB&&KB.funding)$("fund-src").textContent="검증 KB 기준";
+
+/* ---------- 셀프체크 ---------- */
+const FALLBACK_CHECK=[
+  {category:"통장",item:"청약통장 가입기간·예치금이 해당 지역/면적 기준을 충족하는가?",why:"미달 시 1순위 자격이 없습니다.",risk:"순위 미달"},
+  {category:"무주택",item:"세대구성원 전원이 무주택인가? (분양권·입주권 포함)",why:"가점제·생애최초 등은 무주택 세대만 가능.",risk:"부적격 당첨"},
+  {category:"세대주",item:"신청 자격이 세대주를 요구하는 공급에서 본인이 세대주인가?",why:"특별공급·일부 공급은 세대주 요건이 있습니다.",risk:"부적격"},
+  {category:"거주요건",item:"해당 지역 거주기간(지역우선) 요건을 충족하는가?",why:"위장전입은 공급질서 교란으로 형사처벌·청약 제한.",risk:"제재·제한"},
+  {category:"재당첨",item:"재당첨 제한 기간에 해당하지 않는가?",why:"과거 당첨 이력에 따라 일정 기간 청약이 제한됩니다.",risk:"청약 제한"},
+  {category:"특공",item:"특별공급은 세대당 평생 1회 — 이미 사용하지 않았는가?",why:"중복 사용 시 부적격.",risk:"부적격"},
+];
+function renderCheck(){
+  const list=(KB&&KB.selfCheck&&KB.selfCheck.length)?KB.selfCheck:FALLBACK_CHECK;
+  $("chk-src").textContent=(KB&&KB.selfCheck)?"검증 KB":"기본 점검표";
+  const saved=LS.get("cy.check",{});
+  $("chk-list").innerHTML=list.map((c,i)=>`<label class="check">
+    <input type="checkbox" data-i="${i}" ${saved[i]?"checked":""}>
+    <div><div class="c-t">[${c.category}] ${c.item}</div><div class="c-w">${c.why}</div>${c.risk?`<div class="c-r">⚠ 미충족 시: ${c.risk}</div>`:""}</div></label>`).join("");
+  const upd=()=>{const cks=[...$("chk-list").querySelectorAll("input")];const n=cks.filter(c=>c.checked).length;
+    $("chk-bar").style.width=(n/cks.length*100)+"%";
+    $("chk-stat").textContent=`${n}/${cks.length} 확인 — ${n===cks.length?"신청 준비 완료 ✓":"미확인 항목을 점검하세요"}`;
+    const s={};cks.forEach(c=>s[c.dataset.i]=c.checked);LS.set("cy.check",s);};
+  $("chk-list").querySelectorAll("input").forEach(c=>c.addEventListener("change",upd));upd();
+}
+
+/* ---------- 전략/특공/절차 ---------- */
+function renderKB(){
+  if(KB&&KB.strategy)$("strat-list").innerHTML=KB.strategy.map(s=>`<div class="it"><b>${s.title}</b>${s.bestFor?` <span class="for">${s.bestFor}</span>`:""}<p>${s.detail}</p></div>`).join("");
+  if(KB&&KB.specialSupply)$("ss-list").innerHTML=KB.specialSupply.map(s=>`<div class="it"><b>${s.type}</b><p>${s.eligibility}${s.note?" · "+s.note:""}</p></div>`).join("");
+  if(KB&&KB.procedure)$("proc-list").innerHTML=KB.procedure.map((p,i)=>`<div class="step"><div class="n">${i+1}</div><div><b>${p.step}</b><p>${p.detail}${p.docs?"<br>📎 "+p.docs:""}</p></div></div>`).join("");
+  if(KB&&KB.disclaimer)$("disclaimer").textContent=KB.disclaimer;
+  $("kb-state")&&($("kb-state").textContent=KB?"검증 완료 ✓":"생성 중 (완료 시 자동 반영)");
+}
+
+/* ---------- 자료 업로드/검증 ---------- */
+function renderDocs(){
+  const docs=LS.get("cy.docs",[]);
+  $("doc-list").innerHTML=docs.length?docs.map((d,i)=>`<div class="doc">
+    <span class="nm">📄 ${d.name}</span><span style="color:var(--mut)">${d.size}</span>
+    <select data-i="${i}"><option ${d.st==="확인필요"?"selected":""}>확인필요</option><option ${d.st==="검증완료"?"selected":""}>검증완료</option></select>
+    <span class="del" data-del="${i}">×</span></div>`).join(""):'<p class="pending">등록된 자료가 없습니다.</p>';
+  $("doc-list").querySelectorAll("select").forEach(s=>s.onchange=()=>{const d=LS.get("cy.docs",[]);d[s.dataset.i].st=s.value;LS.set("cy.docs",d);renderDocs();});
+  $("doc-list").querySelectorAll("[data-del]").forEach(x=>x.onclick=()=>{const d=LS.get("cy.docs",[]);d.splice(+x.dataset.del,1);LS.set("cy.docs",d);renderDocs();});
+}
+$("doc-file").onchange=e=>{const d=LS.get("cy.docs",[]);
+  [...e.target.files].forEach(f=>d.push({name:f.name,size:(f.size/1024).toFixed(0)+"KB",st:"확인필요",at:Date.now()}));
+  LS.set("cy.docs",d);e.target.value="";renderDocs();};
+
+/* ---------- 희망조건 + 매칭 ---------- */
+const REGIONS=["서울","경기","인천","부산","대구","대전","광주","울산","세종","강원","충북","충남","전북","전남","경북","경남","제주"];
+const SPECIALS=["신혼부부","생애최초","다자녀","신생아","노부모부양","기관추천"];
+const chipHTML=(attr,arr,sel)=>arr.map(v=>`<label class="pref-chip"><input type="checkbox" data-${attr} value="${v}" ${sel.includes(v)?"checked":""}><span>${v}</span></label>`).join("");
+const loadPrefs=()=>LS.get("cy.prefs",{regions:[],htype:"무관",price:"",special:[]});
+(function initPrefs(){const p=loadPrefs();
+  $("pref-regions").innerHTML=chipHTML("reg",REGIONS,p.regions||[]);
+  $("pref-special").innerHTML=chipHTML("sp",SPECIALS,p.special||[]);
+  $("pref-htype").value=p.htype||"무관";$("pref-price").value=p.price||"";onMoney($("pref-price"),"pref-price-kor");})();
+function readPrefs(){return {
+  regions:[...document.querySelectorAll("[data-reg]:checked")].map(c=>c.value),
+  htype:$("pref-htype").value,price:onlyDigits($("pref-price").value),
+  special:[...document.querySelectorAll("[data-sp]:checked")].map(c=>c.value)};}
+$("pref-save").onclick=()=>{LS.set("cy.prefs",readPrefs());renderMatch();$("pref-save").textContent="저장됨 ✓";setTimeout(()=>$("pref-save").textContent="희망 조건 저장",1500);};
+["pref-regions","pref-special","pref-htype"].forEach(id=>$(id).addEventListener("change",()=>renderMatch()));
+function startDate(it){const m=String(it.청약기간||"").match(/\d{4}-\d{2}-\d{2}/);return m?new Date(m[0]):null;}
+function endDate(it){const m=String(it.청약기간||"").match(/\d{4}-\d{2}-\d{2}/g);return m?new Date(m[m.length-1]):null;}
+function renderMatch(){
+  const panel=$("match-panel");if(!window.MATCH){panel.innerHTML='<p class="pending">매칭 모듈 로드 실패</p>';return;}
+  const DATA=(window.BUNYANG&&window.BUNYANG.items)||[];
+  if(!DATA.length){panel.innerHTML='<p class="pending">분양 데이터(bunyang.js)가 없습니다.</p>';return;}
+  const prefs=readPrefs(),gj=+$("g-tot").textContent||0,today=new Date();today.setHours(0,0,0,0);
+  let rows=DATA.map(d=>({d,f:MATCH.fit(d,prefs,gj),st:startDate(d),en:endDate(d)})).filter(x=>!x.f.excluded);
+  const live=x=>x.en&&x.en>=today;                 // 예정 또는 진행중(신청 가능)
+  rows.sort((a,b)=>{const la=live(a)?0:1,lb=live(b)?0:1;
+    if(la!==lb)return la-lb;                        // 신청가능 우선
+    if(la===0)return (a.st||0)-(b.st||0);           // 예정/진행: 빠른 순
+    return (b.st||0)-(a.st||0);});                  // 마감: 최근 순
+  const top=rows.slice(0,12), liveN=rows.filter(live).length;
+  $("match-cnt").textContent=`신청가능 ${liveN}곳 · 적합 ${rows.length}곳`;
+  panel.innerHTML=top.map(x=>{const dd=x.st?Math.round((x.st-today)/864e5):null;
+    const dt=!x.en?"":(x.en<today?"마감":(dd>0?`D-${dd}`:"진행중"));
+    return `<div class="match-item"><div><b>${x.d.지역} · ${x.d.주택명}</b>
+      <div class="meta">${x.d.주택구분} · 청약 ${x.d.청약기간}</div>
+      <div class="meta">${x.f.reasons.join(" · ")}</div></div>
+      <div class="right"><span class="fit fit-${x.f.band}">적합 ${x.f.score}</span><div class="dday">${dt}</div></div></div>`;
+  }).join("")||'<p class="pending">희망 지역에 맞는 현장이 없습니다. 지역을 넓혀보세요.</p>';
+}
+window.renderMatch=renderMatch;
+
+/* ---------- 점수 올리기 개인화 할일 ---------- */
+function renderTodos(){
+  const el=$("todo-list"); if(!el||!window.MATCH)return;
+  const bb={"i-join":$("i-join").value,"i-birth":$("i-birth").value,"i-marry":$("i-marry").value,"i-fam":+$("i-fam").value||0,"i-own":$("i-own").checked};
+  const G=MATCH.computeGajeom(bb), t=[];
+  if(!bb["i-join"])t.push(["통장 가입이 먼저","주택청약종합저축에 가입하세요. 가입기간 가점은 시간이 만들어 — 빠를수록 유리합니다."]);
+  else t.push(["통장 유지·납입 지속",`가입기간 가점은 연 +1점(현재 ${G.g3}/17). 매월 자유납입을 이어가세요.`]);
+  if(bb["i-own"])t.push(["주택 보유 — 우회 전략","가점제는 무주택 0점입니다. 추첨 비중 큰 전용 60㎡ 이하·특별공급 중심으로 노리세요."]);
+  else t.push(["무주택 유지","분양권·입주권·세대원 주택도 주택 수에 포함됩니다. 무주택 상태를 유지하세요."]);
+  if(G.g2<35)t.push(["부양가족 점수 키우기",`부양가족 1명당 +5점(최대 35, 현재 ${G.g2}). 직계존속 3년 동일등본·미혼 직계비속 등재를 검토하세요.`]);
+  t.push(["예치금 충족 확인","거주지역·희망면적 기준 예치금을 입주자모집공고일까지 채우세요(부족분 당일 일시납 가능)."]);
+  t.push(["청약홈 자가진단","신청 전 청약홈의 주택소유확인·무주택기간·가점·통장순위 4종으로 최종 점검하세요."]);
+  el.innerHTML=t.map((x,i)=>`<div class="step"><div class="n">${i+1}</div><div><b>${x[0]}</b><p>${x[1]}</p></div></div>`).join("");
+}
+window.renderTodos=renderTodos;
+
+/* ---------- 이메일 알림 구독 ---------- */
+$("sub-btn").onclick=async()=>{
+  const email=($("sub-email").value||"").trim(), msg=$("sub-msg");
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){msg.style.color="var(--bad)";msg.textContent="올바른 이메일을 입력하세요.";return;}
+  if(!$("sub-consent").checked){msg.style.color="var(--bad)";msg.textContent="수신 동의에 체크해 주세요.";return;}
+  const p=readPrefs();
+  const payload={email,consent:true,regions:p.regions,htype:p.htype,special:p.special,dday:+$("sub-dday").value};
+  msg.style.color="var(--mut)";msg.textContent="구독 처리 중…";
+  try{
+    const r=await fetch("/subscribe",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
+    const j=await r.json();
+    if(j.ok){msg.style.color="var(--live)";msg.textContent=`구독 완료! 조건 맞는 청약이 뜨면 ${email} 으로 알려드립니다. (현재 구독자 ${j.count}명)`;LS.set("cy.email",email);}
+    else{msg.style.color="var(--bad)";msg.textContent=j.error||"구독에 실패했습니다.";}
+  }catch(e){
+    msg.style.color="var(--mut)";
+    msg.innerHTML='구독 서버가 실행 중이 아닙니다. 폴더에서 <code>python notify.py serve</code> 로 열어주세요. (운영 시 서버리스/호스트로 전환)';
+  }
+};
+(function(){const e=LS.get("cy.email");if(e)$("sub-email").value=e;})();
+
+renderCheck();renderKB();renderDocs();fund();renderMatch();renderTodos();
+
+/* ---------- 스크롤 등장 (index.html과 동일 패턴, 정적 섹션만) ---------- */
+(function reveal(){
+  const REDUCE=matchMedia("(prefers-reduced-motion:reduce)").matches;
+  const show=el=>el&&el.classList.add("in");
+  if(!REDUCE&&"IntersectionObserver"in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){show(e.target);io.unobserve(e.target);}}),
+      {threshold:.06,rootMargin:"0px 0px -5% 0px"});
+    document.querySelectorAll("[data-reveal]").forEach(el=>io.observe(el));
+  }else document.querySelectorAll("[data-reveal]").forEach(show);
+})();
+</script>
+</body>
+</html>

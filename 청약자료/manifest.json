@@ -1,0 +1,272 @@
+[
+  {
+    "key": "deposit",
+    "cat": "A.청약통장",
+    "path": "/ar/arb/selectsubscriptionDepositInfoView.do",
+    "status": 200,
+    "bytes": 39411,
+    "txt": 1893,
+    "title": "청약홈 | 주택청약 상품정보"
+  },
+  {
+    "key": "bnkb-stat-all",
+    "cat": "A.청약통장",
+    "path": "/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do",
+    "status": 200,
+    "bytes": 49057,
+    "txt": 3040,
+    "title": "청약홈 | 청약통장 가입현황"
+  },
+  {
+    "key": "bnkb-stat-acc",
+    "cat": "A.청약통장",
+    "path": "/ai/aie/selectSubscrptBnkbAcctoSbscrbStusView.do",
+    "status": 200,
+    "bytes": 46812,
+    "txt": 2750,
+    "title": "청약홈 | 청약통장 통장별 가입현황"
+  },
+  {
+    "key": "bnkb-stat-pd",
+    "cat": "A.청약통장",
+    "path": "/ai/aie/selectSubscrptBnkbSbscrbPdAcctoStusView.do",
+    "status": 200,
+    "bytes": 49505,
+    "txt": 3114,
+    "title": "청약홈 | 청약통장 가입기간별 가입현황"
+  },
+  {
+    "key": "gajeom-calc",
+    "cat": "B.가점/점수",
+    "path": "/ap/apg/selectAddpntCalculatorView.do",
+    "status": 200,
+    "bytes": 65903,
+    "txt": 5927,
+    "title": "청약홈 | 청약가점계산"
+  },
+  {
+    "key": "qualf-diag",
+    "cat": "B.가점/점수",
+    "path": "/co/coc/selectSubscrptQualfDiagMain.do",
+    "status": 200,
+    "bytes": 3608,
+    "txt": 79,
+    "title": "한국부동산원 청약홈"
+  },
+  {
+    "key": "qualf",
+    "cat": "C.자격/지역",
+    "path": "/ar/ara/selectSubscriptIntroQualfView.do",
+    "status": 404,
+    "bytes": 1647,
+    "txt": 39,
+    "title": "한국부동산원 주택청약"
+  },
+  {
+    "key": "limit",
+    "cat": "C.자격/지역",
+    "path": "/co/cob/selectSubscrptLmttCnList.do",
+    "status": 200,
+    "bytes": 147409,
+    "txt": 5582,
+    "title": "청약홈 | 로그인"
+  },
+  {
+    "key": "special-area",
+    "cat": "C.자격/지역",
+    "path": "/ai/aic/selectSpecltSubscrptRndAreaList.do",
+    "status": 200,
+    "bytes": 40635,
+    "txt": 2033,
+    "title": "청약홈 | 규제지역정보"
+  },
+  {
+    "key": "apt-list",
+    "cat": "D.청약중현장",
+    "path": "/ai/aia/selectAPTLttotPblancListView.do",
+    "status": 200,
+    "bytes": 78465,
+    "txt": 4476,
+    "title": "청약홈 | APT분양정보"
+  },
+  {
+    "key": "remndr-list",
+    "cat": "D.청약중현장",
+    "path": "/ai/aia/selectAPTRemndrLttotPblancListView.do",
+    "status": 200,
+    "bytes": 70531,
+    "txt": 3604,
+    "title": "청약홈 | APT잔여세대 분양정보/경쟁률"
+  },
+  {
+    "key": "other-list",
+    "cat": "D.청약중현장",
+    "path": "/ai/aia/selectOtherLttotPblancListView.do",
+    "status": 200,
+    "bytes": 72921,
+    "txt": 4414,
+    "title": "청약홈 | APT분양정보"
+  },
+  {
+    "key": "house",
+    "cat": "F.제도안내",
+    "path": "/ar/ara/selectSubscriptIntroHouseView.do",
+    "status": 404,
+    "bytes": 1647,
+    "txt": 39,
+    "title": "한국부동산원 주택청약"
+  },
+  {
+    "key": "howto",
+    "cat": "F.제도안내",
+    "path": "/ar/ara/selectSubscriptIntroHowToReqstView.do",
+    "status": 404,
+    "bytes": 1647,
+    "txt": 39,
+    "title": "한국부동산원 주택청약"
+  },
+  {
+    "key": "preawner",
+    "cat": "F.제도안내",
+    "path": "/ar/ara/selectSubscriptIntroPreawnerSlctnView.do",
+    "status": 404,
+    "bytes": 1647,
+    "txt": 39,
+    "title": "한국부동산원 주택청약"
+  },
+  {
+    "key": "special",
+    "cat": "F.제도안내",
+    "path": "/ar/ara/selectSubscriptIntroSpetialView.do",
+    "status": 404,
+    "bytes": 1647,
+    "txt": 39,
+    "title": "한국부동산원 주택청약"
+  },
+  {
+    "key": "remndr-hshld",
+    "cat": "F.제도안내",
+    "path": "/ar/ara/selectSubscriptIntroRemndrHshldView.do",
+    "status": 404,
+    "bytes": 1647,
+    "txt": 39,
+    "title": "한국부동산원 주택청약"
+  },
+  {
+    "key": "vocab",
+    "cat": "F.제도안내",
+    "path": "/ar/ard/selectSubscriptVocabularyView.do",
+    "status": 200,
+    "bytes": 53757,
+    "txt": 3996,
+    "title": "청약홈 | 주택청약 용어설명"
+  },
+  {
+    "key": "notice",
+    "cat": "G.공지사항",
+    "path": "/cu/cua/selectNoticeListView.do",
+    "status": 200,
+    "bytes": 41511,
+    "txt": 2246,
+    "title": "청약홈 | 공지사항"
+  },
+  {
+    "key": "bnkb-intro",
+    "cat": "A.청약통장",
+    "path": "/ar/ara/selectSubscrptIntroBnkbView.do",
+    "status": 200,
+    "bytes": 42150,
+    "txt": 3080,
+    "title": "청약홈 | APT 청약안내 청약통장"
+  },
+  {
+    "key": "guide-house",
+    "cat": "F.제도안내",
+    "path": "/ar/ara/selectSubscrptIntroHouseView.do",
+    "status": 200,
+    "bytes": 37833,
+    "txt": 2056,
+    "title": "청약홈 | APT 청약안내 청약주택"
+  },
+  {
+    "key": "guide-qualf",
+    "cat": "C.자격/지역",
+    "path": "/ar/ara/selectSubscrptIntroQualfView.do",
+    "status": 200,
+    "bytes": 43894,
+    "txt": 3985,
+    "title": "청약홈 | APT 청약안내 청약자격"
+  },
+  {
+    "key": "guide-special",
+    "cat": "F.제도안내",
+    "path": "/ar/ara/selectSubscrptIntroSpetialView.do",
+    "status": 200,
+    "bytes": 161961,
+    "txt": 36955,
+    "title": "청약홈 | APT청약안내 특별공급"
+  },
+  {
+    "key": "guide-howto",
+    "cat": "F.제도안내",
+    "path": "/ar/ara/selectSubscrptIntroHowToReqstView.do",
+    "status": 200,
+    "bytes": 39265,
+    "txt": 2929,
+    "title": "청약홈 | APT청약안내 청약신청방법"
+  },
+  {
+    "key": "guide-preawner",
+    "cat": "F.제도안내",
+    "path": "/ar/ara/selectSubscrptIntroPreawnerSlctnView.do",
+    "status": 200,
+    "bytes": 54857,
+    "txt": 6249,
+    "title": "청약홈 | APT청약안내 당첨자선정"
+  },
+  {
+    "key": "guide-remndr",
+    "cat": "F.제도안내",
+    "path": "/ar/ara/selectSubscrptIntroRemndrHshldView.do",
+    "status": 200,
+    "bytes": 38648,
+    "txt": 2810,
+    "title": "청약홈 | APT청약안내 잔여세대"
+  },
+  {
+    "key": "win-apt",
+    "cat": "E.완료/당첨",
+    "path": "/wa/waa/selectAptPrzwinDescList.do",
+    "status": 200,
+    "bytes": 147385,
+    "txt": 5582,
+    "title": "청약홈 | 로그인"
+  },
+  {
+    "key": "faq",
+    "cat": "G.공지사항",
+    "path": "/cu/cub/selectFAQList.do",
+    "status": 200,
+    "bytes": 66290,
+    "txt": 9651,
+    "title": "청약홈 | 자주 묻는 질문"
+  },
+  {
+    "key": "allimi",
+    "cat": "D.청약중현장",
+    "path": "/cu/cuc/selectSubscrptAllimiView.do",
+    "status": 200,
+    "bytes": 147409,
+    "txt": 5582,
+    "title": "청약홈 | 로그인"
+  },
+  {
+    "key": "movein",
+    "cat": "E.완료/당첨",
+    "path": "/ai/aia/selectAPTMvnPrearngeHsHldcoList.do",
+    "status": 200,
+    "bytes": 49457,
+    "txt": 3332,
+    "title": "청약홈 | 입주(예정)정보 조회"
+  }
+]

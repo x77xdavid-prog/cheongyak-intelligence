@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>청약 인텔리전스 · 분양현장 알리미</title>
+<meta name="description" content="청약홈 실데이터를 청약 임박순으로 — 분양정보·경쟁률·특별공급 신청현황·당첨가점까지 한눈에. 청약 캘린더, 가점계산기, 자격진단을 한 곳에서.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* ── 2026 trend system · electric cobalt → violet, glassmorphism, bento ── */
+  --primary:#3D5AFE; --primary-2:#7B5BFC; --primary-ink:#1E36D8; --primary-soft:#EDF0FF;
+  --grad:linear-gradient(120deg,#3D5AFE,#7B5BFC);
+  --grad-hero:linear-gradient(135deg,#2E4BFF 0%,#6D4DFB 52%,#9B53F2 100%);
+  --grad-mesh:radial-gradient(circle at 18% 20%,rgba(61,90,254,.18),transparent 45%),radial-gradient(circle at 85% 12%,rgba(123,91,252,.16),transparent 42%);
+
+  --ink:#0C1124; --ink-2:#1A2138;
+  --mut:#5A6379; --faint:#98A1B6; --line:#E8ECF6; --line-2:#F1F4FB;
+  --bg:#F4F6FC; --surface:#FFFFFF; --surface-2:#F8FAFF;
+
+  /* semantic — names kept stable for data script inline styles */
+  --ok:#06C270; --ok-soft:#E1F8EC;
+  --hot:#FB3B68; --hot-soft:#FFE9EF;
+  --amber:#FF9E2C; --warn:#C2740B; --warn-soft:#FFF1DC; --amber-soft:#FFF1DC;
+  --under:#7C5CFC; --under-soft:#EEEAFF;
+
+  --r-2xl:26px; --r-xl:20px; --r-lg:16px; --r-md:12px; --r-sm:9px;
+  --sh-xs:0 1px 2px rgba(12,17,36,.05);
+  --sh-sm:0 2px 8px -2px rgba(12,17,36,.10);
+  --sh-md:0 10px 30px -12px rgba(20,30,70,.22);
+  --sh-lg:0 28px 70px -28px rgba(20,30,80,.40);
+  --sh-glow:0 18px 50px -16px rgba(61,90,254,.45);
+  --mono:"Fira Code",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Pretendard",system-ui,sans-serif;background:var(--bg);color:var(--ink);
+  -webkit-font-smoothing:antialiased;line-height:1.55;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+.tnum{font-variant-numeric:tabular-nums;font-family:var(--mono)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 clamp(16px,3.4vw,34px)}
+.sec{padding:clamp(46px,6vw,78px) 0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:26px}
+.sec-head h2{font-size:clamp(21px,3vw,30px);margin:0;font-weight:800;letter-spacing:-.035em;line-height:1.1}
+.sec-head h2 .accent{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.sec-head p{margin:7px 0 0;color:var(--mut);font-size:14px}
+.sec-head .more{font-size:13px;font-weight:700;color:var(--primary);display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.sec-head .more svg{width:15px;height:15px;transition:transform .25s var(--ease)}
+.sec-head .more:hover svg{transform:translateX(3px)}
+
+/* ── Utility bar ── */
+.util{background:var(--ink);color:#C9D0E4;font-size:12.5px}
+.util-in{display:flex;align-items:center;gap:18px;height:38px}
+.util-l{display:flex;align-items:center;gap:7px;font-weight:500}
+.util-l svg{width:14px;height:14px;color:#8E9ABF}
+.util-r{margin-left:auto;display:flex;align-items:center;gap:18px}
+.util .live{display:flex;align-items:center;gap:7px;color:#E6EAF6;font-weight:600}
+.util .dot{width:7px;height:7px;border-radius:50%;background:var(--ok);position:relative}
+.util .dot::after{content:"";position:absolute;inset:-4px;border-radius:50%;background:var(--ok);opacity:.4;animation:pulse 2.2s var(--ease) infinite}
+.util-r a{color:#AAB4D0;transition:color .2s}
+.util-r a:hover{color:#fff}
+@keyframes pulse{0%{transform:scale(.7);opacity:.5}70%{transform:scale(2.6);opacity:0}100%{opacity:0}}
+
+/* ── Header / GNB (glassmorphic) ── */
+header.gnb{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.72);
+  backdrop-filter:saturate(180%) blur(18px);-webkit-backdrop-filter:saturate(180%) blur(18px);
+  border-bottom:1px solid rgba(20,30,70,.08)}
+.gnb-in{display:flex;align-items:center;gap:14px;height:70px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800;font-size:18px;letter-spacing:-.03em}
+.brand .logo{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  background:var(--grad);box-shadow:var(--sh-glow)}
+.brand .logo svg{width:21px;height:21px}
+.brand .gtxt .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+nav.menu{display:flex;gap:2px;margin-left:14px}
+nav.menu a{padding:9px 15px;border-radius:10px;font-size:14.5px;font-weight:600;color:var(--ink-2);
+  transition:color .2s var(--ease),background .2s var(--ease)}
+nav.menu a:hover{color:var(--primary);background:var(--primary-soft)}
+.gnb-act{margin-left:auto;display:flex;align-items:center;gap:9px}
+.icon-btn{width:40px;height:40px;border-radius:11px;border:1px solid var(--line);background:var(--surface);
+  display:grid;place-items:center;cursor:pointer;color:var(--mut);transition:all .2s var(--ease)}
+.icon-btn:hover{color:var(--primary);border-color:var(--primary);box-shadow:var(--sh-sm)}
+.icon-btn svg{width:18px;height:18px}
+.btn-my{padding:10px 18px;border-radius:11px;font-size:14px;font-weight:700;color:#fff;background:var(--grad);
+  box-shadow:var(--sh-glow);transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.btn-my:hover{transform:translateY(-1px);box-shadow:0 22px 44px -16px rgba(61,90,254,.6)}
+.burger{display:none;width:42px;height:42px;border-radius:11px;border:1px solid var(--line);background:var(--surface);
+  cursor:pointer;color:var(--ink);place-items:center}
+.burger svg{width:20px;height:20px}
+
+/* ── Hero / 오늘의 청약 ── */
+.hero{position:relative;padding:clamp(40px,5.5vw,72px) 0 clamp(36px,4vw,54px);overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:var(--grad-mesh);z-index:0;pointer-events:none}
+.hero .glow{position:absolute;inset:-80px -60px auto;height:560px;z-index:0;pointer-events:none}
+.hero .glow b{position:absolute;display:block;border-radius:50%;filter:blur(72px);will-change:transform}
+.hero .glow .a{width:540px;height:540px;left:-40px;top:-150px;opacity:.5;
+  background:radial-gradient(circle,rgba(61,90,254,.55),transparent 62%);animation:drift1 19s var(--ease) infinite alternate}
+.hero .glow .b{width:460px;height:460px;right:-10px;top:-120px;opacity:.42;
+  background:radial-gradient(circle,rgba(155,83,242,.5),transparent 62%);animation:drift2 24s var(--ease) infinite alternate}
+.hero-in{position:relative;z-index:1;display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(28px,4vw,52px);align-items:center}
+.kicker{display:inline-flex;align-items:center;gap:7px;font-size:12px;letter-spacing:.04em;font-weight:700;
+  color:var(--primary-ink);background:rgba(255,255,255,.75);border:1px solid var(--line);
+  padding:7px 13px;border-radius:99px;box-shadow:var(--sh-xs)}
+.kicker .pp{width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(6,194,112,.18)}
+.hero h1{font-size:clamp(30px,5vw,56px);margin:16px 0 8px;letter-spacing:-.045em;line-height:1.04;font-weight:800}
+.hero h1 em{font-style:normal;background:var(--grad);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;color:transparent;background-size:220% 100%;animation:hue 6.5s linear infinite}
+.hero .sub{color:var(--mut);font-size:clamp(14.5px,1.5vw,16.5px);max-width:50ch;margin:0}
+.hero .sub b{color:var(--ink);font-weight:700}
+.hero-cta{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.btn-primary,.btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:13px;
+  font-size:14.5px;font-weight:700;cursor:pointer;border:0;font-family:inherit;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.btn-primary{color:#fff;background:var(--grad);box-shadow:var(--sh-glow)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 26px 50px -18px rgba(61,90,254,.62)}
+.btn-ghost{color:var(--ink);background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-xs)}
+.btn-ghost:hover{transform:translateY(-2px);box-shadow:var(--sh-sm);border-color:var(--primary)}
+.btn-primary svg,.btn-ghost svg{width:16px;height:16px}
+.upd{font-size:12.5px;color:var(--faint);margin:18px 0 0;display:flex;align-items:center;gap:6px}
+
+/* today bento cards (live data) */
+.today{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+.tcard{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);
+  padding:20px 20px 18px;box-shadow:var(--sh-sm);overflow:hidden;cursor:pointer;
+  transition:transform .28s var(--ease),box-shadow .28s var(--ease),border-color .28s var(--ease)}
+.tcard:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:transparent}
+.tcard .tc-top{display:flex;align-items:center;justify-content:space-between;font-size:13px;font-weight:700;color:var(--mut)}
+.tcard .tc-top .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--primary-soft);color:var(--primary)}
+.tcard .tc-top .ic svg{width:18px;height:18px}
+.tcard .tc-val{display:flex;align-items:baseline;gap:5px;margin:16px 0 3px}
+.tcard .tc-val .tnum{font-size:42px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.tcard .tc-val i{font-style:normal;font-size:15px;font-weight:700;color:var(--mut)}
+.tcard .tc-sub{font-size:12.5px;color:var(--faint)}
+.tcard.feature{background:var(--grad-hero);border-color:transparent;color:#fff;box-shadow:var(--sh-glow)}
+.tcard.feature .tc-top,.tcard.feature .tc-sub{color:rgba(255,255,255,.86)}
+.tcard.feature .tc-top .ic{background:rgba(255,255,255,.18);color:#fff}
+.tcard.feature .tc-val i{color:rgba(255,255,255,.86)}
+.tcard.hot .tc-top .ic{background:var(--hot-soft);color:var(--hot)} .tcard.hot .tc-val .tnum{color:var(--hot)}
+.tcard.under .tc-top .ic{background:var(--under-soft);color:var(--under)} .tcard.under .tc-val .tnum{color:var(--under)}
+
+/* ── Quick menu bento (청약 준비) ── */
+.quickwrap{background:linear-gradient(180deg,var(--surface),var(--surface-2));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.qcard{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);
+  padding:20px 18px;box-shadow:var(--sh-xs);transition:transform .26s var(--ease),box-shadow .26s var(--ease),border-color .26s var(--ease);overflow:hidden}
+.qcard::after{content:"";position:absolute;right:-30px;bottom:-30px;width:96px;height:96px;border-radius:50%;
+  background:var(--grad);opacity:0;transition:opacity .3s var(--ease);filter:blur(8px)}
+.qcard:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:transparent}
+.qcard:hover::after{opacity:.1}
+.qcard .qi{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;margin-bottom:14px;
+  background:var(--primary-soft);color:var(--primary);transition:background .26s,color .26s}
+.qcard:hover .qi{background:var(--grad);color:#fff}
+.qcard .qi svg{width:24px;height:24px}
+.qcard h3{margin:0 0 4px;font-size:15px;font-weight:700;letter-spacing:-.02em}
+.qcard p{margin:0;font-size:12.5px;color:var(--faint);line-height:1.5}
+
+/* ── Board / 분양정보·경쟁률 (data feature) ── */
+.kpis-note{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.chip{font-size:12px;font-weight:600;color:var(--mut);background:var(--surface);border:1px solid var(--line);padding:6px 12px;border-radius:99px}
+.chip b{color:var(--primary);font-weight:700}
+.insights{display:grid;grid-template-columns:1fr 1.25fr;gap:16px;margin-bottom:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);box-shadow:var(--sh-sm)}
+.panel h3{font-size:14px;font-weight:700;margin:0;padding:17px 20px 12px;letter-spacing:-.02em;display:flex;align-items:center;gap:8px}
+.panel h3 .tag{font-size:11px;font-weight:600;color:var(--mut);background:var(--surface-2);border:1px solid var(--line);padding:3px 9px;border-radius:99px;margin-left:auto}
+.dist{padding:6px 20px 20px;display:flex;flex-direction:column;gap:13px}
+.dist .bar-row{display:grid;grid-template-columns:78px 1fr 36px;align-items:center;gap:11px;font-size:13px}
+.dist .bar-row .nm{color:var(--mut);font-weight:600}
+.dist .track{height:10px;background:var(--surface-2);border-radius:99px;overflow:hidden;border:1px solid var(--line-2)}
+.dist .fill{height:100%;border-radius:99px;width:0;transition:width 1s var(--ease)}
+.dist .cnt{text-align:right;font-weight:700;color:var(--ink)}
+.hotlist{padding:4px 14px 14px}
+.hotlist .item{display:grid;grid-template-columns:24px 1fr auto;align-items:center;gap:11px;padding:11px 8px;border-radius:11px;cursor:pointer;transition:background .18s var(--ease)}
+.hotlist .item:hover{background:var(--surface-2)}
+.hotlist .rk{font-family:var(--mono);font-size:13px;font-weight:700;color:#fff;background:var(--faint);border-radius:7px;text-align:center;line-height:24px;height:24px}
+.hotlist .item:nth-child(1) .rk{background:var(--grad)} .hotlist .item:nth-child(2) .rk{background:#A0A8BE} .hotlist .item:nth-child(3) .rk{background:#C2A878}
+.hotlist .nm{font-size:14px;font-weight:600;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hotlist .nm small{color:var(--faint);font-weight:500}
+.hotlist .rt{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--hot);white-space:nowrap}
+
+.board{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-2xl);box-shadow:var(--sh-md);overflow:hidden}
+.toolbar{display:flex;gap:11px;flex-wrap:wrap;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.toolbar h3{font-size:16px;margin:0;font-weight:700;margin-right:4px;letter-spacing:-.02em}
+.seg{display:inline-flex;background:var(--surface-2);border:1px solid var(--line);border-radius:11px;padding:3px}
+.seg button{border:0;background:transparent;font:inherit;font-size:13px;font-weight:600;color:var(--mut);padding:7px 14px;border-radius:8px;cursor:pointer;transition:all .18s var(--ease)}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--primary);box-shadow:var(--sh-xs)}
+.field{position:relative;display:flex;align-items:center}
+.field svg{position:absolute;left:11px;width:16px;height:16px;color:var(--faint);pointer-events:none}
+select,input[type=search]{font:inherit;font-size:13.5px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:9px 12px;transition:border .18s,box-shadow .18s}
+input[type=search]{padding-left:33px;width:188px}
+select:focus,input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 4px rgba(61,90,254,.14)}
+.switch{margin-left:auto;display:inline-flex;align-items:center;gap:9px;font-size:13px;color:var(--mut);font-weight:600;cursor:pointer;user-select:none}
+.switch input{position:absolute;opacity:0}
+.switch .track2{width:40px;height:23px;border-radius:99px;background:var(--line);position:relative;transition:background .2s var(--ease)}
+.switch .track2::after{content:"";position:absolute;top:2px;left:2px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:var(--sh-xs);transition:transform .2s var(--ease)}
+.switch input:checked+.track2{background:var(--primary)}
+.switch input:checked+.track2::after{transform:translateX(17px)}
+.switch input:focus-visible+.track2{box-shadow:0 0 0 4px rgba(61,90,254,.22)}
+.count{padding:11px 20px;font-size:12.5px;color:var(--mut);background:var(--surface-2);border-bottom:1px solid var(--line-2)}
+.count b{color:var(--ink);font-weight:700}
+.row{border-bottom:1px solid var(--line-2)}
+.row:last-child{border-bottom:0}
+.head{display:grid;grid-template-columns:60px 1fr auto;gap:15px;padding:15px 20px;align-items:center;cursor:pointer;transition:background .15s var(--ease);min-height:66px}
+.head:hover{background:var(--surface-2)}
+.head:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+.reg{font-size:12px;font-weight:700;color:var(--primary);background:var(--primary-soft);border-radius:9px;padding:8px 0;text-align:center;letter-spacing:-.01em}
+.nm{font-weight:650;letter-spacing:-.015em;font-size:15px;display:flex;align-items:center;gap:8px}
+.nm .exp{display:inline-flex;align-items:center;gap:3px;color:var(--primary);font-size:11.5px;font-weight:600;background:var(--primary-soft);padding:3px 8px;border-radius:99px}
+.nm .exp svg{width:11px;height:11px;transition:transform .25s var(--ease)}
+.row.open .nm .exp svg{transform:rotate(180deg)}
+.meta{font-size:12.5px;color:var(--mut);margin-top:4px;line-height:1.5}
+.meta b{color:var(--ink);font-weight:600}
+.meta .period{font-family:var(--mono);font-size:11.5px}
+.right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;white-space:nowrap}
+.dday{font-family:var(--mono);font-weight:700;font-size:17px;letter-spacing:-.02em}
+.dday.soon{color:var(--hot)} .dday.live{color:var(--ok)}
+.badge{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:700;padding:4px 11px;border-radius:99px}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.b-soon{background:var(--hot-soft);color:var(--hot)} .b-live{background:var(--ok-soft);color:var(--ok)}
+.b-wait{background:var(--primary-soft);color:var(--primary-ink)} .b-done{background:#F1F2F5;color:#9AA3B2}
+.rate{display:inline-flex;align-items:center;gap:7px;font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:9px}
+.rate .rfill{width:44px;height:6px;border-radius:99px;background:rgba(0,0,0,.08);overflow:hidden}
+.rate .rfill i{display:block;height:100%;border-radius:99px}
+.r-hi{background:var(--hot-soft);color:var(--hot)} .r-hi .rfill i{background:var(--hot)}
+.r-mid{background:var(--warn-soft);color:var(--warn)} .r-mid .rfill i{background:var(--amber)}
+.r-under{background:var(--under-soft);color:var(--under)} .r-under .rfill i{background:var(--under)}
+.detail{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease);background:var(--surface-2)}
+.row.open .detail{grid-template-rows:1fr;border-top:1px solid var(--line-2)}
+.detail>div{overflow:hidden}
+.detail-in{padding:8px 20px 22px}
+.detail h4{font-size:13px;margin:16px 0 8px;color:var(--ink-2);font-weight:700;display:flex;gap:8px;align-items:baseline}
+.detail h4 .sm{font-size:11px;color:var(--mut);font-weight:500}
+.under-tag{color:var(--under);font-weight:700}
+.tbl-wrap{max-height:300px;overflow:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table.cz{width:100%;border-collapse:collapse;font-size:12.5px}
+table.cz th,table.cz td{padding:9px 11px;border-bottom:1px solid var(--line-2);text-align:center;white-space:nowrap}
+table.cz td:not(:first-child){font-family:var(--mono);font-variant-numeric:tabular-nums}
+table.cz th{background:var(--surface-2);color:var(--ink-2);font-weight:600;position:sticky;top:0;font-size:11.5px;font-family:"Pretendard",sans-serif}
+table.cz td:first-child,table.cz th:first-child{text-align:left;font-weight:600}
+table.cz tbody tr:hover{background:var(--surface-2)}
+.empty{padding:60px 20px;text-align:center;color:var(--faint);font-size:14px}
+.empty svg{width:36px;height:36px;margin-bottom:10px;color:var(--line)}
+
+/* ── 주택 유형별 ── */
+.types{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.type{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-2xl);overflow:hidden;box-shadow:var(--sh-sm);transition:transform .3s var(--ease),box-shadow .3s var(--ease)}
+.type:hover{transform:translateY(-5px);box-shadow:var(--sh-lg)}
+.type .top{height:128px;display:grid;place-items:center;background:var(--grad-hero);position:relative;overflow:hidden}
+.type:nth-child(2) .top{background:linear-gradient(135deg,#0EA5E9,#22D3A8)}
+.type:nth-child(3) .top{background:linear-gradient(135deg,#F59E0B,#FB3B68)}
+.type .top svg{width:54px;height:54px;color:rgba(255,255,255,.96);position:relative;z-index:1}
+.type .top::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 75% 20%,rgba(255,255,255,.28),transparent 55%)}
+.type .body{padding:20px}
+.type h3{margin:0 0 6px;font-size:17px;font-weight:700;letter-spacing:-.02em}
+.type p{margin:0 0 14px;font-size:13px;color:var(--mut);line-height:1.55}
+.type .go{font-size:13px;font-weight:700;color:var(--primary);display:inline-flex;align-items:center;gap:5px}
+.type .go svg{width:15px;height:15px;transition:transform .25s var(--ease)}
+.type:hover .go svg{transform:translateX(3px)}
+
+/* ── 공지사항 ── */
+.notice{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-2xl);box-shadow:var(--sh-sm);overflow:hidden}
+.notice a.nrow{display:grid;grid-template-columns:88px 1fr auto;align-items:center;gap:16px;padding:18px 22px;border-bottom:1px solid var(--line-2);transition:background .18s var(--ease)}
+.notice a.nrow:last-child{border-bottom:0}
+.notice a.nrow:hover{background:var(--surface-2)}
+.notice .ncat{font-size:11.5px;font-weight:700;color:var(--primary);background:var(--primary-soft);border-radius:8px;padding:6px 0;text-align:center}
+.notice .ncat.new{color:var(--hot);background:var(--hot-soft)}
+.notice .ntitle{font-size:14.5px;font-weight:600;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.notice .ndate{font-family:var(--mono);font-size:12.5px;color:var(--faint)}
+
+/* ── Footer ── */
+footer.site{background:var(--ink);color:#AEB7CF;padding:54px 0 40px;margin-top:8px}
+.foot-top{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px;padding-bottom:30px;border-bottom:1px solid rgba(255,255,255,.09)}
+.foot-brand .brand{color:#fff;margin-bottom:12px}
+.foot-brand p{font-size:12.5px;line-height:1.7;margin:0;max-width:34ch;color:#8E98B5}
+.foot-col h4{font-size:13px;color:#E6EAF6;margin:0 0 13px;font-weight:700}
+.foot-col a{display:block;font-size:13px;color:#9AA4C0;padding:5px 0;transition:color .18s}
+.foot-col a:hover{color:#fff}
+.foot-bot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:22px;font-size:12px;color:#7A85A6}
+.foot-bot .ds{display:flex;align-items:center;gap:7px}
+.foot-bot .ds svg{width:14px;height:14px;color:var(--ok)}
+
+/* ── animation ── */
+@keyframes drift1{to{transform:translate(110px,56px) scale(1.16)}}
+@keyframes drift2{to{transform:translate(-86px,40px) scale(1.12)}}
+@keyframes hue{to{background-position:220% 0}}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.hero .kicker{animation:rise .7s var(--ease) both}
+.hero h1{animation:rise .8s var(--ease) .08s both}
+.hero .sub{animation:rise .8s var(--ease) .16s both}
+.hero-cta{animation:rise .8s var(--ease) .24s both}
+.hero .upd{animation:rise .8s var(--ease) .32s both}
+.today{animation:rise .9s var(--ease) .2s both}
+[data-reveal]{opacity:0;transform:translateY(24px);transition:opacity .75s var(--ease) var(--rd,0ms),transform .75s var(--ease) var(--rd,0ms)}
+[data-reveal].in{opacity:1;transform:none}
+
+/* ── responsive ── */
+@media (max-width:1000px){
+  nav.menu{display:none} .burger{display:grid}
+  .hero-in{grid-template-columns:1fr;gap:30px} .today{max-width:560px}
+  .quick{grid-template-columns:repeat(2,1fr)} .types{grid-template-columns:1fr}
+  .insights{grid-template-columns:1fr} .foot-top{grid-template-columns:1fr 1fr}
+}
+@media (max-width:600px){
+  .util-l{display:none} .util-in{justify-content:center}
+  .gnb-in{height:62px;gap:10px} .brand{font-size:16px;white-space:nowrap} .brand .logo{width:34px;height:34px}
+  .icon-btn{display:none} .btn-my{padding:9px 14px;font-size:13px;white-space:nowrap}
+  .today{grid-template-columns:1fr} .quick{grid-template-columns:repeat(2,1fr)}
+  .switch{margin-left:0;width:100%;order:9}
+  .head{grid-template-columns:50px 1fr;gap:12px} .right{grid-column:2;flex-direction:row;align-items:center;margin-top:4px}
+  .notice a.nrow{grid-template-columns:74px 1fr;gap:12px} .notice .ndate{grid-column:2}
+  .foot-top{grid-template-columns:1fr 1fr}
+  .tcard .tc-val .tnum{font-size:36px}
+}
+/* ── 청약 여정 다이어그램 ── */
+.jrny{position:relative}
+.jrny .jlead{max-width:760px;margin:-4px 0 38px;color:var(--mut);font-size:15px;line-height:1.65}
+.jrny .jlead b{color:var(--ink-2);font-weight:700}
+.jflow{display:grid;grid-template-columns:repeat(5,1fr);gap:18px;position:relative}
+.jstep{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-xl);
+  padding:24px 17px 18px;box-shadow:var(--sh-sm);transition:transform .3s var(--ease),box-shadow .3s var(--ease),border-color .3s}
+.jstep:hover{transform:translateY(-5px);box-shadow:var(--sh-md);border-color:#DFE3FF}
+.jstep .jnum{position:absolute;top:-15px;left:17px;width:34px;height:34px;border-radius:11px;
+  background:var(--grad);color:#fff;font-family:var(--mono);font-weight:700;font-size:15px;
+  display:grid;place-items:center;box-shadow:var(--sh-glow)}
+.jstep .jkick{font-size:10.5px;font-weight:800;letter-spacing:.13em;color:var(--primary);margin:6px 0 5px}
+.jstep h3{margin:0 0 8px;font-size:16px;font-weight:800;letter-spacing:-.02em;line-height:1.25}
+.jstep .jdesc{margin:0 0 13px;font-size:12.5px;color:var(--mut);line-height:1.5}
+.jstep ul{margin:0;padding:0;list-style:none;display:grid;gap:7px}
+.jstep li{font-size:12px;line-height:1.45;color:var(--ink-2);padding-left:20px;position:relative}
+.jstep li::before{position:absolute;left:0;top:0;font-size:11.5px}
+.jstep li.do::before{content:"✅"} .jstep li.need::before{content:"📋"}
+.jstep li.tip::before{content:"💡"} .jstep li.fork::before{content:"🔀"}
+.jstep li.tip,.jstep li.fork{color:var(--mut)}
+.jstep li b{color:var(--primary-ink);font-weight:700}
+.jstep::after{content:"";position:absolute;right:-13px;top:46px;width:10px;height:10px;
+  border-top:2.5px solid var(--primary-2);border-right:2.5px solid var(--primary-2);
+  transform:rotate(45deg);opacity:.5}
+.jstep:nth-child(5)::after{display:none}
+.jtracks{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:38px}
+.jtrack{border-radius:var(--r-xl);padding:22px 24px 20px;border:1px solid var(--line)}
+.jtrack.high{background:linear-gradient(150deg,#EEF1FF,#F6F1FF);border-color:#DFE3FF}
+.jtrack.low{background:linear-gradient(150deg,#E9FBF2,#EAF6FF);border-color:#D6F2E4}
+.jtrack h4{margin:0 0 9px;font-size:15px;font-weight:800;display:flex;align-items:center;gap:9px;letter-spacing:-.01em}
+.jtrack .jt-tag{font-size:11px;font-weight:700;padding:3px 10px;border-radius:999px;background:#fff;color:var(--primary-ink);box-shadow:var(--sh-xs)}
+.jtrack.low .jt-tag{color:var(--ok)}
+.jtrack p{margin:0;font-size:13px;color:var(--ink-2);line-height:1.65}
+.jrule{margin-top:24px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  background:var(--ink);color:#E6EAF6;border-radius:var(--r-xl);padding:20px 24px;font-size:13.5px;line-height:1.55}
+.jrule .jr-ic{flex:none;width:42px;height:42px;border-radius:13px;background:rgba(255,255,255,.1);display:grid;place-items:center}
+.jrule .jr-ic svg{width:22px;height:22px;stroke:#fff;fill:none}
+.jrule b{color:#fff}
+.jrule .jr-call{margin-left:auto;font-family:var(--mono);font-weight:700;font-size:14.5px;color:#fff;
+  background:var(--grad);padding:10px 16px;border-radius:11px;white-space:nowrap}
+@media (max-width:1000px){.jflow{grid-template-columns:1fr 1fr}.jstep::after{display:none}}
+@media (max-width:600px){.jflow{grid-template-columns:1fr;gap:26px}.jtracks{grid-template-columns:1fr}.jrule .jr-call{margin-left:0}}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition-duration:.01ms!important;scroll-behavior:auto}
+  .hero .glow{display:none}
+  [data-reveal]{opacity:1!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+
+<!-- ── 상단 유틸바 ── -->
+<div class="util">
+  <div class="wrap util-in">
+    <span class="util-l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg> 청약 문의 1644-7445 · 평일 09:00–17:30</span>
+    <span class="util-r">
+      <span class="live"><span class="dot" aria-hidden="true"></span><span id="live-txt">청약홈 실데이터 연동</span></span>
+      <a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">청약홈 바로가기</a>
+      <a href="#notice">공지사항</a>
+    </span>
+  </div>
+</div>
+
+<!-- ── 헤더 / GNB ── -->
+<header class="gnb">
+  <div class="wrap gnb-in">
+    <a class="brand" href="index.html">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg></span>
+      <span class="gtxt">청약<span class="grad">인텔리전스</span></span>
+    </a>
+    <nav class="menu" aria-label="주 메뉴">
+      <a class="on" href="index.html#journey">청약 여정</a>
+      <a href="page2.html">청약 준비</a>
+      <a href="index.html#board">분양현장</a>
+      <a href="manage.html">내 청약 관리</a>
+      <a href="board.html">게시판</a>
+    </nav>
+    <div class="gnb-act">
+      <button class="icon-btn" id="searchBtn" aria-label="현장 검색"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></button>
+      <a class="btn-my" href="page2.html">마이 청약</a>
+      <button class="burger" id="burger" aria-label="전체 메뉴"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ── 히어로 / 오늘의 청약 ── -->
+  <section class="hero" id="today" aria-labelledby="h1">
+    <span class="glow" aria-hidden="true"><b class="a"></b><b class="b"></b></span>
+    <div class="wrap hero-in">
+      <div class="hero-copy">
+        <span class="kicker"><span class="pp" aria-hidden="true"></span> 청약홈 실데이터 · LIVE</span>
+        <h1>청약 임박 현장을<br><em>가장 먼저</em>.</h1>
+        <p class="sub">전국 분양현장을 <b>청약 임박순</b>으로 정렬하고, 현장별 <b>경쟁률·특별공급 신청현황·당첨가점</b>까지 한 번에. 청약 캘린더와 가점계산까지 한 곳에서 준비하세요.</p>
+        <div class="hero-cta">
+          <button class="btn-primary" data-jump="board">분양현장 살펴보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <button class="btn-ghost" data-jump="quick">청약 준비하기</button>
+        </div>
+        <p class="upd" id="upd"></p>
+      </div>
+      <div class="today" aria-label="오늘의 청약 현황">
+        <article class="tcard feature" data-jump="board">
+          <div class="tc-top"><span>청약 진행중</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span></div>
+          <div class="tc-val"><span class="tnum" id="s-live">–</span><i>건</i></div>
+          <div class="tc-sub">지금 접수 가능한 현장</div>
+        </article>
+        <article class="tcard hot" data-jump="board">
+          <div class="tc-top"><span>청약 임박</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span></div>
+          <div class="tc-val"><span class="tnum" id="s-soon">–</span><i>건</i></div>
+          <div class="tc-sub">7일 이내 접수 시작</div>
+        </article>
+        <article class="tcard under" data-jump="board">
+          <div class="tc-top"><span>미달 현장</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M21 7v6h-6"/></svg></span></div>
+          <div class="tc-val"><span class="tnum" id="s-under">–</span><i>건</i></div>
+          <div class="tc-sub">경쟁률 1:1 미만 · 기회</div>
+        </article>
+        <article class="tcard" data-jump="board">
+          <div class="tc-top"><span>수집 현장</span><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></span></div>
+          <div class="tc-val"><span class="tnum" id="s-total">–</span><i>건</i></div>
+          <div class="tc-sub">청약홈 연동 분양정보</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 청약 여정 다이어그램 (한눈에 보기) ── -->
+  <section class="sec wrap jrny" id="journey" data-reveal>
+    <div class="sec-head">
+      <div><h2>청약, <span class="accent">5단계</span>로 끝낸다</h2>
+        <p>청약통장 가입자 입장에서 — 통장 → 점수·자격 → 조건 확인 → 단지 찾기 → 신청까지 한 흐름으로.</p></div>
+      <a class="more" href="page2.html">내 점수 계산하기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <p class="jlead">청약통장부터 만들고 → 내 <b>점수·자격</b>을 확인하고 → 들어갈 수 있는 <b>단지</b>를 찾아 → 정해진 시간에 <b>신청</b>하면 끝. 모든 최종 기준은 그 단지의 <b>입주자모집공고문</b>이 우선합니다.</p>
+
+    <div class="jflow">
+      <article class="jstep">
+        <span class="jnum">1</span><div class="jkick">STEP 01</div>
+        <h3>통장 만들기</h3>
+        <p class="jdesc">청약의 입장권. 통장이 없으면 시작도 못 한다.</p>
+        <ul>
+          <li class="do">9개 은행서 <b>주택청약종합저축</b> 가입 (월 2~50만원)</li>
+          <li class="need">본인 실명확인증표 (나이·자격 제한 없음)</li>
+          <li class="tip">가입기간이 곧 점수 — 빨리 만들수록 유리</li>
+        </ul>
+      </article>
+      <article class="jstep">
+        <span class="jnum">2</span><div class="jkick">STEP 02</div>
+        <h3>내 점수·자격 확인</h3>
+        <p class="jdesc">내가 1순위인지, 가점이 몇 점인지 미리 안다.</p>
+        <ul>
+          <li class="do">가점 직접 계산 <b>(84점 = 무주택32+부양35+기간17)</b></li>
+          <li class="need">주민등록표등본, 통장 순위기산일·납입실적</li>
+          <li class="fork">가점 높으면 <b>가점제</b> / 낮으면 <b>추첨·특공</b></li>
+        </ul>
+      </article>
+      <article class="jstep">
+        <span class="jnum">3</span><div class="jkick">STEP 03</div>
+        <h3>이 집이 내 조건에 맞나</h3>
+        <p class="jdesc">주택종류·규제 여부로 신청 가능한지 거른다.</p>
+        <ul>
+          <li class="do">국민/민영 구분 + <b>규제지역</b> 여부 확인</li>
+          <li class="need">거주지·세대주 여부, 5년 내 당첨이력, 보유 주택수</li>
+          <li class="fork"><b>1순위 제한자</b>는 1순위라도 2순위로 신청</li>
+        </ul>
+      </article>
+      <article class="jstep">
+        <span class="jnum">4</span><div class="jkick">STEP 04</div>
+        <h3>신청할 단지 찾기</h3>
+        <p class="jdesc">청약 중인 단지를 고르고 일정을 챙긴다.</p>
+        <ul>
+          <li class="do">'분양정보/경쟁률'서 단지 선택 → <b>모집공고문</b> 확인</li>
+          <li class="need">관심지역 필터 + <b>[알림 신청]</b> 등록</li>
+          <li class="tip">잔여세대는 청약기간 하루뿐인 경우 多 — 알림 필수</li>
+        </ul>
+      </article>
+      <article class="jstep">
+        <span class="jnum">5</span><div class="jkick">STEP 05</div>
+        <h3>신청하고 결과 확인</h3>
+        <p class="jdesc">정해진 시간에 신청하고, 발표일에 결과를 본다.</p>
+        <ul>
+          <li class="do">청약기간 <b>09:00~17:30</b> 청약홈 인터넷 신청</li>
+          <li class="need">본인 명의 인증서 1개 + 청약통장</li>
+          <li class="tip">당일 17:30 전 취소·재신청 가능, 마감 후 불가</li>
+        </ul>
+      </article>
+    </div>
+
+    <div class="jtracks">
+      <div class="jtrack high">
+        <h4>고가점이라면 <span class="jt-tag">가점제 정공법</span></h4>
+        <p>가점이 통하는 단지를 노린다. 투기과열지구 85㎡ 초과는 가점 80%로 고가점에 유리. 단 점수보다 <b>거주지 불일치·세대주 요건·5년 내 당첨이력</b>이 더 큰 탈락 위험이니 신청 전에 먼저 제거하세요.</p>
+      </div>
+      <div class="jtrack low">
+        <h4>저가점이라면 <span class="jt-tag">추첨·특별공급</span></h4>
+        <p>① 무주택이면 <b>특별공급</b>(청년·신혼부부·생애최초·신생아 등)을 길로. ② 일반공급은 <b>추첨 비중 큰 민영</b>(85㎡ 초과 비규제 = 추첨 100%). ③ 떨어지면 <b>무순위 잔여세대</b>로 재도전.</p>
+      </div>
+    </div>
+
+    <div class="jrule">
+      <span class="jr-ic"><svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg></span>
+      <div><b>공통 철칙 —</b> 신청 직전 반드시 그 단지의 <b>입주자모집공고문</b>을 직접 확인하세요. 위 수치는 참고용이며, 최종 기준은 개별 공고문이 우선합니다.</div>
+      <a class="jr-call" href="tel:1644-7445">청약문의 1644-7445</a>
+    </div>
+  </section>
+
+  <!-- ── 청약 준비 (퀵메뉴 벤토) ── -->
+  <div class="quickwrap">
+    <section class="sec wrap" id="quick" data-reveal>
+      <div class="sec-head">
+        <div><h2>나의 청약, <span class="accent">준비해 볼까요?</span></h2>
+          <p>청약 가점부터 자격진단까지 — 신청 전에 한 번에 확인하세요.</p></div>
+        <a class="more" href="page2.html">청약 도우미 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="quick">
+        <a class="qcard" href="page2.html"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><h3>청약 캘린더</h3><p>임박·진행 일정을 한눈에</p></a>
+        <a class="qcard" href="page2.html"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 10h8M8 14h3M8 18h3M15 14h1v4h-1z"/></svg></span><h3>가점 계산기</h3><p>무주택·부양가족·기간 산정</p></a>
+        <a class="qcard" href="page2.html"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span><h3>자격 진단</h3><p>1·2순위 자격 자가진단</p></a>
+        <a class="qcard" href="page2.html"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></span><h3>주택소유 확인</h3><p>세대 주택소유 현황 조회</p></a>
+        <a class="qcard" href="page2.html"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20M6 15h4"/></svg></span><h3>청약통장</h3><p>가입내역·납입 현황</p></a>
+        <a class="qcard" href="page2.html"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M12 7v5l3 2"/></svg></span><h3>가상 체험</h3><p>실제 신청 화면 연습</p></a>
+        <a class="qcard" href="page2.html"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></span><h3>청약 알리미</h3><p>관심 현장 임박 알림</p></a>
+        <a class="qcard" href="#board"><span class="qi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 3 3 5-6"/></svg></span><h3>경쟁률 분석</h3><p>분양현장 실시간 경쟁률</p></a>
+      </div>
+    </section>
+  </div>
+
+  <!-- ── 분양정보·경쟁률 (실데이터 기능) ── -->
+  <section class="sec wrap" id="board" data-reveal>
+    <div class="sec-head">
+      <div><h2>분양정보 · <span class="accent">경쟁률</span></h2>
+        <p>청약홈 실데이터를 임박순으로 — 현장을 펼치면 주택형별 경쟁률·신청현황·당첨가점이 보입니다.</p></div>
+    </div>
+    <div class="insights" aria-label="경쟁률 인사이트">
+      <div class="panel">
+        <h3>경쟁률 분포 <span class="tag" id="dist-tag">–</span></h3>
+        <div class="dist" id="dist"></div>
+      </div>
+      <div class="panel">
+        <h3>오늘의 핫 현장 <span class="tag">종합경쟁률 TOP</span></h3>
+        <div class="hotlist" id="hot"></div>
+      </div>
+    </div>
+    <div class="board">
+      <div class="toolbar">
+        <h3>분양 현장</h3>
+        <div class="seg" id="seg" role="group" aria-label="상태 필터">
+          <button data-st="" aria-pressed="true">전체</button>
+          <button data-st="soon" aria-pressed="false">임박</button>
+          <button data-st="live" aria-pressed="false">진행중</button>
+          <button data-st="wait" aria-pressed="false">예정</button>
+          <button data-st="done" aria-pressed="false">마감</button>
+        </div>
+        <select id="f-reg" aria-label="지역 필터"><option value="">전체 지역</option></select>
+        <div class="field">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          <input id="f-q" type="search" placeholder="주택명 검색" aria-label="주택명 검색">
+        </div>
+        <label class="switch"><input type="checkbox" id="f-cz"><span class="track2"></span>경쟁률 있는 곳만</label>
+      </div>
+      <div class="count" id="count" aria-live="polite"></div>
+      <div id="list"></div>
+    </div>
+  </section>
+
+  <!-- ── 주택 유형별 청약 정보 ── -->
+  <section class="sec wrap" id="types" data-reveal>
+    <div class="sec-head">
+      <div><h2>주택 유형별 <span class="accent">청약 정보</span></h2>
+        <p>유형마다 신청 자격과 절차가 다릅니다. 내게 맞는 유형을 확인하세요.</p></div>
+    </div>
+    <div class="types">
+      <a class="type" href="#board">
+        <div class="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M6 21V5a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v16M9 9h.01M12 9h.01M15 9h.01M9 13h.01M12 13h.01M15 13h.01"/></svg></div>
+        <div class="body"><h3>APT · 공공/민영</h3><p>국민·민영주택 일반·특별공급. 1순위/2순위 자격과 가점제·추첨제를 확인하세요.</p><span class="go">분양현장 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a class="type" href="#board">
+        <div class="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V7l8-4 8 4v14M4 21h16M9 21v-5h6v5M8 8h.01M12 8h.01M16 8h.01M8 12h.01M12 12h.01M16 12h.01"/></svg></div>
+        <div class="body"><h3>오피스텔 · 생숙 · 도시형</h3><p>오피스텔·생활숙박시설·도시형생활주택·민간임대. 청약통장 없이 신청 가능한 유형.</p><span class="go">분양현장 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+      <a class="type" href="#board">
+        <div class="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l5-3 5 3M15 21V11l4-2v12M8 11h.01M8 15h.01M11 11h.01M11 15h.01"/></svg></div>
+        <div class="body"><h3>(공공지원)민간임대</h3><p>공공지원 민간임대·임의공급. 무주택 요건과 임대 조건을 함께 확인하세요.</p><span class="go">분양현장 보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── 공지사항 ── -->
+  <section class="sec wrap" id="notice" data-reveal>
+    <div class="sec-head">
+      <div><h2>공지사항</h2><p>청약 제도·서비스 변경 안내</p></div>
+      <a class="more" href="https://www.applyhome.co.kr" target="_blank" rel="noopener">전체보기 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <div class="notice">
+      <a class="nrow" href="https://www.applyhome.co.kr" target="_blank" rel="noopener"><span class="ncat new">제도</span><span class="ntitle">신생아 특별공급 제도 안내</span><span class="ndate">2026.06.15</span></a>
+      <a class="nrow" href="https://www.applyhome.co.kr" target="_blank" rel="noopener"><span class="ncat">서비스</span><span class="ntitle">신한인증서 서비스 일시 중단 안내</span><span class="ndate">2026.05.12</span></a>
+      <a class="nrow" href="https://www.applyhome.co.kr" target="_blank" rel="noopener"><span class="ncat">안내</span><span class="ntitle">청약홈 홈페이지 개편 안내</span><span class="ndate">2026.03.11</span></a>
+      <a class="nrow" href="https://www.applyhome.co.kr" target="_blank" rel="noopener"><span class="ncat">제도</span><span class="ntitle">규제지역 정보 업데이트 및 가점제 비율 변경 안내</span><span class="ndate">2026.02.20</span></a>
+    </div>
+  </section>
+</main>
+
+<!-- ── 푸터 ── -->
+<footer class="site">
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <div class="brand"><span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V8l7-5 7 5v13M9 21v-6h6v6"/></svg></span> <span style="color:#fff">청약 인텔리전스</span></div>
+        <p>청약홈 실데이터를 임박순으로 정리하는 분양현장 알리미. 본 서비스는 정보 제공용이며 실제 청약 신청은 청약홈에서 진행하세요.</p>
+      </div>
+      <div class="foot-col"><h4>청약 준비</h4><a href="page2.html">가점 계산기</a><a href="page2.html">자격 진단</a><a href="page2.html">청약 알리미</a><a href="manage.html">내 청약 관리</a></div>
+      <div class="foot-col"><h4>분양정보</h4><a href="#board">분양현장·경쟁률</a><a href="#types">주택 유형별 정보</a><a href="#board">미달 현장(기회)</a><a href="#board">당첨가점 보기</a></div>
+      <div class="foot-col"><h4>안내</h4><a href="#notice">공지사항</a><a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">자주묻는 질문</a><a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">규제지역 정보</a><a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">청약제도 안내</a></div>
+    </div>
+    <div class="foot-bot">
+      <span class="ds"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg> 출처 청약홈(applyhome.co.kr) · insane-search 실데이터 연동 · 공식 사이트 아님</span>
+      <span>© 2026 청약 인텔리전스 · 정보 제공 목적의 비공식 서비스</span>
+    </div>
+  </div>
+</footer>
+<!-- 데이터 갱신: python fetch_cheongyak.py list 8 && enrich → bunyang.js 최신화 후 이 페이지가 갱신본을 그대로 읽음 -->
+
+<script src="bunyang.js"></script>
+<script>
+const D=(window.BUNYANG||{items:[]}), DATA=D.items||[];
+const $=id=>document.getElementById(id);
+$("upd").innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--ok)"><path d="M20 6 9 17l-5-5"/></svg> 최종 수집 '+(D.updated||"-")+' · 출처 청약홈(키 불필요)';
+
+const TODAY=new Date();TODAY.setHours(0,0,0,0);
+const pd=s=>{const m=String(s||"").match(/\d{4}-\d{2}-\d{2}/g);return m?m.map(x=>new Date(x)):[];};
+function status(it){
+  const[st,en]=pd(it.청약기간);
+  if(!st)return{key:"wait",label:"예정",dday:null};
+  const dd=Math.round((st-TODAY)/864e5),ddE=en?Math.round((en-TODAY)/864e5):dd;
+  if(dd>0)return{key:dd<=7?"soon":"wait",label:dd<=7?"임박":"예정",dday:dd};
+  if(ddE>=0)return{key:"live",label:"진행중",dday:0};
+  return{key:"done",label:"마감",dday:ddE};
+}
+const cz=it=>it.경쟁률&&it.경쟁률.summary;
+const rateVal=it=>{const s=cz(it);return s?(s.종합경쟁률??null):null;};
+function rateChip(it){
+  const s=cz(it); if(!s)return"";
+  const v=s.종합경쟁률, under=s.미달||(v!=null&&v<1);
+  if(under)return`<span class="rate r-under" title="미달">미달 ${v??""}:1</span>`;
+  if(v==null)return"";
+  const cls=v>=10?"r-hi":"r-mid", pct=Math.min(100,v/20*100);
+  return`<span class="rate ${cls}"><span class="rfill"><i style="width:${pct}%"></i></span>${v}:1</span>`;
+}
+
+/* 지역 필터 채우기 */
+[...new Set(DATA.map(d=>d.지역))].filter(Boolean).sort().forEach(r=>{
+  const o=document.createElement("option");o.value=o.textContent=r;$("f-reg").appendChild(o);});
+
+/* ── 인사이트: 경쟁률 분포 + 핫 현장 ── */
+function buildInsights(){
+  const rated=DATA.map(rateVal).filter(v=>v!=null);
+  const buckets=[
+    {nm:"미달 <1", test:v=>v<1, color:"var(--under)"},
+    {nm:"1~5:1", test:v=>v>=1&&v<5, color:"var(--ok)"},
+    {nm:"5~10:1", test:v=>v>=5&&v<10, color:"var(--amber)"},
+    {nm:"10:1+", test:v=>v>=10, color:"var(--hot)"},
+  ].map(b=>({...b,n:rated.filter(b.test).length}));
+  const mx=Math.max(1,...buckets.map(b=>b.n));
+  $("dist-tag").textContent=rated.length+"개 집계";
+  $("dist").innerHTML=buckets.map(b=>`<div class="bar-row"><span class="nm">${b.nm}</span>
+    <span class="track"><span class="fill" style="background:${b.color}" data-w="${b.n/mx*100}"></span></span>
+    <span class="cnt tnum">${b.n}</span></div>`).join("")||`<p style="color:var(--faint);font-size:12.5px;padding:8px 0">집계된 경쟁률이 아직 없습니다.</p>`;
+  requestAnimationFrame(()=>document.querySelectorAll(".fill").forEach(f=>f.style.width=f.dataset.w+"%"));
+
+  const hot=DATA.filter(d=>rateVal(d)!=null&&rateVal(d)>=1).sort((a,b)=>rateVal(b)-rateVal(a)).slice(0,5);
+  $("hot").innerHTML=hot.length?hot.map((d,i)=>`<div class="item" data-nm="${d.주택명}">
+    <span class="rk">${i+1}</span>
+    <span class="nm">${d.주택명} <small>· ${d.지역}</small></span>
+    <span class="rt">${rateVal(d)}:1</span></div>`).join("")
+    :`<p style="color:var(--faint);font-size:12.5px;padding:10px 12px">청약 종료 후 경쟁률이 집계되면 표시됩니다.</p>`;
+  $("hot").querySelectorAll(".item").forEach(el=>el.addEventListener("click",()=>{
+    $("f-q").value=el.dataset.nm;state.q=el.dataset.nm;render();
+    $("list").scrollIntoView({behavior:"smooth",block:"start"});}));
+}
+
+/* ── 상세 ── */
+function detailHTML(it){
+  let h="";const s=cz(it);
+  if(s){
+    h+=`<h4>주택형별 경쟁률 <span class="sm">공급 ${s.공급합} · 접수 ${s.접수합} · 종합 ${s.종합경쟁률??"-"}:1${s.미달?' <span class="under-tag">미달</span>':''}</span></h4>`;
+    h+='<div class="tbl-wrap"><table class="cz"><thead><tr><th>주택형</th><th>공급</th><th>순위</th><th>접수</th><th>경쟁률</th><th>결과</th><th>당첨가점(최저~최고)</th></tr></thead><tbody>';
+    it.경쟁률.rows.forEach(r=>{const u=String(r.경쟁률).includes("△");
+      h+=`<tr><td>${r.주택형}</td><td>${r.공급}</td><td>${r.순위}</td><td>${r.접수}</td><td class="${u?'under-tag':''}">${r.경쟁률}</td><td>${r.결과||"-"}</td><td>${(r.가점최저||"-")+" ~ "+(r.가점최고||"-")}</td></tr>`;});
+    h+="</tbody></table></div>";
+  }
+  if(it.신청현황&&it.신청현황.length){
+    h+="<h4>특별공급 신청현황 <span class='sm'>접수일 중 갱신</span></h4><div class='tbl-wrap'><table class='cz'><tbody>";
+    it.신청현황.slice(0,30).forEach(r=>{h+="<tr>"+r.map(c=>`<td>${c}</td>`).join("")+"</tr>";});
+    h+="</tbody></table></div>";
+  }
+  if(!h)h=`<p style="color:var(--mut);font-size:13px;padding:10px 0">청약 종료 후 경쟁률이, 접수일에 신청현황이 표시됩니다. (문의 ${it.문의처||"-"})</p>`;
+  return h;
+}
+
+const state={st:"",reg:"",q:"",cz:false};
+function render(){
+  const ord={soon:0,live:1,wait:2,done:3};
+  let rows=DATA.map(d=>({...d,_s:status(d)}));
+  rows.sort((a,b)=>ord[a._s.key]-ord[b._s.key]||(a._s.dday??999)-(b._s.dday??999));
+  rows=rows.filter(d=>(!state.reg||d.지역===state.reg)&&(!state.st||d._s.key===state.st)
+    &&(!state.q||(d.주택명||"").includes(state.q))&&(!state.cz||cz(d)));
+  $("count").innerHTML=`<b>${rows.length}</b>개 현장`+(state.st||state.reg||state.q||state.cz?" (필터 적용)":"");
+  const el=$("list");
+  if(!rows.length){el.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><br>조건에 맞는 현장이 없습니다.</div>`;return;}
+  el.innerHTML=rows.map(d=>{
+    const s=d._s,dt=s.dday===null?"·":(s.dday>0?`D-${s.dday}`:(s.key==="live"?"진행중":`D+${-s.dday}`));
+    const hasD=cz(d)||(d.신청현황&&d.신청현황.length);
+    const ddc=s.key==="soon"?"soon":s.key==="live"?"live":"";
+    return `<div class="row">
+      <div class="head" role="button" tabindex="0" aria-expanded="false">
+        <div class="reg">${d.지역||"-"}</div>
+        <div><div class="nm">${d.주택명||"-"}${hasD?`<span class="exp">상세 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m6 9 6 6 6-6"/></svg></span>`:""}</div>
+          <div class="meta">${d.주택구분||""}·${d.분양임대||""} · <b>${d.시공사||"-"}</b><br><span class="period">청약 ${d.청약기간||"-"}</span> · 발표 ${d.당첨자발표||"-"}</div></div>
+        <div class="right"><div class="dday ${ddc}">${dt}</div><span class="badge b-${s.key}">${s.label}</span>${rateChip(d)}</div>
+      </div>
+      <div class="detail"><div><div class="detail-in">${detailHTML(d)}</div></div></div>
+    </div>`;}).join("");
+}
+
+/* 펼침: 이벤트 위임 (클릭 + 키보드) */
+function toggleRow(head){
+  const row=head.closest(".row"), open=row.classList.toggle("open");
+  head.setAttribute("aria-expanded",open);
+}
+$("list").addEventListener("click",e=>{const h=e.target.closest(".head");if(h)toggleRow(h);});
+$("list").addEventListener("keydown",e=>{
+  const h=e.target.closest(".head");if(h&&(e.key==="Enter"||e.key===" ")){e.preventDefault();toggleRow(h);}});
+
+/* 필터 바인딩 */
+$("seg").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+  [...e.currentTarget.children].forEach(x=>x.setAttribute("aria-pressed",x===b));
+  state.st=b.dataset.st;render();});
+$("f-reg").addEventListener("change",e=>{state.reg=e.target.value;render();});
+$("f-q").addEventListener("input",e=>{state.q=e.target.value.trim();render();});
+$("f-cz").addEventListener("change",e=>{state.cz=e.target.checked;render();});
+
+/* KPI (값은 실데이터 그대로 — 카운트업은 연출일 뿐 최종값은 정확) */
+const REDUCE=matchMedia("(prefers-reduced-motion:reduce)").matches;
+function countUp(el,to){
+  if(REDUCE||!isFinite(to)){el.textContent=to;return;}
+  const dur=900,t0=performance.now();
+  (function step(t){const p=Math.min(1,(t-t0)/dur),e=1-Math.pow(1-p,3);
+    el.textContent=Math.round(to*e);if(p<1)requestAnimationFrame(step);})(performance.now());
+}
+const all=DATA.map(status);
+countUp($("s-total"),DATA.length);
+countUp($("s-soon"),all.filter(s=>s.key==="soon").length);
+countUp($("s-live"),all.filter(s=>s.key==="live").length);
+countUp($("s-under"),DATA.filter(d=>{const s=cz(d);return s&&(s.미달||(s.종합경쟁률!=null&&s.종합경쟁률<1));}).length);
+
+buildInsights();
+render();
+
+/* 스크롤 등장 (정적 섹션만 — 표 행 재렌더와 무관) */
+const revealEl=el=>el&&el.classList.add("in");
+if(!REDUCE&&"IntersectionObserver"in window){
+  const io=new IntersectionObserver((es)=>es.forEach(e=>{
+    if(e.isIntersecting){revealEl(e.target);io.unobserve(e.target);}
+  }),{threshold:.06,rootMargin:"0px 0px -5% 0px"});
+  document.querySelectorAll("[data-reveal]").forEach(el=>io.observe(el));
+}else{
+  document.querySelectorAll("[data-reveal]").forEach(revealEl);
+}
+
+/* 인페이지 내비게이션 — 앵커 점프 시 대상 섹션을 즉시 표시(숨김 버그 방지) */
+function jumpTo(id,after){
+  const t=document.getElementById(id);if(!t)return;
+  revealEl(t);
+  t.scrollIntoView({behavior:"smooth",block:"start"});
+  if(after)setTimeout(after,520);
+}
+document.querySelectorAll("[data-jump]").forEach(el=>el.addEventListener("click",()=>jumpTo(el.dataset.jump)));
+document.querySelectorAll('nav.menu a[href^="#"], .util-r a[href^="#"], .foot-col a[href^="#"], a.more[href^="#"], a.type[href^="#"], a.qcard[href^="#"]')
+  .forEach(a=>a.addEventListener("click",e=>{e.preventDefault();jumpTo(a.getAttribute("href").slice(1));}));
+$("searchBtn").addEventListener("click",()=>jumpTo("board",()=>$("f-q").focus()));
+$("burger").addEventListener("click",()=>jumpTo("journey"));
+if(location.hash)revealEl(document.getElementById(location.hash.slice(1)));
+addEventListener("hashchange",()=>revealEl(document.getElementById(location.hash.slice(1))));
+</script>
+</body>
+</html>

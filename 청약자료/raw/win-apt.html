@@ -1,0 +1,4666 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1" />
+	<meta name="format-detection" content="telephone=no" />
+	<link rel="icon" type="image/ico" href="https://static.applyhome.co.kr/images/kabhom/common/favicon.ico" />
+	<link rel="apple-touch-icon" href="https://static.applyhome.co.kr/images/kabhom/common/phone.png"/>
+	<link rel="shortcut icon" href="https://static.applyhome.co.kr/images/kabhom/common/phone.png"/> 
+	
+	<link rel="stylesheet" type="text/css" href="/css/kabhom/main/leftSubMenu.css"/>
+	<link rel="stylesheet" type="text/css" href="/css/kabhom/main/hom.css"/>	
+	<link rel="stylesheet" type="text/css" href="/css/kabhom/main/scrap/virtual.css"/>
+	
+	
+	
+	<!-- 배너 슬라이드 추가링크 -->
+	<!-- <link rel="stylesheet" href="/css/kabhom/main/vendors/swiper.min.css">
+    <script src="/js/kabhom/plugin/swiper.min.js"></script> -->
+   
+	<title>청약홈 | 로그인</title>
+	
+	
+	<!-- 운영일 경우에만 -->
+	
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-143621263-1"></script>
+	
+	
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+	
+	  gtag('config', 'UA-143621263-1');
+	</script>
+	
+	<script src="https://static.applyhome.co.kr/js/kabhom/plugin/jquery.3.1.1.min.js"></script>
+	<script src="https://static.applyhome.co.kr/js/kabhom/plugin/jquery-ui.min.js"></script>
+	<script src="/js/kabhom/main/site.js"></script>
+	
+	<!-- 성능제어 Netfunnel, 키보드보안 -->
+	<script src="/js/kabhom/com/com.js"></script>
+	
+	<!-- 성능제어 Netfunnel -->
+	<script src="https://static.applyhome.co.kr/netfunnel/netfunnel.js"></script>
+	<script src="https://static.applyhome.co.kr/netfunnel/netfunnel_skin.js"></script>
+	
+	<script>
+	document.domain = "applyhome.co.kr";
+	
+	window.onpageshow = function(event) {
+		if(event.persisted) {
+			
+			window.location.reload(true);
+		}
+	}
+	$(document).ready(function() {
+		if(gfn_isMobile()) {
+			$('#divTab').css("display","none");
+		}
+		
+		var gnbTree = $("#gnbTree > li > button");
+		$(gnbTree).on("click", function() {
+				 $(this).parents("li").siblings("li").children("ul").slideUp();
+				 $(this).parents("li").siblings("li").children("button").removeClass("on");
+				 $(this).siblings("ul").slideToggle();
+				 $(this).addClass("on");
+		 });
+	});
+	
+		
+		var strPopupYn = 'N';
+		
+			strPopupYn = 'Y';
+		
+		
+		if(window.name == "iframeDialog" && strPopupYn == 'Y')
+		{
+			parent.document.location.href = "/co/coz/selectComplexLoginView.do";
+		}
+
+		$(function(){
+			 
+			 /**
+			 * Description	: 상단 lnb_wrap setting
+			 */
+			$navi = $("#naviUl li").last();
+			var umid = $navi.data("umid");
+			if(umid != null) {
+				$navi.append($("#menu"+umid).next("ul").clone());
+				$navi.find('a').removeAttr('id');
+			}
+			
+			
+			var strMenuId = "menu" + $("#naviUl li").eq(1).data('mid');
+			$('#gnb #' + strMenuId).addClass('lnb_active');
+			
+			
+			
+			
+			if(gfn_getCookie("COA01M04_POPUP02") == "Y")
+			{
+			    $("#snb .info-wrap").addClass("hide");
+			}
+		});
+		
+	// Form input을 name=value 형식의 object로 변환	
+	$.fn.formToObject = function() {
+		var obj = null;
+		try {
+			if (this[0].tagName && this[0].tagName.toUpperCase() == "FORM") {
+				var arr = this.serializeArray();
+				if(arr) {
+					obj = {};
+					$.each(arr, function(){
+						obj[this.name] = this.value;
+					})
+				}
+			}
+		} catch (e) {
+			alert(e.message);
+		} finally {
+			return obj;
+		}
+	};
+	
+	function formToString(form) {
+		var formData = new FormData($form);
+		
+		var object = {};
+		formData.forEach(function(value, key){
+		    object[key] = value;
+		});
+		var json = JSON.stringify(object);
+	}
+	
+	function fn_openPopup(url, title) {
+//	    if(gfn_isMobile() == false) {
+	        window.open(url, title);
+//	    }
+	}
+	
+	//팝업창에서 excepion 화면 닫기
+	function fn_closeKabExceptionDialog(){
+    	$(".ui-dialog").remove();
+    }
+	
+	</script>
+</head>
+<body>
+<div id="wrap">
+	<a href="#gnb" class="skip-link">주메뉴 바로가기</a>
+	<a href="#subContent" class="skip-link">본문 바로가기</a>	
+	<div id="snb">
+		<div class="info-wrap">
+			<div>
+				<p><span>청약문의 1644-7445</span>(월~금 09:00~17:30)</p>
+				<button class="btn-close txt-indent color-wh">닫기</button>
+			</div>
+		</div>
+		<div id="header">
+			<div class="my-area">
+				<h1><a href="javascript:$net.href('/co/coa/selectMainView.do');" class="txt-indent">청약HOME</a></h1>
+				<div>
+					
+						<button type="button" class="btn-search txt-indent">검색</button>
+					
+					<button type="button" class="btn-menu txt-indent">메인 메뉴</button>
+				</div>
+			</div>
+			
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	
+			<div class="search-area">
+				<div class="search-wrap">
+					<div class="search-btn"><button type="button" class="btn-close txt-indent">닫기</button></div>
+					<div class="search-box">
+						<form name="konanSearchform" id="konanSearchform" action="" method="POST"></form>
+						<input type="search" id="mainSchTxt" name="mainSchTxt" placeholder="검색어 입력" autocomplete="off" />
+						<!-- <button type="button" class="btn-search-delete txt-indent">삭제</button> -->
+						<button type="button" id="btnKonanSearch" class="btn-search txt-indent">검색</button>
+					</div>
+					<div class="search-autobox">
+						<div class="left-box">
+							<ul id="autolist"></ul>
+						</div>
+					</div>
+				</div>
+				
+				<div class="search-txt">찾으시는 메뉴명과 관심 지역명을 검색해보세요(순위확인서, 대구, 역삼 등)</div>
+			</div>
+			<div class="search-shadow"></div>
+			
+			<script>
+			$(function () {
+			    var searchTerm = "";
+			    $("#mainSchTxt").autocomplete({
+			        source: function (request, response) {
+			            searchTerm = request.term;
+			            $.ajax({
+			                url: "/co/coz/searchSuggestResult.do",
+			                data: { term: searchTerm },
+			                type: "GET",
+			                success: function(data) {
+			                    //console.log(data);
+			                    var jsonData = (typeof data === "string") ? JSON.parse(data) : data;
+			                    var html = "";
+			                    $.each(jsonData.suggestions.s || [], function(index, item) {
+			                        var itemTxt = item.keyword || '';
+			                        //자동완성 API 호출값에 URL이 포함되어지면 해당 ID값 호출 처리
+			                        //console.log(item.addtional || '');
+			                        var url = item.addtional[0] || '';			                        
+			                        var searchRegex = searchTerm.replace(/[.*+?^$()|[]\\]/g, '\\$&');
+			                        var highlighted = itemTxt.replace(new RegExp('(' + searchRegex + ')', 'gi'),'<span>$1</span>');
+			                        html += '<li data-url="'+url+'"><a href="'+url+'">';
+			                        if(!url || url.length === 0) {
+			                            html += highlighted;
+			                        }else {
+			                            html += highlighted + ' ≫';
+			                        }
+			                        html += '<div class="url-box"></div></a></li>';
+			                    });
+			                    $("#autolist").html(html).show();
+			                    //response(data);
+			                    response([]);
+			                }
+			            });
+			        },
+			        minLength: 1,
+			        delay: 300
+			    });
+			    $("#mainSchTxt").on("keydown", function(e) {
+			        if(e.keyCode === 13) {
+			            e.preventDefault();
+			            var chkArr = search.checkSearchCondition();
+			            var searchTxt = $("#mainSchTxt").val();
+			            var recordCountPerPage = 10;
+			            if(searchTxt.length > 1) {
+			                if ( chkArr ) {
+				                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'schTxt', name:'schTxt', value:searchTxt}) );
+				                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'recordCountPerPage', name:'recordCountPerPage', value:recordCountPerPage}) );
+					    		$net.submit("konanSearchform", "/co/coz/integratedSearchResultView.do");
+			                }
+			            }else {
+			                alert('검색어를 2글자 이상 입력해주세요.');
+			                return false;
+			            }
+			        }
+			    });
+			    $("#btnKonanSearch").on("click", function(e) {
+			        e.preventDefault();
+			        var chkArr = search.checkSearchCondition();
+			        var searchTxt = $("#mainSchTxt").val();
+			        var recordCountPerPage = 10;
+		            if(searchTxt.length > 1) {
+		                if ( chkArr ) {
+			                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'schTxt', name:'schTxt', value:searchTxt}) );
+			                $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'recordCountPerPage', name:'recordCountPerPage', value:recordCountPerPage}) );
+				    		$net.submit("konanSearchform", "/co/coz/integratedSearchResultView.do");
+		                }
+		            }else {
+		                alert('검색어를 2글자 이상 입력해주세요.');
+		                return false;
+		            }
+			    });
+			    $(document).on("mouseenter", "#autolist li", function(e) {
+			        var $currentLi = $(this);
+			        $("#autolist li").not(this).find("div").empty().removeData("inited"); //다른 li의 div값을 비움
+			        
+			        if($currentLi.find("div").data("inited")) return; //이미 만들었다면 스킵하기
+			        
+			        var selectedTxt = $(this).children("a").first().text().replace("≫", "").trim();
+			        var url = $(this).data("url");
+			        if(url){
+			            var html = '<span>'+url+'</spna><span class="search-url">'+selectedTxt+'로 바로 이동</span>';
+				        $currentLi.find("div").html(html).data("inited", true);
+			        }
+			    });
+			    $(document).on("click", "#autolist li a", function(e) {
+			        e.preventDefault();
+			        var chkArr = search.checkSearchCondition();
+			        var selectedTxt = $(this).text().replace("≫", "").trim();
+			        var url = $(this).closest("li").data("url");
+			        var recordCountPerPage = 10;
+			        $("#autolist").val(selectedTxt);
+			        if(url){
+			            $net.href(""+url+"");
+			        }else{
+			            if ( chkArr ) {
+				            $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'schTxt', name:'schTxt', value:selectedTxt}) );
+				            $('#konanSearchform').append( $('<input/>', {type:'hidden',id:'recordCountPerPage', name:'recordCountPerPage', value:recordCountPerPage}) );
+				    		$net.submit("konanSearchform", "/co/coz/integratedSearchResultView.do");
+			            }
+			        }
+			    });
+			    $(document).on("click", function(e) {
+			        if(!$(e.target).closest(".search-area").length) {
+			            $("#mainSchTxt").val("");
+			            $("#autolist").hide();
+			        }
+			    });
+			    $("#mainSchTxt").on("input", function(e) {
+					if(!e.target.value) {
+						$("#autolist").empty();
+					}
+				});
+			});
+			
+			var search = {
+			    checkSearchCondition : function() {
+					
+		    		var regApct = /[\%\&\<\>\"\']/gi;		
+		    		if(regApct.test($('#mainSchTxt').val()))
+		    		{
+		    			alert("검색어에 허용되지 않는 특수문자가 존재합니다.");	
+		    			$('#mainSchTxt').focus();
+		    			return false;
+		    		}
+		    		
+		    		var regApct = /(<([^>]+)>)/gi;		
+		    		if(regApct.test($('#mainSchTxt').val()))
+		    		{
+		    			alert("검색어에 허용되지 않는 문자스크립트가 존재합니다.");	
+		    			$('#mainSchTxt').val('');
+		    			$('#mainSchTxt').focus();
+		    			return false;
+		    		}
+		    		return true;
+		    	}
+			}
+			</script>
+		</div>
+		<div class="scrolling">
+			<nav id="gnb">
+				<div class="btn-box">
+					<div>
+					
+						
+							<a href="javascript:$net.href('/co/cob/selectSubscrptBnkbSbscrbDesc.do');" class="btn-login">마이페이지</a>
+						
+						
+					
+					</div>
+					<button type="button" class="btn-close txt-indent">닫기</button>
+				</div>
+				
+	<ul class="main">
+		<li>
+			<a href="#">청약신청</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" id="menu639">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" id="menu667">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=01&ty=10');" id="menu100085">1순위/2순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=04&ty=10');" id="menu100133">무순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=11&ty=10');" id="menu100337">임의공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=06&ty=20');" id="menu100164">불법행위재공급</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptReqstList.do');" id="menu668">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptCanclList.do');" id="menu669">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" id="menu640">오피스텔/생활숙박시설/도시형/민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" id="menu670">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptReqstList.do');" id="menu671">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptCanclList.do');" id="menu672">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" id="menu641">공공지원민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" id="menu673">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptReqstList.do');" id="menu674">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptCanclList.do');" id="menu675">청약취소</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약당첨조회</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinDescList.do');" id="menu646">APT</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wab/selectOfctlUrbtyPrzwinHouseList.do');" id="menu647">오피스텔/생활숙박시설/도시형/민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wac/selectPrvateRentPrzwinHouseList.do');" id="menu648">공공지원민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wad/selectMxtrHouseDrwtList.do');" id="menu649">주택조합 동·호수 추첨결과</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약자격확인</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldInfoProvdAgreRequestView.do');" id="menu100022">세대구성원 등록/조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldMbInfoProvdAgreView.do');" id="menu100127">세대구성원 동의</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/cob/selectSubscrptLmttCnList.do');" id="menu100128">청약제한사항확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectHousePosesnList.do');" id="menu100129">주택소유확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do');" id="menu100276">청약통장</a>
+						<ul>
+							<li><a href="javascript:NetFunnel.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do', '');" id="menu100277">가입내역</a></li>
+							<li><a href="javascript:$net.href('/cu/cud/selectRankCnfrmnIssuView.do');" id="menu100278">순위확인서 발급</a></li>
+							<li><a href="javascript:$net.href('/cu/cue/selectRankCnfrmnIssuView.do');" id="menu100279">순위확인서 발급내역</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/coc/selectSubscrptQualfDiagMain.do');" id="menu100312">청약자격진단</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">공고단지 청약연습</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" id="menu100280">공고단지</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" id="menu100281">청약연습</a></li>
+							<li><a href="javascript:$net.href('/ra/raa/selectAptSpsplyPreparSubscrptReqstList.do');" id="menu100282">연습내역 조회</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apg/selectAddpntCalculatorView.do');" id="menu100125">청약가점계산기</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/app/reqst/selectSubscrtReqstAptMainView.do');" id="menu100126">청약가상체험</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약일정 및 통계</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ai/aib/selectSubscrptCalenderView.do');" id="menu651">청약캘린더(청약일정)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cuc/selectSubscrptAllimiView.do');" id="menu652">청약알리미 신청</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" id="menu650">분양정보/경쟁률</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" id="menu686">APT</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectOtherLttotPblancListView.do');" id="menu687">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTRemndrLttotPblancListView.do');" id="menu818">APT 잔여세대</a></li>
+							<li><a href="javascript:$net.href('/ap/apk/selectAPTLttotPblancListView.do');" id="menu100383">민간사전청약</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" id="menu654">청약통장 통계</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" id="menu688">전체 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAcctoSbscrbStusView.do');" id="menu689">통장별 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbSbscrbPdAcctoStusView.do');" id="menu690">가입기간별 현황</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약제도안내</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" id="menu655">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" id="menu692">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroBnkbView.do');" id="menu693">청약통장</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroQualfView.do');" id="menu694">청약자격</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroSpetialView.do');" id="menu695">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHowToReqstView.do');" id="menu696">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroPreawnerSlctnView.do');" id="menu697">당첨자 선정</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroRemndrHshldView.do');" id="menu761">잔여세대</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" id="menu656">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" id="menu698">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionReqstMthInfoView.do');" id="menu699">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscrptIntroPreawnerSlctn.do');" id="menu700">당첨자 선정</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectsubscriptionDepositInfoView.do');" id="menu657">주택청약 상품정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aic/selectSpecltSubscrptRndAreaList.do');" id="menu100121">규제지역정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/ard/selectSubscriptVocabularyView.do');" id="menu658">주택청약 용어설명</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약소통방</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/cu/cua/selectNoticeListView.do');" id="menu660">공지사항</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cub/selectFAQList.do');" id="menu661">자주묻는질문</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinCnfrmnList.do');" id="menu100156">APT당첨사실조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cui/selectAdvPrzwnerCanclView.do');" id="menu100382">사전청약 당첨취소자 조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/rs/rsa/selectResaleListView.do');" id="menu100174">분양권 정보(전매제한등)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTMvnPrearngeHsHldcoList.do');" id="menu100267">입주(예정)정보</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+	</ul>
+
+			</nav>
+			<footer>
+				<div class="cs-box">
+					<strong class="txt-phone">청약문의</strong>
+					<div>
+						<strong class="num-phone">1644-칠사사오</strong>
+						<span>문의 시간  <strong>월~금 09:00 ~ 17:30</strong> </span>
+						<p>상담은 법적 효력 없는 참고용입니다.</p>
+					</div>
+				</div>
+				<div class="family-box">
+					<ul>
+						<li><a href="javascript:$net.href('/kabbnk/cn/cna/selectMainView.do');">대행은행</a></li>
+						<li><a href="javascript:$net.href('/kabbiz/cm/cma/selectMainView.do');">사업주체</a></li>
+					</ul>
+				</div>
+				<h2><a href="javascript:$net.href('/co/coa/selectMainView.do');" class="logo-bottom txt-indent">한국부동산원 청약 HOME</a></h2>
+				<div class="policy-box">
+					<ul>
+						<li><a href="javascript:$net.href('/co/coz/selectIndvdlinfoPolicyView.do');">개인정보처리방침</a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectMobileUseInfoView.do');">모바일 사용에 대한 안내</a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectMailColctDenialView.do');">이메일 추출방지정책 </a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectSecurityProgrmView.do');">보안프로그램</a></li>
+						<li><a href="javascript:$net.href('/co/coz/selectCrtfctCopyView.do');">공동인증서 관리</a></li>
+						<li><a href="http://remote.kais.kr" target="_blank">원격연결</a></li>
+						<li><a href="#" class="menu-sitemap">사이트맵</a></li>
+					</ul>
+					<div class="info-sitemap">
+ 						<div class="site-wrap">
+							<a class="btn-close txt-indent color-wh">닫기</a>            	
+							
+	<ul class="main">
+		<li>
+			<a href="#">청약신청</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" class="title" id="menu639">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do');" id="menu667">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=01&ty=10');" id="menu100085">1순위/2순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=04&ty=10');" id="menu100133">무순위</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=11&ty=10');" id="menu100337">임의공급</a></li>
+							<li><a href="javascript:$net.href('/ap/aph/reqst/selectSubscrtReqstAptMainView.do?se=06&ty=20');" id="menu100164">불법행위재공급</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptReqstList.do');" id="menu668">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apa/selectAptSpsplySubscrptCanclList.do');" id="menu669">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" class="title" id="menu640">오피스텔/생활숙박시설/도시형/민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apb/reqst/selectSubscrtReqstUOMainView.do');" id="menu670">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptReqstList.do');" id="menu671">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apb/selectUrbtyOfctlSubscrptCanclList.do');" id="menu672">청약취소</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" class="title" id="menu641">공공지원민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apc/reqst/selectSubscrtReqstPRMainView.do');" id="menu673">청약신청</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptReqstList.do');" id="menu674">청약신청 내역조회</a></li>
+							<li><a href="javascript:$net.href('/ap/apc/selectPrvateRentSubscrptCanclList.do');" id="menu675">청약취소</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약당첨조회</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinDescList.do');" class="title" id="menu646">APT</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wab/selectOfctlUrbtyPrzwinHouseList.do');" class="title" id="menu647">오피스텔/생활숙박시설/도시형/민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wac/selectPrvateRentPrzwinHouseList.do');" class="title" id="menu648">공공지원민간임대</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/wad/selectMxtrHouseDrwtList.do');" class="title" id="menu649">주택조합 동·호수 추첨결과</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약자격확인</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldInfoProvdAgreRequestView.do');" class="title" id="menu100022">세대구성원 등록/조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ra/rab/selectHshldMbInfoProvdAgreView.do');" class="title" id="menu100127">세대구성원 동의</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/cob/selectSubscrptLmttCnList.do');" class="title" id="menu100128">청약제한사항확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectHousePosesnList.do');" class="title" id="menu100129">주택소유확인</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do');" class="title" id="menu100276">청약통장</a>
+						<ul>
+							<li><a href="javascript:NetFunnel.href('/ap/apd/selectSubscrptBnkbSbscrbDesc.do', '');" id="menu100277">가입내역</a></li>
+							<li><a href="javascript:$net.href('/cu/cud/selectRankCnfrmnIssuView.do');" id="menu100278">순위확인서 발급</a></li>
+							<li><a href="javascript:$net.href('/cu/cue/selectRankCnfrmnIssuView.do');" id="menu100279">순위확인서 발급내역</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/co/coc/selectSubscrptQualfDiagMain.do');" class="title" id="menu100312">청약자격진단</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">공고단지 청약연습</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" class="title" id="menu100280">공고단지</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ap/apr/reqst/selectSubscrtReqstAptMainView.do');" id="menu100281">청약연습</a></li>
+							<li><a href="javascript:$net.href('/ra/raa/selectAptSpsplyPreparSubscrptReqstList.do');" id="menu100282">연습내역 조회</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/apg/selectAddpntCalculatorView.do');" class="title" id="menu100125">청약가점계산기</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ap/app/reqst/selectSubscrtReqstAptMainView.do');" class="title" id="menu100126">청약가상체험</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약일정 및 통계</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ai/aib/selectSubscrptCalenderView.do');" class="title" id="menu651">청약캘린더(청약일정)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cuc/selectSubscrptAllimiView.do');" class="title" id="menu652">청약알리미 신청</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" class="title" id="menu650">분양정보/경쟁률</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTLttotPblancListView.do');" id="menu686">APT</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectOtherLttotPblancListView.do');" id="menu687">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a></li>
+							<li><a href="javascript:$net.href('/ai/aia/selectAPTRemndrLttotPblancListView.do');" id="menu818">APT 잔여세대</a></li>
+							<li><a href="javascript:$net.href('/ap/apk/selectAPTLttotPblancListView.do');" id="menu100383">민간사전청약</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" class="title" id="menu654">청약통장 통계</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAllSbscrbStusView.do');" id="menu688">전체 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbAcctoSbscrbStusView.do');" id="menu689">통장별 현황</a></li>
+							<li><a href="javascript:$net.href('/ai/aie/selectSubscrptBnkbSbscrbPdAcctoStusView.do');" id="menu690">가입기간별 현황</a></li>
+						</ul>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약제도안내</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" class="title" id="menu655">APT</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHouseView.do');" id="menu692">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroBnkbView.do');" id="menu693">청약통장</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroQualfView.do');" id="menu694">청약자격</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroSpetialView.do');" id="menu695">특별공급</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroHowToReqstView.do');" id="menu696">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroPreawnerSlctnView.do');" id="menu697">당첨자 선정</a></li>
+							<li><a href="javascript:$net.href('/ar/ara/selectSubscrptIntroRemndrHshldView.do');" id="menu761">잔여세대</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" class="title" id="menu656">오피스텔/생활숙박시설/도시형/(공공지원)민간임대</a>
+						<ul>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionHouseInfoView.do');" id="menu698">청약주택</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscriptionReqstMthInfoView.do');" id="menu699">청약신청방법</a></li>
+							<li><a href="javascript:$net.href('/ar/arb/selectPROUSubscrptIntroPreawnerSlctn.do');" id="menu700">당첨자 선정</a></li>
+						</ul>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/arb/selectsubscriptionDepositInfoView.do');" class="title" id="menu657">주택청약 상품정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aic/selectSpecltSubscrptRndAreaList.do');" class="title" id="menu100121">규제지역정보</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ar/ard/selectSubscriptVocabularyView.do');" class="title" id="menu658">주택청약 용어설명</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+		<li>
+			<a href="#">청약소통방</a>
+			<div class="sub-wrap">
+				<ul class="sub">
+					<li>
+						<a href="javascript:$net.href('/cu/cua/selectNoticeListView.do');" class="title" id="menu660">공지사항</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cub/selectFAQList.do');" class="title" id="menu661">자주묻는질문</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/wa/waa/selectAptPrzwinCnfrmnList.do');" class="title" id="menu100156">APT당첨사실조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/cu/cui/selectAdvPrzwnerCanclView.do');" class="title" id="menu100382">사전청약 당첨취소자 조회</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/rs/rsa/selectResaleListView.do');" class="title" id="menu100174">분양권 정보(전매제한등)</a>
+					</li>
+					<li>
+						<a href="javascript:$net.href('/ai/aia/selectAPTMvnPrearngeHsHldcoList.do');" class="title" id="menu100267">입주(예정)정보</a>
+					</li>
+				</ul>
+			</div>
+		</li>
+	</ul>
+
+						</div>
+					</div>
+				</div>
+				<p class="txt-address">(우)41068 대구광역시 동구 이노밸리로 291 (신서동)</p>
+				<p class="txt-copyright">COPYRIGHT ⓒ KOREA REAL ESTATE BOARD, ALL RIGHTS RESERVED.</p>
+			</footer>
+		</div>
+	</div>
+
+	<div id="content" class="sub_content">
+		<div class="sub_visu apply">
+			<div class="sub_visu_box">
+				<div class="sub_visu_txt">
+					<h5>
+				
+					
+					
+						
+							
+								로그인
+							
+							
+						
+					
+				
+					</h5>
+					
+					
+					<div class="lnb_wrap">
+						<ul class="lnb_box" id="naviUl">
+							<li><a href="javascript:$net.href('/co/coa/selectMainView.do');"><i class="xi-home"></i><span class="blind">홈으로</span></a></li>
+							<li class="mo_none" data-mid=""><i class="xi-angle-right-thin"></i> 로그인</li>
+					
+						
+						
+						
+						
+							
+						
+						
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+<!-- 배너 슬라이드 추가 스크립트 -->
+    <!-- <script>
+    var swiper = new Swiper('.swiper-container',{
+        autoplay: {
+            delay: 4000,
+            disableOnInteraction: false,
+        },
+        spaceBetween: 30,
+        effect: 'fade',
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+    });
+  </script> -->
+
+<link rel="stylesheet" type="text/css" href="/css/kabhom/main/login.css"/>
+
+
+<div class="loding_wrap" id="commonProgressBar">
+	<div class="lod_wrap_box">
+		<div class="lod_box">
+			<i class="xi-spinner-2 xi-spin"></i>
+			<p>처리중입니다.</p>
+		</div>
+	</div>
+</div>
+
+
+<!--로그인 화면 시작-->
+<div class="sub_content_box login" id="subContent">
+	
+
+
+
+
+<div class="useBrow"><button class="btn_org popShow" data-pop="useBrowPop">권장하는 브라우저 버전</button></div>
+
+<!--탭있는 로그인 시작-->
+   <div class="loginTab">
+       <ul>
+          <li>
+               <a href="#logintab1" class="active">공동<br>인증서</a>
+               <div id="logintab1" class="login_wrap2" data-index="1">
+					
+						
+                   <div class="loginBox2">
+                       <dl>
+                           <dt><img src="/images/kabhom/member/ic_login.png" alt=""></dt>
+                           <dd>
+                               <p>공동 인증서로 로그인</p>
+                           </dd>
+                       </dl>
+                       <div class="login_f_box">
+                           <label for="jumin_1_1" class="blind">주민등록번호 앞자리</label>
+                           <input type="tel" id="jumin_1_1" placeholder="주민등록번호 앞자리" maxlength="6" value="">
+                           <span class="mid_line">-</span>
+                           <label for="jumin_2_1" class="blind">주민등록번호 뒷자리</label>
+                           <input type="password" name="jumin_2_1" id="jumin_2_1" placeholder="주민등록번호 뒷자리" maxlength="7" value="" data-tk-kbdtype="number">
+                       </div>
+                       <div class="login_btn">
+                           <button type="button" class="btn_submit" id="selectCrtfctLoginView">로그인</button>
+                       </div>
+                   </div>
+						
+						
+					
+                   <div class="dash_list">
+                      <ul class="bul_list line_list black_list mt_10">
+                           <li>공동인증서로 로그인을 하기 위해서는 은행 또는 범용 공동인증서를 발급받으셔야 합니다.</li>
+                           <li>개인정보 보호를 위해 공용PC에서 사용 후 SNS계정의 로그아웃 상태를 반드시 확인해주세요.</li>
+                           <li><span class="color_red">증권용 공동인증서는 사용 불가합니다.</span></li>
+                           <li><span><a href="/co/coz/selectCrtfctCopyView.do" class="btn_org">공동인증서 관리</a></span></li>
+                       </ul>
+                   </div>
+               </div>
+           </li>
+           <li>
+               <a href="#logintab3" id="alogintab3">금융<br>인증서</a>
+               <div id="logintab3" class="login_wrap2" style="display:none;" data-index="2" data-first="0">
+					
+						
+                   <div class="loginBox2">
+                       <dl>
+                           <dt><img src="/images/kabhom/member/ic_login3.png" alt=""></dt>
+                           <dd>
+                               <p>금융 인증서로 로그인</p>
+                           </dd>
+                       </dl>
+                       <div class="login_f_box">
+                           <label for="jumin_1_3" class="blind">주민등록번호 앞자리</label>
+                           <input type="tel" id="jumin_1_3" placeholder="주민등록번호 앞자리" maxlength="6" value="">
+                           <span class="mid_line">-</span>
+                           <label for="jumin_2_3" class="blind">주민등록번호 뒷자리</label>
+                           <input type="password" name="jumin_2_3" id="jumin_2_3" placeholder="주민등록번호 뒷자리" maxlength="7" value="" data-tk-kbdtype="number">
+                       </div>
+                       <div class="login_btn">
+                           <button type="button" class="btn_submit" id="yeskey">로그인</button>
+                       </div>
+                   </div>
+						
+						
+					
+               </div>
+           </li> 
+           <li>
+           	<a href="#logintab33" class="tab33">간편<br>인증서</a>
+           	<div id="logintab33" class="login_wrap2" style="display:none;" data-index="3">
+           		<input type="text" id="fakename" value="" style="border:none;background:transparent;position:absolute;caret-color:transparent;outline:none;"/>
+	           	<ul>
+	           		<!-- 네이버 -->
+	           		 <li>
+		               <a href="#logintab2" class="certNav">
+		               <span class="certImg">
+		                
+							
+			            		<img src="/images/kabhom/member/img_naver.jpg" alt="네이버인증서" class="">
+			           		
+							
+						
+		               </span>
+		               <span>네이버<em>인증서</em></span>
+		               </a>
+		               
+		               <div id="logintab2" class="login_wrap3" style="display:none;">
+							
+								
+		                   <div class="loginBox2">
+		                       <dl class="naverDl">
+		                           <dt><img src="/images/kabhom/member/ic_login2.png" alt=""></dt>
+		                           <dd>
+		                               <p>네이버 인증서로 로그인</p>
+		                           </dd>
+		                       </dl>
+		                       <div class="jumbotron mt_20" style="display:inline-block;">
+									<p>
+										<div id="naverIdLogin" class="naverImg">
+										   <a id="naverIdLogin_loginButton" href="#" role="button"><img src="https://static.nid.naver.com/oauth/big_g.PNG" width="70%"></a>
+										</div>
+										<span id="naverLoginStr" style="display:none"><b>홍길동</b>님 만나서 반갑습니다!</span>
+									</p>
+							   </div>
+		                       <div class="login_f_box naver" id="jumin_no" style="display:none; margin-top:30px">
+		                           <label for="jumin_1_2" class="blind">주민등록번호 앞자리</label>
+		                           <input type="tel" id="jumin_1_2" placeholder="주민등록번호 앞자리" maxlength="6" value="">
+		                           <span class="mid_line">-</span>
+		                           <label for="jumin_2_2" class="blind">주민등록번호 뒷자리</label>
+		                           <input type="password" name="jumin_2_2" id="jumin_2_2" placeholder="주민등록번호 뒷자리" maxlength="7" value="" data-tk-kbdtype="number">
+		                       </div>
+		                       
+		                       <div class="check_st2 naver" style="display:none">
+			               			<input type="checkbox" id="chk_jumin" name="chk_jumin" value="">
+			               			<label for="chk_jumin">주민등록번호 오기입으로 인한 청약신청취소 / 당첨취소에 대한 책임은 모두 본인에게 있습니다.</label>
+		               		   </div>
+		
+		                       <div class="login_btn" id="naver_login_bt" style="margin-top:64px; padding-top:15px">
+		                           <button type="button" class="btn_submit" id="naver">로그인</button>
+		                       </div>
+		                   </div>
+								
+								
+							
+							<div>
+								<ul class="bul_list aster_list">
+									<li><span class="color_red">청약통장 미가입자</span>는 공동인증서 또는 금융인증서를 사용하시기 바랍니다.</li>
+									<li><span class="color_red">APT 무순위/임의공급/불법행위재공급 청약신청자</span> 및 특별공급 중 <span class="color_red">청약통장을 사용하지 않는 유형의 청약신청자</span>는 공동인증서 또는 금융인증서를 사용하시기 바랍니다.</li>
+								</ul>
+							</div>
+		                   <div class="naverUseInfo new">
+		                       <div class="naver_info_con bul_list_st">		                       		
+		                       		<div class="naver_info_tit"><strong>네이버 고객센터 문의 접수 방법 - 온라인(로그인 필수)</strong></div>
+		                       		<div class="naver_info_txt">			                       			
+			                       		<p>PC : <a href="https://naver.me/GT0aL03U">https://naver.me/GT0aL03U</a></p>
+			                           	<p>모바일 : <a href="https://naver.me/FKsfXaXG">https://naver.me/FKsfXaXG</a></p>
+		                       		</div>
+	                       		</div>
+	                       		<div class="naver_info_con bul_list_st">		                       		
+		                       		<div class="naver_info_tit"><strong>네이버 인증서 문의</strong></div>
+		                       		<div class="naver_info_txt">
+	                           			<a href="tel:1600-7969" class="point">☎ 1600 - 7969</a>
+	                           			<p class="mini">대기시간이 길 수 있으니 도움말을 찾아보거나 온라인 문의를 해주시면 감사하겠습니다.</p>
+	                           		</div>
+	                       		</div>
+	                       		<div class="naver_info_con2 bul_list_st">
+	                       			네이버 인증서 업데이트에 따라 '22.07.22 이후 청약홈 앱에서 네이버 인증서를 사용하기 위해서는 <strong class="color_red">청약홈 앱 업데이트(IOS : 4.3, Android : 1.66 이상)</strong>가 필요합니다.
+	                       		</div>
+		                       <div>
+		                       </div>
+		                       <div class="box03 mt_10">
+		                           <div class="color_red btmborder"><small>Q. 네이버 인증서 발급이 안돼요.</small></div>
+		                           <ul class="bul_list">
+		                               <li>
+		                                   네이버 인증서는 본인명의의 휴대폰으로 만 14세 이상 개인회원의 경우 발급이 가능하며 통화 기능이 불가한 휴대기기 이거나 IOS 9.0 미만, 안드로이드 6 미만의 OS는 지원하지 않습니다. 인증서 발급 가능한 기기이나 인증서 발급이 정상적으로 진행되지 않는 경우 네이버 도움말 참고 부탁드립니다. (로그인 필수)
+		                                   <div>
+		                                       <!-- <a href="https://m.help.naver.com/support/contents/contentsView.help?contentsNo=10263&amp;lang=ko" target="_blank">네이버 인증서 발급안내</a> -->
+		                                       <button type="button" class="btn_org btnNaver" id="naverContentsView">네이버 인증서 발급안내</button>
+		                                   </div>
+		                               </li>
+		                           </ul>
+		                       </div>
+		                   </div>
+		                 </div>
+		            </li>
+		            
+		            <!-- KB국민 -->
+		            <li>
+			            <a href="#logintab4" class="certKuk">
+			            <span class="certImg">
+			            
+							
+			            		<img src="/images/kabhom/member/img_kb.jpg" alt="KB국민인증서"  class="">
+			           		
+							
+						
+			            </span>
+		               <span>KB국민<em>인증서</em></span>
+			            </a>
+			            <div id="logintab4" class="login_wrap3" style="display:block;">
+							
+								
+			                <div class="loginBox2">
+			                    <dl>
+			                        <dt><img src="/images/kabhom/member/ic_login4.png" alt=""></dt>
+			                        <dd>
+			                            <p>KB국민 인증서로 로그인</p>
+			                        </dd>
+			                    </dl>
+			                    <div id="kbinfo">
+				                    <div class="login_f_box">
+				                    	<label for="name_4" class="blind">이름</label>
+				                        <input type="text" id="name_4" placeholder="이름" maxlength="30" value="">
+				                        <span>&nbsp;&nbsp;</span>
+				                        <label for="phone_4" class="blind">휴대폰번호</label>
+				                        <input type="tel" id="phone_4" placeholder="휴대폰번호(숫자만)" maxlength="11" value="">
+				                    </div>
+				                    <div class="login_f_box mt_10">
+				                        <label for="jumin_1_4" class="blind">주민등록번호 앞자리</label>
+				                        <input type="tel" id="jumin_1_4" placeholder="주민등록번호 앞자리" maxlength="6" value="">
+				                        <span class="mid_line">-</span>
+				                        <label for="jumin_2_4" class="blind">주민등록번호 뒷자리</label>
+				                        <input type="password" name="jumin_2_4" id="jumin_2_4" placeholder="주민등록번호 뒷자리" maxlength="7" value="" data-tk-kbdtype="number">
+				                    </div>
+			                    </div>
+			                    <div class="login_btn">
+			                        <button type="button" class="btn_submit" id="kbstar">로그인</button>
+			                    </div>
+			                   
+			                </div>
+								
+								
+							
+							<div>
+								<ul class="bul_list aster_list">
+									<li><span class="color_red">청약통장 미가입자</span>는 공동인증서 또는 금융인증서를 사용하시기 바랍니다.</li>
+									<li><span class="color_red">APT 무순위/임의공급/불법행위재공급 청약신청자</span> 및 특별공급 중 <span class="color_red">청약통장을 사용하지 않는 유형의 청약신청자</span>는 공동인증서 또는 금융인증서를 사용하시기 바랍니다.</li>
+								</ul>
+							</div>
+			                <div class="dash_list">
+		                      <ul class="bul_list line_list black_list mt_10">
+		                           <li>휴대폰에 KB스타뱅킹앱이 설치되어 있어야 합니다.</li>
+		                           <li>KB스타뱅킹앱을 통해 KB국민인증서를 발급 받으셔야 합니다.</li>
+		                           <li>인증요청 메세지를 받으시려면 KB스타뱅킹앱 [인증/보안>KB국민인증서>알림설정]에서 알림(Push) 동의해 주셔야 합니다.</li>
+		                       </ul>
+		                   </div>
+			            </div>
+			        </li>
+			       
+		           
+		        	<!-- 토스 -->
+			        <li>
+			            <a href="#logintab5" class="certTos">
+			            <span class="certImg">
+			            
+							
+			            		<img src="/images/kabhom/member/img_toss.jpg" alt="토스인증서"  class="">
+			           		
+							
+						
+			            </span>
+		               <span>토스<em>인증서</em></span>
+			            </a>
+			            <div id="logintab5" class="login_wrap3" style="display:none;">
+							
+								
+			                <div class="loginBox2">
+			                    <dl>
+			                        <dt><img src="/images/kabhom/member/ic_login6.png" alt=""></dt>
+			                        <dd>
+			                            <p>토스 인증서로 로그인</p>
+			                        </dd>
+			                    </dl>
+			                    <div id="tossinfo">
+				                    <div class="login_f_box">
+				                    	<label for="name_5" class="blind">이름</label>
+				                        <input type="text" id="name_5" placeholder="이름" maxlength="30" value="">
+				                        <span>&nbsp;&nbsp;</span>
+				                        <label for="phone_5" class="blind">휴대폰번호</label>
+				                        <input type="tel" id="phone_5" placeholder="휴대폰번호(숫자만)" maxlength="11" value="">
+				                    </div>
+				                    <div class="login_f_box mt_10">
+				                        <label for="jumin_1_5" class="blind">주민등록번호 앞자리</label>
+				                        <input type="tel" id="jumin_1_5" placeholder="주민등록번호 앞자리" maxlength="6" value="">
+				                        <span class="mid_line">-</span>
+				                        <label for="jumin_2_5" class="blind">주민등록번호 뒷자리</label>
+				                        <input type="password" name="jumin_2_5" id="jumin_2_5" placeholder="주민등록번호 뒷자리" maxlength="7" value="" data-tk-kbdtype="number">
+				                    </div>
+			                    </div>
+			                    <div class="login_btn">
+			                        <button type="button" class="btn_submit" id="toss">로그인</button>
+			                    </div>
+			                </div>
+								
+								
+							
+							<div>
+								<ul class="bul_list aster_list">
+									<li><span class="color_red">청약통장 미가입자</span>는 공동인증서 또는 금융인증서를 사용하시기 바랍니다.</li>
+									<li><span class="color_red">APT 무순위/임의공급/불법행위재공급 청약신청자</span> 및 특별공급 중 <span class="color_red">청약통장을 사용하지 않는 유형의 청약신청자</span>는 공동인증서 또는 금융인증서를 사용하시기 바랍니다.</li>
+								</ul>
+							</div>
+			                <div class="dash_list">
+		                      <ul class="bul_list line_list black_list mt_10">
+		                           <li>휴대폰에 토스앱이 설치되어 있어야 합니다.</li>
+		                           <li>토스앱을 통해 토스인증서를 발급 받으셔야 합니다.</li>
+		                           <li>휴대폰 설정에서 토스 알림 ‘허용’으로 등록해주세요.</li>
+		                       </ul>
+		                   </div>
+			            </div>
+			        </li>
+		            
+			        <!-- 신한 -->
+			        <li>
+			            <a href="#logintab6" class="certShin">
+			            <span class="certImg">
+			            
+							
+			            		<img src="/images/kabhom/member/img_shin.jpg" alt="신한인증서"  class="">
+			            	
+							
+						
+			            </span>
+		               <span>신한<em>인증서</em></span>
+			            </a>
+			            <div id="logintab6" class="login_wrap3" style="display:none;">
+							
+								
+					                <div class="loginBox2">
+					                    <dl>
+					                        <dt><img src="/images/kabhom/member/ic_login8.png" alt=""></dt>
+					                        <dd>
+					                            <p>신한 인증서로 로그인</p>
+					                        </dd>
+					                    </dl>
+					                    <div id="shbankinfo">
+						                    <div class="login_f_box">
+						                    	<label for="name_6" class="blind">이름</label>
+						                        <input type="text" id="name_6" placeholder="이름" maxlength="30" value="">
+						                        <span>&nbsp;&nbsp;</span>
+						                        <label for="phone_6" class="blind">휴대폰번호</label>
+						                        <input type="tel" id="phone_6" placeholder="휴대폰번호(숫자만)" maxlength="11" value="">
+						                    </div>
+						                    <div class="login_f_box mt_10">
+						                        <label for="jumin_1_6" class="blind">주민등록번호 앞자리</label>
+						                        <input type="tel" id="jumin_1_6" placeholder="주민등록번호 앞자리" maxlength="6" value="">
+						                        <span class="mid_line">-</span>
+						                        <label for="jumin_2_6" class="blind">주민등록번호 뒷자리</label>
+						                        <input type="password" name="jumin_2_6" id="jumin_2_6" placeholder="주민등록번호 뒷자리" maxlength="7" value="" data-tk-kbdtype="number">
+						                    </div>
+					                    </div>
+					                    <div class="login_btn">
+					                        <button type="button" class="btn_submit" id="shbank">로그인</button>
+					                    </div>
+					                </div>
+								
+								
+							
+							<div>
+								<ul class="bul_list aster_list">
+									<li><span class="color_red">청약통장 미가입자</span>는 공동인증서 또는 금융인증서를 사용하시기 바랍니다.</li>
+									<li><span class="color_red">APT 무순위/임의공급/불법행위재공급 청약신청자</span> 및 특별공급 중 <span class="color_red">청약통장을 사용하지 않는 유형의 청약신청자</span>는 공동인증서 또는 금융인증서를 사용하시기 바랍니다.</li>
+								</ul>
+							</div>
+			                <div class="dash_list">
+		                      <ul class="bul_list line_list black_list mt_10">
+		                           <li>휴대폰에 신한 슈퍼SOL 앱이 설치되어 있어야 합니다.</li>
+		                           <li>신한 슈퍼SOL 앱을 통해 신한인증서를 발급 받으셔야 합니다.</li>
+		                           <li>휴대폰 설정에서 신한 슈퍼SOL 앱에서 알림 ‘허용’으로 등록해주세요.</li>
+		                       </ul>
+		                   </div>
+			            </div>
+			        </li>
+		              <!-- 카카오 -->
+		            <li>
+		            	<a href="#logintab7" class="certKaka">
+		            	<span class="certImg">
+		            	 
+							
+			            		<img src="/images/kabhom/member/img_kaka.jpg" alt="카카오인증서"  class="">
+			           		
+							
+						
+		            	</span>
+		               <span>카카오톡<em>인증서</em></span>
+		            	</a>
+			            <div id="logintab7" class="login_wrap3" style="display:none;">
+							
+								
+					                <div class="loginBox2">
+					                    <dl>
+					                        <dt><img src="/images/kabhom/member/ic_login9.png" alt=""></dt>
+					                        <dd>
+					                            <p>카카오톡 인증서로 로그인</p>
+					                        </dd>
+					                    </dl>
+					                    <div id="kakaoinfo">
+						                    <div class="login_f_box">
+						                    	<label for="name_7" class="blind">이름</label>
+						                        <input type="text" id="name_7" placeholder="이름" maxlength="30" value="">
+						                        <span>&nbsp;&nbsp;</span>
+						                        <label for="phone_7" class="blind">휴대폰번호</label>
+						                        <input type="tel" id="phone_7" placeholder="휴대폰번호(숫자만)" maxlength="11" value="">
+						                    </div>
+						                    <div class="login_f_box mt_10">
+						                        <label for="jumin_1_7" class="blind">주민등록번호 앞자리</label>
+						                        <input type="tel" id="jumin_1_7" placeholder="주민등록번호 앞자리" maxlength="6" value="">
+						                        <span class="mid_line">-</span>
+						                        <label for="jumin_2_7" class="blind">주민등록번호 뒷자리</label>
+						                        <input type="password" name="jumin_2_7" id="jumin_2_7" placeholder="주민등록번호 뒷자리" maxlength="7" value="" data-tk-kbdtype="number">
+						                    </div>
+					                    </div>
+					                    <div class="login_btn">
+					                        <button type="button" class="btn_submit" id="kakao">로그인</button>
+					                    </div>
+					                </div>
+								
+								
+							
+							<div>
+								<ul class="bul_list aster_list">
+									<li><span class="color_red">청약통장 미가입자</span>는 공동인증서 또는 금융인증서를 사용하시기 바랍니다.</li>
+									<li><span class="color_red">APT 무순위/임의공급/불법행위재공급 청약신청자</span> 및 특별공급 중 <span class="color_red">청약통장을 사용하지 않는 유형의 청약신청자</span>는 공동인증서 또는 금융인증서를 사용하시기 바랍니다.</li>
+								</ul>
+							</div>
+			                <div class="dash_list">
+		                      <ul class="bul_list line_list black_list mt_10">
+		                           <li>휴대폰에 카카오톡 앱이 설치되어 있어야 합니다.</li>
+		                           <li>카카오톡 앱을 통해 카카오인증서를 발급 받으셔야 합니다.</li>
+		                           <li>휴대폰 설정에서 카카오톡 앱에서 알림 ‘허용’으로 등록해주세요.</li>
+		                       </ul>
+		                   </div>
+			            </div>
+		        	</li>
+		           </ul>
+		           <div class="back_img"></div>
+		           </div>
+	           
+	           
+           </li>
+                          
+          
+	            
+        </ul>
+    </div>
+<!--탭있는 로그인 끝-->
+
+<!--권장하는 브라우저 팝업-->
+    <div class="popup useBrowPop">
+        <div class="popConts">
+            <div class="sub_tit" tabindex="0"><span>권장하는 브라우저 버전안내</span></div>
+            <div class="mt_20">
+                <table class="tbl_st tbl_tb tbl_center tbl_padding pc">
+                    <caption class="blind">권장하는 브라우저 버전안내</caption>
+                    <colgroup>
+                        <col style="width: 14%">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: 16%">
+                        <col style="width: auto">
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td class="title" rowspan="3">기능구분</td>
+                            <td class="title" colspan="6">Window</td>
+                            <td class="title">Mac</td>
+                            <td class="title" colspan="2">Mobile</td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="2">Explorer</td>
+                            <td rowspan="2">Edge</td>
+                            <td rowspan="2">Chrome</td>
+                            <td rowspan="2">FireFox</td>
+                            <td rowspan="2">Opera</td>
+                            <td rowspan="2">Safari</td>
+                            <td rowspan="2">Android(삼성,LG등)</td>
+                            <td rowspan="2">iOS(애플)</td>
+                        </tr>
+                        <tr>
+                            <td>8이하, 9</td>
+                            <td>10, 11</td>
+                        </tr>
+                        <tr>
+                            <td>공동인증서</td>
+                            <td class="color_red">불가</td>
+                            <td class="color_red">불가</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                        </tr>
+                        <tr>
+                            <td>브라우저인증서</td>
+                            <td class="color_red">불가</td>
+                            <td class="color_red">불가</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                        </tr>
+                        <tr>
+                            <td>인증서 가져오기<br>/ 내보내기</td>
+                            <td class="color_red">불가</td>
+                            <td class="color_red">불가</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+                <table class="tbl_st tbl_tb tbl_center tbl_padding mobile">
+                    <caption class="blind">권장하는 브라우저 버전안내</caption>
+                    <colgroup>
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+                        <col style="width: auto">
+
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td class="title"></td>
+                            <td class="title">공동인증서</td>
+                            <td class="title">브라우저인증서</td>
+                            <td class="title">인증서 가져오기<br>/ 내보내기</td>
+                        </tr>
+                        <tr>
+                            <td>Explorer 8이하, 9</td>
+                            <td class="color_red">불가</td>
+                            <td class="color_red">불가</td>
+                            <td class="color_red">불가</td>
+                        </tr>
+                        <tr>
+                            <td>Explorer 10, 11</td>
+                            <td class="color_red">불가</td>
+                            <td class="color_red">불가</td>
+                            <td class="color_red">불가</td>
+                        </tr>
+                        <tr>
+                            <td>Edge</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                        </tr>
+                        <tr>
+                            <td>Chrome</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                        </tr>
+                        <tr>
+                            <td>FireFox</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                        </tr>
+                        <tr>
+                            <td>Opera</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                        </tr>
+                        <tr>
+                            <td>Safari</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                        </tr>
+                        <tr>
+                            <td>Android(삼성,LG등)</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                        </tr>
+                        <tr>
+                            <td>iOS(애플)</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                            <td>가능</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="line_box">
+                    <div class="line_content">
+                        <h5 class="sub_sub_sub_tit" style="margin-top: 0px">Mac OS(애플 테스크, 노트북 등)</h5>
+                        <ul class="bul_list line_list">
+                            <li>Mac OS 10.14(mojave) 이하에서 가능</li>
+                            <li>Mac OS 10.15(Parallels) 이상버전 이용은 현재 불가</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="closePop">
+                <i class="xi xi-close-thin"></i><span class="blind">팝업 닫기</span>
+            </button>
+        </div>
+    </div>
+
+<form name="redirForm" id="redirForm" method="POST">
+    <input type="hidden" name="nextUrl" id="nextUrl" value="/wa/waa/selectAptPrzwinDescList.do">
+</form>
+
+<script>
+document.domain = "applyhome.co.kr";
+
+    $(document).ready(function() {
+    	//간편인증 로그인 위해 클래스 추가, 폰트이상으로 제외.
+    	//var root = document.documentElement;
+    	//root.classList.add('oacxHtml');
+    	
+    	//탭있는 로그인 loginTab2
+        $(".login_wrap2").hide();
+        $(".loginTab > ul li:first a").addClass("active");
+        $(".loginTab > ul li:first .login_wrap2").show();
+        
+        
+        
+        $('.loginTab > ul li a').click(function() {
+            $('.loginTab > ul li a').removeClass("active");
+            $(this).addClass("active");
+            $(".login_wrap2").hide();
+            $(".login_wrap3").hide();
+            $("#logintab33 > ul li:first a").addClass("active");
+            $("#logintab33 > ul li:first .login_wrap3").show();
+            
+            let activeTab = $(this).attr("href");
+            $(activeTab).show();
+            var index = $(activeTab).data("index");
+            
+            var input = $(activeTab).find('input[type=tel],input[type=text]').filter(':first');
+            if(typeof input != 'undefined'){
+            	input.focus().click();
+            	if(index == "3"){
+            		input.blur();
+            	}
+            	else if(window.Android != null && index == "2") {
+            		var isFirst = $(activeTab).data("first");
+            		if(isFirst == "0"){
+            			$(activeTab).data("first", "1");           			
+						var asyncf = new Promise((res, rej) => {
+							$('.tab33').click();
+							setTimeout(() => {
+								$('#alogintab3').click();
+							}, 10);
+							res();
+						});	
+            		}
+                }
+            }
+            
+            return false;
+        });
+        
+        
+        
+        //탭있는 로그인 loginTab3
+        $(".login_wrap3").hide();
+        $("#logintab33 > ul li:first a").addClass("active");
+        $("#logintab33 > ul li:first .login_wrap3").show();
+        
+        
+        $('#logintab33 > ul li a').click(function() {
+            //$('.login_wrap2 > ul li a').removeClass("active");
+            $('#logintab33 > ul li a').removeClass("active");
+            $(".loginTab > ul li a.tab33").addClass("active");
+            $(this).addClass("active");
+            $(".login_wrap3").hide();
+            $(this).parents(".login_wrap2").show();
+            
+            
+            
+            
+            let activeTab = $(this).attr("href");
+            $(activeTab).show();
+            
+            var input = $(activeTab).find('input[type=text]').filter(':visible:first');
+            if(typeof input != 'undefined'){
+            	input.focus().click();
+            	if(window.Android != null) {
+                	window.Android.openKeyBoard();
+                }
+            }
+            
+            return false;
+        });
+
+        //툴팁
+        $('.tip').click(function() {
+            $(this).next('.tipBox').show();
+        });
+
+        //권장하는 브라우저
+        $(".popShow").on("click", function() {
+            var openPop = $(this).attr("data-pop");
+            $("." + openPop + "").attr('tabindex', '0').show().focus();
+            $(".current").removeClass('current');
+            $(this).addClass('current');
+        });
+        
+        $(".closePop").click(function() {
+            $(".popup").css('display', 'none');
+            $('.current').focus();
+        });
+
+        $(".tipclose").click(function() {
+            $(this).parent(".tipBox").hide();
+        });
+        
+        
+	    onlyNumber($('#jumin_1_3, #jumin_1_1, #jumin_1_2, #jumin_1_4, #phone_4, jumin_1_5, #phone_5, #jumin_1_6, #phone_6, #jumin_1_7, #phone_7'));  
+	    
+        
+        initmTranskey();
+        
+        $('input[data-tk-kbdType]').focus(function(){
+            mtk.onKeyboard(this);
+        });
+        
+        // first naver login button show
+        $("#naver_login_bt").hide();
+        
+        // 로그인 클릭
+        $("#selectCrtfctLoginView").on("click", function() {
+        	var vUrl = "/co/coz/selectCrtfctLoginSetView.do";
+            var oOptions = new Object();
+            oOptions.dataType = "json";
+            oOptions.CallBack = "fn_CertLoginSetCallback";
+            
+            $net.ajax(vUrl, oOptions);
+        });
+        
+        $("#naver").on("click", function() {
+            fn_NaverLoginDo();
+        });
+        
+        $("#yeskey").on("click", function() {
+        	fn_YeskeyLoginDo(); //yeskeytab.jspf
+        });
+        
+        $("#logintab2").on("focusout", function() {// ios 는 이벤트 수신 안됨.
+        	$("#logintab2").show();
+        });
+        
+        $("#kbstar").on("click", function() {
+        	fn_KbstarLoginDo();
+        });
+        
+        $("#toss").on("click", function() {
+            fn_TossLoginDo();
+        });
+        
+        $("#shbank").on("click", function() {
+            fn_ShbankLoginDo();
+        });
+        
+        $("#kakao").on("click", function() {
+            fn_KakaoLoginDo();
+        });
+        
+        $("#naverContentsView").on("click", function() {
+            window.open('https://m.help.naver.com/support/contents/contentsView.help?contentsNo=10263&amp;lang=ko','_blank','noopener'); 
+        });
+    });
+    
+    window.onload = function() {
+    	$("#jumin_1_1").focus().click();
+    	if(window.Android != null) {    		
+        	window.Android.openKeyBoard();
+        }
+    };
+</script>
+
+
+
+
+<div style="display:none">
+	<input type="hidden" id="encIdn3" name="encIdn3" value=""/>
+	<input type="hidden" name="insttCode" id="insttCode" value="" />
+	<input type="hidden" name="apikey" id="apikey" value="" />
+</div>
+
+
+
+<script> 
+var FinCert;
+var initParam = {};
+var ForSignCB;
+	
+    function fn_YeskeyLoginDo() {
+    	// validation
+    	if(!fn_checkValidationForYeskey())
+    		return;
+    	
+		
+        var strJumin1 = $('#jumin_1_3').length > 0 ? $('#jumin_1_3').val() : "";
+        
+        var vUrl = "/co/coz/selectYeskeyLoginDecIdn.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_selYeskeyDecIdnCallBack";
+        oOptions.requestData = 
+        {
+            "transkeyUuid" : mtk.transkeyUuid
+            ,"idnPre" : strJumin1
+            ,"index" : "3"
+        }
+        var mtkValues = null;
+        $('input[data-tk-kbdType]').each(function(idx){
+            
+            var id = $(this).attr('id');
+            id = id.substring(id.length - 1);
+            if(id == '3') {
+                mtkValues = mtk.inputFillEncData(document.getElementById($(this).attr('id')));
+                oOptions.requestData["transkey_"+ $(this).attr('id')] = mtkValues.hidden;       
+                oOptions.requestData["transkey_HM_"+ $(this).attr('id')] = mtkValues.hmac + ""; 
+        	}
+        });
+        
+
+        if(mtkValues == null || typeof(mtkValues) == "undefined"){
+        	$('#jumin_2_3').focus();
+        	return;
+        }
+        
+        $net.ajax(vUrl, oOptions);
+    }
+    
+    /**
+     * 설명       : 키보드보안 적용 된 주민등록번호 뒷자리 복호화 CallBack
+     * 사용방식 : fn_selYeskeyDecIdnCallBack(vResBody, e)
+     * 주의       : 
+     * 리턴       : 
+     */
+    function fn_selYeskeyDecIdnCallBack(vResBody, e){
+        if(vResBody.resultCode == 200)
+        {
+            $('#encIdn3').val(vResBody.encIdn);//보안 이슈로 서버에서 암호화된 주민번호 받아서 사용.
+            $('#insttCode').val(vResBody.insttCode);
+            $('#apikey').val(vResBody.apiKey);
+
+        	loadYeskeySDK();
+        }
+        else
+        {
+        	if(gfn_isNull(vResBody.resultMsg))
+            	alert("키보드보안 적용 중 문제가 발생하였습니다. 다시 시도하여 주시기 바랍니다.");
+        	else
+        		alert(vResBody.resultMsg);
+            return false;
+        }
+    }
+    
+    /**
+     * yeskey 관련 정보 
+     */    
+    function initSdk_SucCallback() {
+    	gfn_showCmmnProgressBar();		
+ 		// nonce 위해
+ 		if(ForSignCB == null || typeof(ForSignCB) == "undefined" || ForSignCB == "")
+ 			fn_getYeskeyNonce("fn_preSignCallBack");
+ 		else
+ 			fn_getYeskeyNonce(ForSignCB);
+ 	}
+ 	
+ 	function initSdk_FailCallback(_error) {
+ 		failCallback(_error);
+ 	}
+ 	
+ 	function sign_SucCallback(result) {
+ 		gfn_showCmmnProgressBar();
+
+ 		FinCert.Sdk.getUserInfo({"success": function(ret) {			
+ 				gologin(result, ret.phone);
+	 		},
+ 			"fail": function(err){
+ 				gologin(result, "");
+ 			}
+ 		});
+ 		
+ 	}
+ 	
+ 	function sign_FailCallback(_error) {
+ 		failCallback(_error);
+ 	}
+ 	
+ 	function gologin(signResult, phone) {
+ 		var vUrl = "/co/coz/signYeskeyCert.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_SignCallBack";
+        
+        var strJumin1 = $('#jumin_1_3').length > 0 ? $('#jumin_1_3').val() : "";
+        var encidn = $('#encIdn3').val();
+        oOptions.requestData = 
+		{
+        	"sign" : signResult.signedVals[0]
+        	,"idn" : encidn
+        	,"idnPre": strJumin1
+        	,"phone": phone
+        	,"nextUrl":"/wa/waa/selectAptPrzwinDescList.do"
+		}
+        
+        $net.ajax(vUrl, oOptions);
+ 	}
+ 	
+ 	function loadSdk_SucCallback() {
+ 		gfn_showCmmnProgressBar();
+    	initParam.orgCode = $('#insttCode').val();
+     	initParam.apiKey =  $('#apikey').val();
+     	initParam.lang =  "kor";
+     	initParam.success = initSdk_SucCallback;
+  		initParam.fail = initSdk_FailCallback;
+  		
+  		_init();
+    }
+     
+    function loadSdk_FailCallback(_error) {
+     	failCallback(_error);  
+    }
+    
+    function loadYeskeySDK() {
+    	gfn_showCmmnProgressBar();
+    	if(!document.getElementById("fincertSdk")) {
+	    	var _scriptElem = document.createElement('script');
+	    	_scriptElem.src = "https://4user.yeskey.or.kr/v1/fincert.js"+"?dt=" + getYYYYMMDD();
+	    	_scriptElem.id = "fincertSdk";
+	    	document.querySelector('body').appendChild(_scriptElem);
+	    	_scriptElem.onerror = loadSdk_FailCallback;
+	    	_scriptElem.onload = loadSdk_SucCallback;
+    	}else {
+    		initParam.orgCode = $('#insttCode').val();
+        	initParam.apiKey =  $('#apikey').val();
+        	initParam.lang =  "kor";
+        	initParam.success = initSdk_SucCallback;
+     		initParam.fail = initSdk_FailCallback;
+    		_init();
+    	}
+    }
+    
+    // 신청/취소 서명시 호출.
+    function fn_readyYeskeySign(callback) {
+    	ForSignCB = callback;
+    	var vUrl = "/co/coz/getYeskeySessionInfo.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_readyYeskeySignCallBack";
+        
+        
+        $net.ajax(vUrl, oOptions);
+    }
+    
+    function fn_readyYeskeySignCallBack(vResBody, e) {
+    	if(vResBody.resultCode == 200)
+        {
+            $('#insttCode').val(vResBody.insttCode);
+            $('#apikey').val(vResBody.apiKey);
+
+        	loadYeskeySDK();
+        }
+        else
+        {
+            alert("서버 통신 오류입니다. 다시 시도하여 주시기 바랍니다.");
+            return false;
+        }
+    }
+ 	
+ 	function _init() {
+ 		gfn_showCmmnProgressBar();
+ 		if (!FinCert) {    
+ 			setTimeout(_init, 200);
+ 			return;  
+ 		}  
+ 		FinCert.Sdk.init(initParam);
+ 	}
+ 		
+ 	function fn_preSignCallBack(vResBody, e) {
+ 		if(vResBody.resultCode == 200)
+        {
+ 			gfn_showCmmnProgressBar();
+ 			var signParam = {};
+ 			signParam.signFormat = {
+ 				"type":"CMS"
+ 				,"CMSInfo":{
+ 					"ssn":"dummy"
+ 					,"withoutContent":false
+ 				}
+ 			}
+ 			signParam.content = {
+ 				"plainText":{
+ 					"plainTexts":[{
+ 						"text":"청약홈 로그인"
+ 						,"nonce":vResBody.nonce
+ 					}]
+ 					,"encoding":"UTF-8"
+ 				}
+ 			}
+ 			signParam.algorithms = "RSASSA-PKCS1-v1_5_SHA256";
+ 			signParam.view = {
+ 				"oid":{
+ 					"1.2.410.200005.1.1.1.10":true
+ 				}
+ 				,"lastAccessCert":false
+ 			}
+ 			signParam.info = {"signType": "01"}; //login
+ 			
+ 			signParam.success = sign_SucCallback;
+ 			signParam.fail = sign_FailCallback;
+ 			
+ 			FinCert.Sdk.sign(signParam);
+        }
+        else
+        {
+            alert("서버 통신 오류입니다. 다시 시도하여 주시기 바랍니다.");
+            return false;
+        }
+ 	}	
+ 	
+ 	function fn_SignCallBack(vResBody, e) {
+ 		if(vResBody.resultCode == 200){
+ 			//got to next page 
+ 			//$net.href("/wa/waa/selectAptPrzwinDescList.do");
+ 			var nextUrl = "/wa/waa/selectAptPrzwinDescList.do";
+ 			if(vResBody.NFActIdAuth != null && vResBody.NFActIdAuth.length > 0) {
+ 				NetFunnel.href(nextUrl, vResBody.NFActIdAuth);
+ 			}else{
+ 				$net.href(nextUrl);
+ 			}
+ 		}
+ 		else
+        {
+            alert(vResBody.resultMsg);
+        }
+ 	}
+ 	 	
+ 	
+ 	function failCallback(_error) {
+ 		gfn_hideCmmnProgressBar();
+ 		var _failMsg;
+ 		if(typeof(_error.message) != "undefined") {
+ 			_failMsg = _error.message + '[CODE:' + _error.code + ']';
+ 		} else {
+ 			_failMsg = _error.info.errMsg + '[CODE:' + _error.info.errCode + ']';
+ 		}
+ 		if(_error.code == '800000' || _error.info.errCode == '800000')
+ 			return;
+ 		alert(_failMsg);
+ 	}
+    
+    function getYYYYMMDD() {
+    	var _date = new Date();
+    	var _year = _date.getFullYear();
+    	var _month = new String(_date.getMonth() + 1);
+    	var _day = new String(_date.getDate());
+    	if (_month.length == 1) {
+    		_month = "0" + _month;  
+    	}
+    	if (_day.length == 1) {
+    		_day = "0" + _day;
+    	}
+    	return _year + _month + _day;
+    }
+    
+    /**
+	 * 설명		: yeskey tab 입력값에 대한 유효성을 검사한다.
+	 * 사용방식	: fn_checkValidationForYeskey()
+	 * 주의		: 
+	 * 리턴		: boolean
+	 */
+	function fn_checkValidationForYeskey(){
+		var regExp = /[^0-9]/gi;
+
+		if($('#jumin_1_3').length > 0 && gfn_isNull($.trim($('#jumin_1_3').val())))
+		{
+			
+			alert('주민등록번호 앞자리 is required.');
+			$('#jumin_1_3').focus();
+			return false;
+		}
+		if($('#jumin_1_3').length > 0 && $('#jumin_1_3').val().length < 6)
+		{
+			
+			alert('주민등록번호 앞자리 can not be less than 6 characters.');
+			$('#jumin_1_3').focus();
+			return false;
+		}
+		if(regExp.test($('#jumin_1_3').val()))
+		{
+			alert("주민등록번호 앞자리은(는) 숫자만 입력 가능합니다.");
+            $('#jumin_1_3').val('');
+			$('#jumin_1_3').focus();
+			return false;
+		}
+        
+		if($('#jumin_2_3').length > 0 && gfn_isNull($.trim($('#jumin_2_3').val())))
+		{
+			
+			alert('주민등록번호 뒷자리 is required.');
+			$('#jumin_2_3').focus();
+			return false;
+		}
+		
+		if($('#jumin_2_3').length > 0 && $('#jumin_2_3').val().length < 7)
+		{
+			
+			alert('주민등록번호 뒷자리 can not be less than 7 characters.');
+			$('#jumin_2_3').focus();
+			return false;
+		}
+		
+		return true;
+	}
+    
+    function fn_getYeskeyNonce(callback) {
+    	// nonce 위해 
+	 	var vUrl = "/co/coz/getYeskeyNonce.do";
+	    var oOptions = new Object();
+	    oOptions.dataType = "json";
+	    oOptions.CallBack = callback;
+	        
+	    $net.ajax(vUrl, oOptions);
+    }
+    
+    
+    
+	function fn_yeskeySuccessCB(result) {
+    	var vUrl = "/co/coz/signYeskeyAuthSession.do"; //서명 확인 요청.
+	    var oOptions = new Object();
+	    oOptions.dataType = "json";
+	    oOptions.CallBack = "fn_yeskeySignDoneCB";
+	        
+	    oOptions.requestData = 
+		{
+	        "sign" : result.signedVals[0]
+		}	        
+	    $net.ajax(vUrl, oOptions);
+    }
+    
+    function fn_yeskeyFailedCB(error) { // sign 실패.
+    	failCallback(_error); 
+    }
+    
+    function fn_makeSignforData(trans_SucCallback, trans_FailCallback, nonce, arrayForsign) {
+    	if(arrayForsign == null) {
+    		alert("서명 데이터가 존재하지않습니다.");
+    		return ;
+    	}
+    	
+    	arrayForsign[0]["nonce"] = nonce;
+    	var signParam = {};
+		signParam.signFormat = {
+				"type":"CMS"
+				,"CMSInfo":{
+					"ssn":"dummy"
+					,"withoutContent":false
+			}
+		}
+		signParam.content = {
+				"plainText":{
+					"plainTexts": arrayForsign
+					,"encoding":"UTF-8"
+			}
+		}
+		signParam.algorithms = "RSASSA-PKCS1-v1_5_SHA256";
+		signParam.view = {
+				"oid":{
+					"1.2.410.200005.1.1.1.10":true
+				}
+				,"lastAccessCert":false
+		}
+		signParam.info = {"signType": "04"}; //contract
+			
+		signParam.success = trans_SucCallback;
+		signParam.fail = trans_FailCallback;
+		//alert(JSON.stringify(arrayForsign));//test
+		if (!FinCert) {
+			alert("fincert sdk 가 존재하지않습니다.");
+			return;
+ 		}  
+		FinCert.Sdk.sign(signParam);
+		
+		if(navigator.userAgent.toLowerCase().indexOf("iphone") > 0){
+ 			var body = document.body;
+ 			body.style.top='0px';
+ 	  		//alert(body.style.overflow + ", " + body.style.top);
+		}
+    }
+    
+    function fn_makeSignDataForYeskey(serialArray) {
+    	var obj = {};
+    	var array = [obj];
+
+    	if(serialArray) {
+    		jQuery.each(serialArray, function() {
+    			obj[this.name] = this.value;
+    		});
+    	}
+    	return array;
+    }
+</script>
+
+
+
+
+
+
+
+<script>
+	document.domain = "applyhome.co.kr";
+//<![CDATA[
+	var g_agre_resBody;
+	
+	$(document).ready(function(){
+		
+		$(".close2").click(function() {
+			$(this).parents(".popWrap").hide();
+			$(".current").focus();
+			fn_crtfctLoginCallBack(g_agre_resBody);
+		});
+		
+		
+		$("#btnSubmitNext").on("click", function() {
+			fn_agre_next();
+		});
+	});
+	
+	
+	function close_agre_pope() {
+	    $('#pop_info2').hide();
+	    $(".current").focus();
+		fn_crtfctLoginCallBack(g_agre_resBody);
+	}
+	
+	
+	
+	function open_agre_pop(vResBody) {
+		vResBody.resultAgre = 'N';
+		g_agre_resBody = vResBody;
+		$("#pop_info2").show().focus();
+		$(".current").removeClass('current');
+		$(this).addClass("current");
+	}
+	
+	
+	function fn_agre_next() {
+		$net.submit("redirectFrm", "/ra/rab/selectHshldMbInfoProvdAgreView.do");
+	}
+	
+//]]>
+</script>
+
+
+<div id="pop_info2" style="display:none;" tabindex="0">
+	<div class="pop_info_cell">
+		<div class="pop_box" style="margin-top:0px">
+			<div class="pop_title">
+				<h5><img src="/images/kabhom/main/popup_logo.png" alt="한국부동산원 로고">청약홈</h5>
+				<button type="button" onclick="javascript:close_agre_pope();"><i class="xi xi-close-thin"></i><span class="blind">팝업 닫기</span></button>				
+			</div>
+			
+			<div class="pop_cont" style="padding-bottom:10px">
+				<p style="font-size:1.3rem">재당첨 제한 정보제공 관련 세대원의 정보제공동의 안내</p>	
+					<div class="pop_txt" style="margin:10px 0px 0px 0px; padding:10px">
+					<p id="popMsgDetail" class="txt_l">
+						&nbsp;&nbsp;이용자 편의성 개선을 위해 청약신청과정에서 행정정보 자동조회 신청여부와 무관하게 신청자 본인 및 세대원의 주택소유 및 재당첨제한 등 청약제한사항을 제공할 예정입니다.
+					</br></br>
+					&nbsp;&nbsp;다만, 기존에 진행된 세대구성원 동의에는 이러한 수정사항이 반영되지 않아 청약신청 시 일부 정보제공이 제한되오니 불편하시더라도 세대구성원 동의 절차를 다시 진행하시기 바랍니다.
+						</p>
+					</div>
+					
+					<div class="btn_box">
+						<button type="button" class="btn_submit" id="btnSubmitNext">확인</button>
+					</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<!--
+ <div class="popWrap notes" tabindex="0">
+	<div class="popConts3">
+		<div class="agr_wrap">
+			<div class="sub_tit"><span tabindex="0">재당첨 제한 정보제공 관련 세대원의 정보제공동의 안내</span></div>
+			<div class="depth scll_div">
+				<p>
+					&nbsp;&nbsp;이용자 편의성 개선을 위해 청약신청과정에서 행정정보 자동조회 신청여부와 무관하게 신청자 본인 및 세대원의 주택소유 및 재당첨제한 등 청약제한사항을 제공할 예정입니다.
+					</br></br>
+					&nbsp;&nbsp;다만, 기존에 진행된 세대구성원 동의에는 이러한 수정사항이 반영되지 않아 청약신청 시 일부 정보제공이 제한되오니 불편하시더라도 세대구성원 동의 절차를 다시 진행하시기 바랍니다.
+				</p>
+			</div>
+		</div>
+		<div class="btn_box">
+			<button type="button" class="btn_submit" id="btnSubmitNext">확인</button>
+		</div>
+		<button type="button" class="close2">
+			<i class="xi xi-close-thin"></i><span class="blind">팝업 닫기</span>
+		</button>
+	</div>
+</div> 
+
+-->
+
+
+
+<script	src="/MagicLine4Web/ML4Web/js/ext/jquery-1.10.2.js"></script>
+<script	src="/MagicLine4Web/ML4Web/js/ext/jquery-ui.min.js"></script>
+<script	src="/MagicLine4Web/ML4Web/js/ext/jquery.blockUI.js"></script>
+<script	src="/MagicLine4Web/ML4Web/js/ext/json2.js"></script>
+
+<script	src="/MagicLine4Web/ML4Web/js/ext/ML_Config.js"></script>
+
+<script	src="/MagicLine4Web/ML4Web/js/magic_e2e.js"></script>
+<script	src="/MagicLine4Web/ML4Web/js/crypto/magicjs_1.2.7.2.min.js"></script>
+
+<script>
+var os = "window";
+	function fn_CertLoginSetCallback(vResBody, e) {
+		$("#strOid").val(vResBody.loginOid);
+		$("#strEnv").val(vResBody.strSession);
+		fn_CertLoginDo();
+	}
+	
+	function fn_CertLoginDo() {
+		var targetUrl = location.protocol+"//"+( location.port != ""?location.hostname+":"+location.port:location.hostname );
+		var strData = {htmlClear:'Clear', targetUrl:targetUrl};
+		var iframe = $("#dscert").get(0).contentWindow;
+		iframe.postMessage(strData,targetUrl);
+		
+        
+        if(!fn_checkCertValidation())       return false;
+        
+        
+        var strJumin1 = $('#jumin_1_1').length > 0 ? $('#jumin_1_1').val() : "";
+        
+        var vUrl = "/co/coz/selectDecIdn.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_selectCertDecIdnCallBack";
+        oOptions.requestData = 
+        {
+            "transkeyUuid" : mtk.transkeyUuid
+            ,"idnPre" : strJumin1
+            ,"index" : "1"
+        }
+        var mtkValues = null;
+        $('input[data-tk-kbdType]').each(function(idx){
+            
+            var id = $(this).attr('id');
+            id = id.substring(id.length - 1);
+            if(id == '1') {
+	            mtkValues = mtk.inputFillEncData(document.getElementById($(this).attr('id')));
+	            oOptions.requestData["transkey_"+ $(this).attr('id')] = mtkValues.hidden;       
+	            oOptions.requestData["transkey_HM_"+ $(this).attr('id')] = mtkValues.hmac + ""; 
+            }
+        });
+        
+        if(mtkValues == null || typeof(mtkValues) == "undefined"){
+        	$('#jumin_2_1').focus();
+        	return;
+        }
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	
+	/**
+	 * 설명		: 키보드보안 적용 된 주민등록번호 뒷자리 복호화 CallBack
+	 * 사용방식	: fn_selectDecIdnCallBack(vResBody, e)
+	 * 주의		: 
+	 * 리턴		: 
+	 */
+	function fn_selectCertDecIdnCallBack(vResBody, e){
+		if(vResBody.resultCode == 200)
+		{			
+			
+			var strJumin1 = $('#jumin_1_1').length > 0 ? $('#jumin_1_1').val() : "";
+			
+			
+			dataEncrypt(strJumin1 + vResBody.decJumin2);
+			$('#encIdn').val(vResBody.encIdn);//보안 이슈로 서버에서 암호화된 주민번호 받아서 사용.
+			
+			//TODO : 애플앱 심사를 위한 임시로그인 처리, 운영시 삭제처리해야 됨.
+			//안드로이드처리, TODO:Apple
+            if($('#jumin_1_1').val()== "112233" &  vResBody.decJumin2 == "4455667") {
+            	vResBody.decJumin2 = '0';
+				fn_makeSignDataCallBack_tmp();
+				return;
+			}
+			else if(window.Android != null) {
+				fn_CallNativeAppSign(strJumin1 + vResBody.decJumin2);
+				vResBody.decJumin2 = '0';
+				return;
+			}
+            
+			
+			$('#idn').val(strJumin1 + vResBody.decJumin2);
+			vResBody.decJumin2 = '0';
+			//form 그대로 보내기.
+			magicline.uiapi.MakeSignData(document.reqFrm1, null, fn_makeSignDataCallBack);
+			$('#idn').val(''); // 보안이슈로 사용 후 삭제.
+		}
+		else
+		{
+            if(gfn_isNull(vResBody.resultMsg))
+                alert("키보드보안 적용 중 문제가 발생하였습니다. 다시 시도하여 주시기 바랍니다.");
+            else
+                alert(vResBody.resultMsg);
+			
+            return false;
+		}
+	}
+	
+	/**
+	 * 설명		: 입력값에 대한 유효성을 검사한다.
+	 * 사용방식	: fn_checkValidation()
+	 * 주의		: 
+	 * 리턴		: boolean
+	 */
+	function fn_checkCertValidation(){
+		var regExp = /[^0-9]/gi;
+		if($('#jumin_1_1').length > 0 && gfn_isNull($.trim($('#jumin_1_1').val())))
+		{
+			
+			alert('주민등록번호 앞자리 is required.');
+			$('#jumin_1_1').focus();
+			return false;
+		}
+		if($('#jumin_1_1').length > 0 && $('#jumin_1_1').val().length < 6)
+		{
+			
+			alert('주민등록번호 앞자리 can not be less than 6 characters.');
+			$('#jumin_1_1').focus();
+			return false;
+		}
+		if(regExp.test($('#jumin_1_1').val()))
+		{
+			alert("주민등록번호 앞자리은(는) 숫자만 입력 가능합니다.");
+			$('#jumin_1_1').focus();
+			return false;
+		}
+		if($('#jumin_2_1').length > 0 && gfn_isNull($.trim($('#jumin_2_1').val())))
+		{
+			
+			alert('주민등록번호 뒷자리 is required.');
+			$('#jumin_2_1').focus();
+			return false;
+		}
+		
+		if($('#jumin_2_1').length > 0 && $('#jumin_2_1').val().length < 7)
+		{
+			
+			alert('주민등록번호 뒷자리 can not be less than 7 characters.');
+			$('#jumin_2_1').focus();
+			return false;
+		}
+				
+		return true;
+	}
+	
+	/**
+	 * 설명		: 서명데이터 생성 후 호출하는 CallBack 함수
+	 * 사용방식	: fn_makeSignDataCallBack(code, data)
+	 * 주의		: 
+	 * 리턴		: 
+	 */
+	function fn_makeSignDataCallBack(code, data)
+	{
+		$('#idn').val(''); // 보안이슈로 사용 후 삭제.
+		if(code	== 0)
+		{
+			
+			if(gfn_isMobile() == false) {
+			      
+				//var loginOidList = ;
+				var loginOidList = JSON.parse($("#strOid").val());
+
+		        var oidChk = false;
+		        
+				for(idx in loginOidList) {
+					if (data.certInfo.policyid == loginOidList[idx].OID){
+	                    oidChk = true;
+	                    break;
+	                }
+				};
+				
+				if (oidChk == false) {
+					alert("선택하신 인증서는 지원하지 않는 인증서입니다.")
+					return;
+				}
+			}
+
+			
+			var sign = encodeURIComponent(data.encMsg);
+			
+			
+			var strIdn = $('#encIdn').val();
+			
+			var strJumin1 = $('#jumin_1_1').val();
+
+			
+			var vUrl = "/co/coz/procesCrtfctEncLogin.do";
+			var oOptions = new Object();
+			
+			
+			oOptions.dataType = "json";
+			
+			
+			oOptions.CallBack = "fn_crtfctLoginCallBack";
+			
+			
+			oOptions.requestData = 
+			{
+				"sign" : sign
+				, "vidRandom" : data.vidRandom
+				, "idn" : strIdn
+				, "idnPre" : strJumin1
+				, "idnPost" : ""
+				, "nextUrl" : "/wa/waa/selectAptPrzwinDescList.do"
+			}
+
+			
+			$net.ajax(vUrl, oOptions);
+		} else if(code == 999) {
+		     //취소버튼
+		     $("#btnLogin").focus();
+		     $('#jumin_2_1').val('');
+		} else {
+			$('#jumin_2_1').val('');
+			console.log("errorCode : " + code);
+			alert("결과값 수신에 실패하였습니다.\n다시 시도하여 주십시오.");
+		}
+	};
+	
+    /**
+     * 설명       : 모바일앱 로그인시 네이티브 로그인 화면을 호출한다.
+     * 사용방식 : fn_CallNativeAppSign(idn)
+     * 주의       : 
+     * 리턴       : 
+     */   	
+	function fn_CallNativeAppSign(idn){
+		//Android
+		if(window.Android != null) {
+			window.Android.fn_Sign(idn);
+		}
+		//IOS
+		else {			
+			window.location = "xSignService:xSignMakeCert?idn=" + idn;
+		}
+	};
+	
+    /**
+     * 설명       : 모바일앱 로그인시 호출된 로그인 화면에서 결과 콜백처리
+     * 사용방식 : fn_RecvNativeAppSign(signData, vid, idn)
+     * 주의       : 
+     * 리턴       : 
+     */       
+	function fn_RecvNativeAppSign(signData, vid, idn){
+		var sign = encodeURIComponent(signData);
+		var vUrl = "/co/coz/procesCrtfctLogin.do";
+		var oOptions = new Object();
+		oOptions.dataType = "json";
+		oOptions.CallBack = "fn_crtfctLoginCallBack";
+		
+		oOptions.requestData = 
+		{
+			"sign" : sign
+			, "vidRandom" : vid
+			, "idn" : idn
+			, "idnPre" : idn.substring(0,6)
+			, "idnPost" : idn.substring(6,13)
+			, "nextUrl" : "/wa/waa/selectAptPrzwinDescList.do"
+		}
+
+		
+		$net.ajax(vUrl, oOptions);		
+	};
+	
+	/**
+     * 설명       : 보안 취약점 수정으로 추가된 모바일앱 로그인시 호출된 콜백처리 새 api
+     * 사용방식 : fn_RecvNativeAppSignforEnc(signData, vid, idn) idn 은 공백임.
+     * 주의       : 
+     * 리턴       : 
+     */       
+	function fn_RecvNativeAppSignforEnc(signData, vid, idn){
+		var sign = encodeURIComponent(signData);
+		var vUrl = "/co/coz/procesCrtfctEncLogin.do";
+		var oOptions = new Object();
+		oOptions.dataType = "json";
+		oOptions.CallBack = "fn_crtfctLoginCallBack";
+		
+		var encidn = $('#encIdn').val();
+		var idnPre = $('#jumin_1_1').val();
+		oOptions.requestData = 
+		{
+			"sign" : sign
+			, "vidRandom" : vid
+			, "idn" : encidn
+			, "idnPre" : idnPre
+			, "idnPost" : ""
+			, "nextUrl" : "/wa/waa/selectAptPrzwinDescList.do"
+		}
+
+		
+		$net.ajax(vUrl, oOptions);		
+	};
+	
+	function fn_makeSignDataCallBack_tmp(code, data)
+	{
+			var vUrl = "/co/coz/procesCrtfctEncLogin.do";  
+			var oOptions = new Object();
+			
+			var strIdn = $('#encIdn').val()
+			
+			var strJumin1 = $('#jumin_1_1').val();
+			
+			oOptions.dataType = "json";
+			oOptions.CallBack = "fn_crtfctLoginCallBack";
+			oOptions.requestData = 
+			{
+				"sign" : ""
+				, "vidRandom" : ""
+				, "idn" : strIdn
+				, "idnPre" : strJumin1
+				, "idnPost" : ""
+				, "nextUrl" : "/wa/waa/selectAptPrzwinDescList.do"
+			}
+
+			
+			$net.ajax(vUrl, oOptions);
+	}	
+	
+	/**
+	 * 설명		: 인증서 로그인 시도 후 호출하는 CallBack 함수
+	 * 사용방식	: fn_crtfctLoginCallBack(vResBody, e)
+	 * 주의		: 
+	 * 리턴		: 
+	 */
+	function fn_crtfctLoginCallBack(vResBody, e)
+	{
+		if(vResBody.resultCode == "1")
+		{
+			var nextUrl = "/wa/waa/selectAptPrzwinDescList.do";
+			
+			if(vResBody.resultAgre  == 'Y') {
+				open_agre_pop(vResBody);
+				return false;
+			}
+			
+			
+			if(vResBody.NFActIdAuth != null && vResBody.NFActIdAuth.length > 0) {
+				//NetFunnel.submit("redirectFrm", "/wa/waa/selectAptPrzwinDescList.do", null, vResBody.NFActId);
+				//NetFunnel.submit("redirectFrm", nextUrl, null, vResBody.NFActId);
+				NetFunnel.submit("redirectFrm", nextUrl, null, vResBody.NFActIdAuth);
+
+			} else {
+				//$net.submit("redirectFrm", "/wa/waa/selectAptPrzwinDescList.do");
+				$net.submit("redirectFrm", nextUrl);
+			}
+			
+		} 
+		else
+		{
+			
+			alert(vResBody.resultMsg);
+			return false;
+		}
+	}
+	
+	/**
+	 * 설명		: 개인정보에 대한 데이터 암호화
+	 * 사용방식	: dataEncrypt(idn)
+	 * 주의		: 
+	 * 리턴		: 
+	 */
+	function dataEncrypt(idn)
+	{
+		if(idn.length == 0)
+		{
+			return;
+		}
+		
+		var strSession = JSON.parse($("#strEnv").val());//
+		var ml = new MagicE2E(strSession);
+		
+		$('#encIdn').val(idn);
+		
+		var encData = ml.Encrypt($('#encForm').serialize());
+		$('#encData').val(encData);
+	}
+	
+</script>
+<div style="display:none">
+<form id='encForm' name='encForm' method='post'>
+	<input type="hidden" id="encIdn" name="encIdn" value=""/>
+</form>
+
+<form name="reqFrm1" id="reqFrm1" method="POST" autocomplete="off">
+	<input type="hidden" id='sign' name='sign'/>
+	<input type="hidden" id="vidRandom" name="vidRandom" />
+	<input type="hidden" id="vidType" name="vidType" value="client"/>
+	<input type="hidden" id="encData" name="encData" />
+
+	<input type="hidden" name="idn" id="idn" value="" />
+	<input type="hidden" name="signData" id="signData" value="signData" />
+</form>
+
+<input type="hidden" name="strOid" id="strOid" value=""/>
+<input type="hidden" name="strEnv" id="strEnv" value=""/>
+
+<form name="redirectFrm" id="redirectFrm" method="POST">
+
+</form>
+</div>
+
+<div id="dscertContainer">
+	<iframe	id="dscert" name="dscert" title="인증서 선택" src="" scrolling="no" width="100%" height="100%" frameborder="0" allowTransparency="true" style="position:fixed;z-index:100010;top:0px;left:0px;width:100%;height:100%;"></iframe>
+</div>
+
+
+
+<div style="display:none">
+<input type="hidden" id="encIdn2" name="encIdn2" value=""/>
+</div>
+
+<script>	
+	function fn_NaverLoginDo() {
+		
+        var strJumin1 = $('#jumin_1_2').length > 0 ? $('#jumin_1_2').val() : "";
+        
+        var vUrl = "/co/coz/selectDecIdn.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_selectNaverDecIdnCallBack";
+        oOptions.requestData = 
+        {
+            "transkeyUuid" : mtk.transkeyUuid
+            ,"idnPre" : strJumin1
+            ,"index" : "2"
+        }
+        var mtkValues = null;
+        $('input[data-tk-kbdType]').each(function(idx){
+            
+            var id = $(this).attr('id');
+            id = id.substring(id.length - 1);
+            if(id == '2') {
+	            mtkValues = mtk.inputFillEncData(document.getElementById($(this).attr('id')));
+	            oOptions.requestData["transkey_"+ $(this).attr('id')] = mtkValues.hidden;       
+	            oOptions.requestData["transkey_HM_"+ $(this).attr('id')] = mtkValues.hmac + ""; 
+            }
+        });
+        
+        if(mtkValues == null || typeof(mtkValues) == "undefined"){
+        	$('#jumin_2_2').focus();
+        	return;
+        }
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+	 * 설명		: 입력값에 대한 유효성을 검사한다.
+	 * 사용방식	: fn_checkValidation()
+	 * 주의		: 
+	 * 리턴		: boolean
+	 */
+	function fn_checkNaverValidation(){
+		var regExp = /[^0-9]/gi;
+		
+		var birthDay = naverLogin.user.getBirthday();
+		birthDay = birthDay.trim().replace(/-/gi,"").substring(2);
+
+		if($('#jumin_1_2').length > 0 && gfn_isNull($.trim($('#jumin_1_2').val())))
+		{
+			
+			alert('주민등록번호 앞자리 is required.');
+			$('#jumin_1_2').focus();
+			return false;
+		}
+		if($('#jumin_1_2').length > 0 && $('#jumin_1_2').val().length < 6)
+		{
+			
+			alert('주민등록번호 앞자리 can not be less than 6 characters.');
+			$('#jumin_1_2').focus();
+			return false;
+		}
+		if(regExp.test($('#jumin_1_2').val()))
+		{
+			alert("주민등록번호 앞자리은(는) 숫자만 입력 가능합니다.");
+            $('#jumin_1_2').val('');
+			$('#jumin_1_2').focus();
+			return false;
+		}
+		
+        if (birthDay != $('#jumin_1_2').val()) {
+            alert('네이버인증 생년월일과 주민번호 앞자리가 일치하지 않습니다.');
+            $('#jumin_1_2').focus();
+            return false;
+        }
+        
+		if($('#jumin_2_2').length > 0 && gfn_isNull($.trim($('#jumin_2_2').val())))
+		{
+			
+			alert('주민등록번호 뒷자리 is required.');
+			$('#jumin_2_2').focus();
+			return false;
+		}
+		
+		if($('#jumin_2_2').length > 0 && $('#jumin_2_2').val().length < 7)
+		{
+			
+			alert('주민등록번호 뒷자리 can not be less than 7 characters.');
+			$('#jumin_2_2').focus();
+			return false;
+		}
+		
+		if(!$('#chk_jumin').is(':checked')){
+			alert('유의사항을 확인하여 주시기 바랍니다. (주민등록번호 오기입으로 인한 청약신청취소 / 당첨취소에 대한 책임은 모두 본인에게 있습니다.');
+			$('#chk_jumin').focus();
+			return false;
+		}
+		
+		return true;
+	}
+	
+    /**
+     * 설명       : (모바일인 경우) 키보드보안 적용 된 주민등록번호 뒷자리 복호화 CallBack
+     * 사용방식 : fn_selectDecIdnCallBack(vResBody, e)
+     * 주의       : 
+     * 리턴       : 
+     */
+    function fn_selectNaverDecIdnCallBack(vResBody, e){
+        if(vResBody.resultCode == 200)
+        {
+            vResBody.decJumin2 = '0';
+            $('#encIdn2').val(vResBody.encIdn);//보안 이슈로 서버에서 암호화된 주민번호 받아서 사용.
+            loginProcess();
+        }
+        else
+        {
+            if(gfn_isNull(vResBody.resultMsg))
+                alert("키보드보안 적용 중 문제가 발생하였습니다. 다시 시도하여 주시기 바랍니다.");
+            else
+                alert(vResBody.resultMsg);
+           
+            return false;
+        }
+    }
+    
+    function loginProcess() {
+
+    	
+        if(!fn_checkNaverValidation()) {
+            return false;
+        }
+        
+        
+        var strIdn = $('#encIdn2').val();
+        
+        var strJumin1 = $('#jumin_1_2').val();
+        
+        var param = {
+                "idn" : strIdn
+                , "idnPre" : strJumin1
+                , "idnPost" : ""
+                , "id" : naverLogin.user.getId() 
+                , "naverName" : naverLogin.user.getName()
+                , "naverBirthday" : naverLogin.user.getBirthday()
+                , "naverGender" : naverLogin.user.getGender()
+                , "naverAccessToken" : naverLogin.accessToken.accessToken
+                , "naverClientId" : naverLogin.user.getId()
+                , "naverMobile" : naverLogin.user.getMobile()
+                , "nextUrl" : "/wa/waa/selectAptPrzwinDescList.do"
+        };
+        
+        var oOptions = new Object();
+        oOptions.CallBack = "callbackLogin";
+        oOptions.requestData = param;
+        oOptions.dataType = "json";
+        
+        $net.ajax('/sign/naver/login.do', oOptions);
+    }
+    
+	function callbackLogin(vResBody) {
+	    if(vResBody.resultCode == "200") {
+	    	//location.replace(vResBody.nextUrl);
+			if(vResBody.NFActIdAuth != null && vResBody.NFActIdAuth.length > 0) {
+				NetFunnel.href(vResBody.nextUrl, vResBody.NFActIdAuth);
+			}else{
+				location.replace(vResBody.nextUrl);
+			}
+		}else {
+		    
+		    naverLogin.logout();
+			alert(vResBody.resultMsg);
+		}
+	}
+	
+	function showInitState() {
+		var add = '<a id="naverIdLogin_loginButton" href="#" role="button"><img src="https://static.nid.naver.com/oauth/big_g.PNG"></a>';
+		$(".jumbotron").toggleClass("mt_20");
+		 
+		$("#naverIdLogin").append(add);
+		$("#naverLoginStr").val("");
+		$("#naverLoginStr").hide();
+
+	    $("#jumin_no").hide();
+	    $("#naver_login_bt").hide();
+	    $(".check_st2").hide();
+	}
+</script>
+<!-- (2) LoginWithNaverId Javscript SDK -->
+<script src="https://static.nid.naver.com/js/naveridlogin_js_sdk_2.0.2.js"></script>
+<!-- (3) LoginWithNaverId Javscript 설정 정보 및 초기화 -->
+<script>
+	    window.name='opener';
+		var naverLogin = new naver.LoginWithNaverId(
+			{
+				clientId: "QpcwAAKQChSShllFDXrK",
+				callbackUrl: document.location.protocol + "//" + document.location.host + "/sign/naver/callback/callback.jsp",
+				isPopup: true,
+				loginButton: {color: "green", type: 3, height: 60}
+			}
+		);
+		
+		/* (4) 네아로 로그인 정보를 초기화하기 위하여 init을 호출 */
+		naverLogin.init();
+		
+		/* (5) 현재 로그인 상태를 확인 */
+	    function callBackFunction() {
+	    	naverLogin.getLoginStatus(function (status) {
+	    		$("#logintab2").show();
+	    		if (status) {
+	    		    /* (6) 로그인 상태가 "true" 인 경우 로그인 버튼을 없애고 사용자 정보를 출력합니다. */ 
+	                naverLogin.logout();
+	    			setLoginStatus();
+	    		}
+	    	});
+	    };
+	    
+		/* (6) 로그인 상태가 "true" 인 경우 로그인 버튼을 없애고 사용자 정보를 출력합니다. */
+		function setLoginStatus() {
+			var profileImage = naverLogin.user.getProfileImage();
+			var stringName = naverLogin.user.getName();
+			var imageViewer = '';
+			if (profileImage) {
+				imageViewer += '<img src="' + profileImage + '" height=50 /> <p>';
+			}
+			
+			$(".jumbotron").toggleClass("mt_20");
+			$("#naverIdLogin_loginButton").remove();
+			$("#naverIdLogin").html(imageViewer + stringName + '님 반갑습니다.</p>');
+
+	        $("#jumin_no").css("display","block");
+	        $(".check_st2").css("display","block");
+	        $("#naver_login_bt").css("display","block");
+		}
+		
+		function cancelCallBackforIOS() {
+			$("#logintab2").show();
+		};
+</script>
+
+
+
+<style>
+	.kbbtn_close{
+		position:absolute;
+		bottom: 20px;
+		left:25%;
+	}
+	
+	@media (max-width: 580px){
+		.kbbtn_close{
+			left:37.5%;
+		}
+	}
+</style>
+<div style="display:none">
+	<input type="hidden" id="encIdn4" name="encIdn4" value=""/>
+</div>
+
+<div id="kbstarResultPop" class="popDiv" data-tit="KB인증서" style="display:none;">
+	<div class="popBody">
+		<div>
+	        <p class="mt_10">입력하신 휴대폰으로 인증요청 메세지를 보냈습니다.</p>
+	        <p class="color_red">알림을 확인하여 KB스타뱅킹 앱에서 인증을 진행해주세요</p>
+		</div>
+		<div class="mt_20 login_kb_step">
+			<div>
+				<p><img src="/images/kabhom/member/login_kb_step01.png" alt=""></p>
+				<p class="mt_10">STEP 01</p>
+				<p><span style="font-weight:bold" class="color_red">KB스타뱅킹 앱</span>에서 인증요청 메세지 확인</p>
+			</div>		
+			<div>
+				<p><img src="/images/kabhom/member/login_kb_step02.png" alt=""></p>
+				<p class="mt_10">STEP 02</p>
+				<p><span style="font-weight:bold" class="color_red">KB스타뱅킹 앱</span>에서 인증진행</p>
+			</div>
+			<div>
+				<p><img src="/images/kabhom/member/login_kb_step03.png" alt=""></p>
+				<p class="mt_10">STEP 03</p>
+				<p><span style="font-weight:bold" class="color_red">인증완료 후</span> 아래 '인증확인' 버튼 클릭</p>
+			</div>
+		</div>
+		<div class="line_box">
+                <div class="line_content" style="padding:10px">
+                <ul class="">
+                        <li>스마트폰에 PUSH 알림이 오지 않을 경우 조치방법 -> KB스타뱅킹 앱 [알림함(종모양 아이콘) > 인증내역]에서 인증요청내역 조회 및 인증 가능(유효시간내)</li>
+                        <li>KB스타뱅킹 알림 설정 방법 (KB국민은행 고객센터 1588-9999)
+                        	<ul class="">
+		                        <li>휴대폰 설정에서 KB스타뱅킹 알림 ‘허용’으로 등록해주세요</li>
+		                        <li>KB스타뱅킹앱 [인증/보안>KB국민인증서>알림설정]에서 알림(Push) 동의해주세요. 동의임에도 오지 않는다면, 알림동의 OFF 후 재동의 해주세요</li>
+		                    </ul>                        
+                        </li>
+                    </ul>
+                </div>
+            </div>
+		<div class="btn_box mt_20 btn_sm">
+			<button type="button" class="btn_cancel" id="btnKbstarCancel" >취소</button>
+	        <button type="button" class="btn_cancel" id="btnKbstarNext" onclick="javascript:fn_kbstarResultConfirm();" data-action="N" title="KB스타뱅크앱에서 먼저 인증완료하셔야 합니다.">인증확인</button>
+	    </div>
+    </div>
+</div>
+
+<div id="pop_kbalert" class="pop_info_cell" data-tit="오류" style="display:none;">
+	<div class="popBody">
+		<div id="pop_kbcont">
+		</div>
+		<div class="btn_box mt_20 btn_sm kbbtn_close">
+			<button type="button" class="btn_cancel" id="errConfirm" style="height: 46px;">닫기</button>
+	    </div>
+    </div>
+</div>
+
+<script>
+	$(function(){
+		$("#btnKbstarCancel").on("click", function()
+		{
+			$("#kbstarResultPop").dialog("close");
+		});
+		
+		$("#errConfirm").on("click", function()
+		{
+			$("#pop_kbalert").dialog("close");
+		});
+	});
+	
+	function fn_KbstarLoginDo() {
+    	if(!fn_checkValidationForKbstar())
+    		return;
+		
+    	
+        var strJumin1 = $('#jumin_1_4').length > 0 ? $('#jumin_1_4').val() : "";
+        
+        var vUrl = "/co/coz/selectKbstarLoginDecIdn.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_selKbstarDecIdnCallBack";
+        oOptions.requestData = 
+        {
+            "transkeyUuid" : mtk.transkeyUuid
+            ,"idnPre" : strJumin1
+            ,"index" : "4"
+        }
+        var mtkValues = null;
+        $('input[data-tk-kbdType]').each(function(idx){
+            
+            var id = $(this).attr('id');
+            id = id.substring(id.length - 1);
+            if(id == '4') {
+                mtkValues = mtk.inputFillEncData(document.getElementById($(this).attr('id')));
+                oOptions.requestData["transkey_"+ $(this).attr('id')] = mtkValues.hidden;       
+                oOptions.requestData["transkey_HM_"+ $(this).attr('id')] = mtkValues.hmac + ""; 
+        	}
+        });
+        
+
+        if(mtkValues == null || typeof(mtkValues) == "undefined"){
+        	$('#jumin_2_4').focus();
+        	return;
+        }
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+     * 설명       : 키보드보안 적용 된 주민등록번호 뒷자리 복호화 CallBack
+     * 사용방식 : fn_selYeskeyDecIdnCallBack(vResBody, e)
+     * 주의       : 
+     * 리턴       : 
+     */
+    function fn_selKbstarDecIdnCallBack(vResBody, e){
+        if(vResBody.resultCode == 200)
+        {
+            $('#encIdn4').val(vResBody.encIdn);//보안 이슈로 서버에서 암호화된 주민번호 받아서 사용.
+
+            var vUrl = "/co/coz/authKbstarRequest.do";
+            var oOptions = new Object();
+            oOptions.dataType = "json";
+            oOptions.CallBack = "fn_kbstarRequestCallBack";
+            oOptions.requestData = 
+            {
+				"name":$('#name_4').val()
+				,"phone":$('#phone_4').val()
+				,"idn":$('#encIdn4').val()
+				,"idnPre":$('#jumin_1_4').val()
+            }
+            
+            
+            $net.ajax(vUrl, oOptions);
+        }
+        else
+        {
+        	if(gfn_isNull(vResBody.resultMsg))
+            	alert("키보드보안 적용 중 문제가 발생하였습니다. 다시 시도하여 주시기 바랍니다.");
+        	else
+        		alert(vResBody.resultMsg);
+            return false;
+        }
+    }
+	
+	var cxid;
+	var rxid;
+	
+	function fn_kbstarRequestCallBack(vResBody, e){
+		if(vResBody.resultCode == 200)
+        {
+			fn_pop();
+			cxid = vResBody.certTxId;
+			rxid = vResBody.reqTxId;
+        }
+		else
+		{
+			 //alert(vResBody.resultMsg);
+			 popupAlertMsg(vResBody.resultMsg);
+			 $('#jumin_2_4').val('');
+		}
+	}
+	
+	function fn_KbstarResult() {
+		$("#kbstarResultPop").dialog("close");
+		// send result
+		var vUrl = "/co/coz/authKbstarResult.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_kbstarResultCallBack";
+        oOptions.requestData = 
+        {
+			"name":$('#name_4').val()
+			,"phone":$('#phone_4').val()
+			,"idn":$('#encIdn4').val()
+			,"idnPre":$('#jumin_1_4').val()
+			,"cxId":cxid
+			,"rxId":rxid
+			,"nextUrl":"/wa/waa/selectAptPrzwinDescList.do"
+        }
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	function fn_kbstarResultCallBack(vResBody, e) {		
+		if(vResBody.resultCode == 200)
+        {
+			//got to next page 
+ 			//$net.href("/wa/waa/selectAptPrzwinDescList.do");
+			var nextUrl = "/wa/waa/selectAptPrzwinDescList.do";
+			if(vResBody.NFActIdAuth != null && vResBody.NFActIdAuth.length > 0) {
+				NetFunnel.href(nextUrl, vResBody.NFActIdAuth);
+			}else{
+				$net.href(nextUrl);
+			}
+        }
+		else
+		{
+			 //alert(vResBody.resultMsg);
+			popupAlertMsg(vResBody.resultMsg);
+			$('#jumin_2_4').val('');
+			mtk.resetToken(transkey_surl);
+		}
+	}
+	
+	var signCallback;
+	var signTarget;
+	
+	function fn_kbstarResultConfirm() {
+		var action = $('#btnKbstarNext').data('action');
+		if(action == "Y"){
+			if(signCallback == null || typeof(signCallback) == 'undefined' || signCallback == "") {
+				fn_KbstarResult();
+			}
+			else{
+				fn_kbstarSignResultCf(signCallback);
+			}
+		}
+		else {
+			alert('KB스타뱅크앱에서 먼저 인증완료하셔야 합니다.\nKB스타뱅크에서 청약홈 간편인증완료 확인 후 클릭해 주세요.');
+		}
+	}
+	
+	/* 서명 */
+	function fn_readyKBstarSign(signData, Callback){
+		if(signData == null || typeof(signData) == 'undefined' || signData == ""){
+			alert("서명 데이터가 존재하지않습니다.");
+    		return ;
+		}
+		
+		if(Callback == null || typeof(Callback) == 'undefined' || Callback == ""){
+			alert("서명 콜백 함수가 존재하지않습니다.");
+    		return ;
+		}
+		
+		signCallback = Callback;
+		signTarget = signData;
+		
+		var vUrl = "/co/coz/signKbstarRequest.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_kbstarSignCallback";
+        oOptions.requestData = 
+        {
+			"sign":signData
+        }
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	function fn_kbstarSignCallback(vResBody, e){
+		if(vResBody.resultCode == 200)
+        {
+			fn_pop();
+			cxid = vResBody.certTxId;
+			rxid = vResBody.reqTxId;
+        }
+		else
+		{
+			//alert(vResBody.resultMsg);
+			popupAlertMsg(vResBody.resultMsg);
+		}
+	}
+	
+	function fn_kbstarSignResultCf(Callback) {
+		$("#kbstarResultPop").dialog("close");
+		var vUrl;
+		if(Callback == "fn_noLOginkbstarSignDataCallback"){
+			vUrl = "/co/coz/noLoginSignKbstarResult.do";
+		}
+		else{
+			vUrl = "/co/coz/signKbstarResult.do";
+		}
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = Callback;
+        oOptions.requestData = 
+        {
+			"cxId":cxid
+			,"rxId":rxid
+			,"signTarget":signTarget
+        }
+        
+        if(Callback == "fn_noLOginkbstarSignDataCallback"){
+        	oOptions.requestData.idnPre = $('#jumin_1').val();
+        	oOptions.requestData.name = $('#name').val();
+        	oOptions.requestData.phone = $('#phone').val();
+        	oOptions.requestData.idn = $('#encIdn').val(); 
+		}
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	
+    /**
+	 * 설명		: yeskey tab 입력값에 대한 유효성을 검사한다.
+	 * 사용방식	: fn_checkValidationForYeskey()
+	 * 주의		: 
+	 * 리턴		: boolean
+	 */
+	function fn_checkValidationForKbstar(){
+		var regExp = /[^0-9]/gi;
+		
+		if($('#name_4').length > 0 && gfn_isNull($.trim($('#name_4').val())))
+		{
+			
+			alert('이름 is required.');
+			$('#name_4').focus();
+			return false;
+		}
+		if($('#name_4').length > 0 && $('#name_4').val().length < 2)
+		{
+			
+			alert('이름 can not be less than 2 characters.');
+			$('#name_4').focus();
+			return false;
+		}
+		if($('#phone_4').length > 0 && gfn_isNull($.trim($('#phone_4').val())))
+		{
+			
+			alert('휴대폰번호 is required.');
+			$('#phone_4').focus();
+			return false;
+		}
+		if($('#phone_4').length > 0 && $('#phone_4').val().length < 9)
+		{
+			
+			alert('휴대폰번호 can not be less than 9 characters.');
+			$('#phone_4').focus();
+			return false;
+		}
+
+		if($('#jumin_1_4').length > 0 && gfn_isNull($.trim($('#jumin_1_4').val())))
+		{
+			
+			alert('주민등록번호 앞자리 is required.');
+			$('#jumin_1_4').focus();
+			return false;
+		}
+		if($('#jumin_1_4').length > 0 && $('#jumin_1_4').val().length < 6)
+		{
+			
+			alert('주민등록번호 앞자리 can not be less than 6 characters.');
+			$('#jumin_1_4').focus();
+			return false;
+		}
+		if(regExp.test($('#jumin_1_4').val()))
+		{
+			alert("주민등록번호 앞자리은(는) 숫자만 입력 가능합니다.");
+            $('#jumin_1_4').val('');
+			$('#jumin_1_4').focus();
+			return false;
+		}
+        
+		if($('#jumin_2_4').length > 0 && gfn_isNull($.trim($('#jumin_2_4').val())))
+		{
+			
+			alert('주민등록번호 뒷자리 is required.');
+			$('#jumin_2_4').focus();
+			return false;
+		}
+		
+		if($('#jumin_2_4').length > 0 && $('#jumin_2_4').val().length < 7)
+		{
+			
+			alert('주민등록번호 뒷자리 can not be less than 7 characters.');
+			$('#jumin_2_4').focus();
+			return false;
+		}
+		
+		return true;
+	}
+    
+	function fn_pop() {
+		var oPopupOptions = new Object();
+		
+		oPopupOptions.title = "KB인증서";
+		oPopupOptions.divId = "kbstarResultPop";
+		oPopupOptions.height = "300";
+		oPopupOptions.clazz ='pop_w_500';
+		
+		$pop.dialog(oPopupOptions);
+		$('#btnKbstarNext').removeClass('btn_submit');
+		$('#btnKbstarNext').addClass('btn_cancel');
+		//$('#btnKbstarNext').attr('disabled', true);
+		$('#btnKbstarNext').data('action', 'N');
+		$('.ui-state-default').hide();
+		//확인 버튼 딜레이
+		timeId = setTimeout(fnBtnEnable, 10000);
+	}
+	
+	function fn_makeSignDataForKbstar(serialArray) {
+    	var obj = {};
+
+    	if(serialArray) {
+    		jQuery.each(serialArray, function() {
+    			obj[this.name] = this.value;
+    		});
+    	}
+    	
+    	//return btoa(unescape(encodeURIComponent(JSON.stringify(obj, null, null))));
+    	return obj;
+    }
+	
+	function popupAlertMsg(msg) {	
+		if($("#pop_kbalert").length > 0) {
+			$("#pop_kbcont").empty();
+			$("#pop_kbcont").append(msg);
+		} 
+		
+		var oPopupOptions = new Object();
+		oPopupOptions.title = "오류";
+		oPopupOptions.divId = 'pop_kbalert';
+	 	oPopupOptions.height = '300';
+		oPopupOptions.clazz = 'pop_w_500';
+
+		$pop.dialog(oPopupOptions);
+		$('.ui-state-default').hide();
+	}
+	
+	var timeId = null;
+	function fnBtnEnable() {
+		$('#btnKbstarNext').removeClass('btn_cancel');
+		$('#btnKbstarNext').addClass('btn_submit');
+		//$('#btnKbstarNext').attr('disabled', false);
+		$('#btnKbstarNext').data('action', 'Y');
+		$('#btnKbstarNext').attr('title', "KB스타뱅크에서 청약홈 간편인증완료 확인 후 클릭해 주세요.");
+		clearTimeout(timeId);
+	}
+	
+</script>
+
+
+<style>
+	#tossResultPop {
+		height:400px !important;
+	}
+	#tossResultPop img{
+		width:50%
+	}	
+	#tossResultPop ul li ul li{
+		list-style: decimal-leading-zero;
+	    margin-left: 26px;
+	    font-size:90%;
+	}
+	#tossResultPop ul li{
+		list-style: disc;
+	    margin-left: 20px;
+	    font-size:90%;
+	}
+	.TossalignC {
+	    text-align: center
+	}
+	.TossbigTxt {
+	    font-size: 1.5rem
+	}
+</style>
+<div style="display:none">
+<input type="hidden" id="encIdn5" name="encIdn5" value=""/>
+</div>
+
+<div id="tossResultPop" class="popDiv" data-tit="토스인증서" style="display:none;">
+	<div class="popBody">
+		<div>
+			<p class="TossalignC"><img src="/images/kabhom/member/login_toss_logo.png" alt=""></p>
+	        <p class="mt_10 TossalignC TossbigTxt">인증 확인</p>
+		</div>
+		<div class="line_box">
+            <div class="line_content" style="padding:10px">
+	            <ul class="">
+					<li>입력하신 휴대폰으로 인증요청 알림을 보냈습니다.</li>					
+	                <li>토스 인증 완료 후 현재 화면으로 돌아와 [인증 완료]를 눌러 주세요.</li>
+	                <li>토스 알림 설정 방법 (토스 고객센터 1599-4905)
+		                <ul class="">
+	                        <li>휴대폰 설정에서 토스 알림 ‘허용’으로 등록해주세요</li>
+	                    </ul>
+	                </li>
+	            </ul>
+            </div>
+        </div>
+		<div class="btn_box mt_20 btn_sm">
+			<button type="button" class="btn_cancel" id="btnTossCancel" >취소</button>
+	        <button type="button" class="btn_cancel" id="btnTossNext" onclick="javascript:fn_tossResultConfirm();" data-action="N" title="토스앱에서 먼저 인증완료하셔야 합니다.">인증완료</button>
+	    </div>
+    </div>
+</div>
+
+<div id="pop_tossalert" class="pop_info_cell" data-tit="오류" style="display:none;">
+	<div class="popBody">
+		<div id="pop_tosscont"></div>
+		<div class="line_box">
+            <div class="line_content" style="padding:10px" id="pop_tossmsgRtn"></div>
+        </div>
+		<div class="btn_box mt_20 btn_sm kbbtn_close">
+			<button type="button" class="btn_cancel" id="errTossConfirm" style="height: 46px;">닫기</button>
+	    </div>
+    </div>
+</div>
+
+<script>
+	$(function(){
+		$("#btnTossCancel").on("click", function()
+		{
+			$("#tossResultPop").dialog("close");
+		});
+		
+		$("#errTossConfirm").on("click", function()
+		{
+			$("#pop_tossalert").dialog("close");
+		});
+	});
+	
+	function fn_Tosspop() {
+		var oPopupOptions = new Object();
+		
+		oPopupOptions.title = "토스인증서";
+		oPopupOptions.divId = "tossResultPop";
+		oPopupOptions.height = "500";
+		oPopupOptions.clazz ='pop_w_500';
+		
+		$pop.dialog(oPopupOptions);
+		$('#btnTossNext').removeClass('btn_submit');
+		$('#btnTossNext').addClass('btn_cancel');
+		$('#btnTossNext').data('action', 'N');
+		$('.ui-state-default').hide();
+		//확인 버튼 딜레이
+		timeTossId = setTimeout(fnBtnTossEnable, 7000);
+	}
+	
+	function popupTossAlertMsg(msg,msgRtn) {	
+		if($("#pop_tossalert").length > 0) {
+			$("#pop_tosscont").empty();
+			$("#pop_tossmsgRtn").empty();
+			$("#pop_tosscont").append(msg);
+			if(gfn_isNull(msgRtn)){
+			    $("#pop_tossalert .line_box").hide();
+			}else{
+			    $("#pop_tossalert .line_box").show();
+			    $("#pop_tossmsgRtn").append(msgRtn);
+			}
+		} 
+		
+		var oPopupOptions = new Object();
+		oPopupOptions.title = "오류";
+		oPopupOptions.divId = 'pop_tossalert';
+	 	oPopupOptions.height = '300';
+		oPopupOptions.clazz = 'pop_w_500';
+
+		$pop.dialog(oPopupOptions);
+		$('.ui-state-default').hide();
+	}
+	
+	var timeTossId = null;
+	function fnBtnTossEnable() {
+		$('#btnTossNext').removeClass('btn_cancel');
+		$('#btnTossNext').addClass('btn_submit');
+		$('#btnTossNext').data('action', 'Y');
+		$('#btnTossNext').attr('title', "토스앱에서 청약홈 간편인증완료 확인 후 클릭해 주세요.");
+		clearTimeout(timeTossId);
+	}
+	
+	function fn_makeSignDataForToss(serialArray) {
+    	var obj = {};
+    	
+    	if(serialArray) {
+    		jQuery.each(serialArray, function() {
+    			obj[this.name] = this.value;
+    		});
+    	}
+    	
+    	return obj;
+    }
+	
+	/**
+     * 설명       : 로그인 페이지 토스인증서 로그인 호출
+     */
+	function fn_TossLoginDo() {
+		if(!fn_checkValidationForToss())
+			return;
+		
+		
+	    var strJumin5 = $('#jumin_1_5').length > 0 ? $('#jumin_1_5').val() : "";
+	    
+	    var vUrl = "/co/coz/selectTossLoginDecIdn.do";
+	    var oOptions = new Object();
+	    oOptions.dataType = "json";
+	    oOptions.CallBack = "fn_selTossDecIdnCallBack";
+	    oOptions.requestData = 
+	    {
+	        "transkeyUuid" : mtk.transkeyUuid
+	        ,"idnPre" : strJumin5
+	        ,"index" : "5"
+	    }
+	    var mtkValues = null;
+	    $('input[data-tk-kbdType]').each(function(idx){
+	        
+	        var id = $(this).attr('id');
+            id = id.substring(id.length - 1);
+            if(id == '5') {
+	            mtkValues = mtk.inputFillEncData(document.getElementById($(this).attr('id')));
+	            oOptions.requestData["transkey_"+ $(this).attr('id')] = mtkValues.hidden;       
+	            oOptions.requestData["transkey_HM_"+ $(this).attr('id')] = mtkValues.hmac + ""; 
+	    	}
+	    });
+	    
+	    if(mtkValues == null || typeof(mtkValues) == "undefined"){
+	    	$('#jumin_2_5').focus();
+	    	return;
+	    }
+	    
+	    $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+     * 설명       : 키보드보안 적용 된 주민등록번호 뒷자리 복호화, 토스 본인인증 API 호출 CallBack
+     * 사용방식 : fn_selYeskeyDecIdnCallBack(vResBody, e)
+     * 주의       : 
+     * 리턴       : 
+     */
+    function fn_selTossDecIdnCallBack(vResBody, e){
+        if(vResBody.resultCode == 200) {
+            $('#encIdn5').val(vResBody.encIdn);//보안 이슈로 서버에서 암호화된 주민번호 받아서 사용.
+            
+            var vUrl = "/co/coz/authTossRequest.do";
+            var oOptions = new Object();
+            oOptions.dataType = "json";
+            oOptions.CallBack = "fn_authTossRequestCallBack";
+            oOptions.requestData = 
+            {
+    			"name":$('#name_5').val()
+    			,"phone":$('#phone_5').val()
+    			,"idn":$('#encIdn5').val()
+    			,"idnPre":$('#jumin_1_5').val()
+            }
+            
+            
+            $net.ajax(vUrl, oOptions);            
+        }else {
+        	if(gfn_isNull(vResBody.resultMsg))
+            	alert("키보드보안 적용 중 문제가 발생하였습니다. 다시 시도하여 주시기 바랍니다.");
+        	else
+        		alert(vResBody.resultMsg);
+            return false;
+        }
+    }
+	
+	var reqTxId;
+	var access_token;
+	var signReqTxId;
+	var signAccess_token;
+	var signTossCallback;
+	
+	/**
+     * 설명       : 토스인증서 본인인증 Txid, access_token CallBack
+     */
+	function fn_authTossRequestCallBack(vResBody){
+		if(vResBody.resultCode == 200) {
+		    fn_Tosspop();
+			reqTxId = vResBody.reqTxId;
+			access_token = vResBody.access_token;
+        }else {
+            popupTossAlertMsg(vResBody.resultMsg,vResBody.msgRtn);
+			$('#jumin_2_5').val('');
+		}
+	}
+	
+	/**
+     * 설명       : 인증완료 팝업 인증완료 버튼 호출
+     */
+	function fn_tossResultConfirm() {
+		var action = $('#btnTossNext').data('action');
+		if(action == "Y"){
+		    if(signTossCallback == null || typeof(signTossCallback) == 'undefined' || signTossCallback == "") {
+		        fn_TossAuthResultCf();
+			}else {
+			    fn_TossSignResultCf(signTossCallback);
+			}
+		}else {
+			alert('토스앱에서 먼저 인증완료하셔야 합니다.');
+		}
+	}
+	
+	/**
+     * 설명       : 토스인증서 서버에 본인인증 정보(ci,signature 등)를 요청 
+     */
+	function fn_TossAuthResultCf() {
+		$("#tossResultPop").dialog("close");
+		var vUrl;
+		vUrl = "/co/coz/authTossResult.do";
+		
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_TossAuthResultCallBack";
+        oOptions.requestData = 
+        {
+            "idn":$('#encIdn5').val()
+   			,"idnPre":$('#jumin_1_5').val()
+   			,"access_token":access_token
+   			,"reqTxId":reqTxId
+   			,"nextUrl":"/wa/waa/selectAptPrzwinDescList.do"
+        }
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+     * 설명       : 토스인증서 서버에 본인인증 후 로그인 처리  CallBack
+     */
+	function fn_TossAuthResultCallBack(vResBody) {
+	    if(vResBody.resultCode == 200) {
+	    	//go to next page 
+	        //$net.href("/wa/waa/selectAptPrzwinDescList.do");
+			var nextUrl = "/wa/waa/selectAptPrzwinDescList.do";
+			if(vResBody.NFActIdAuth != null && vResBody.NFActIdAuth.length > 0) {
+	 			NetFunnel.href(nextUrl, vResBody.NFActIdAuth);
+	 		}else{
+	 			$net.href(nextUrl);
+	 		}
+        }else {
+            popupTossAlertMsg(vResBody.resultMsg,vResBody.msgRtn);
+			$('#jumin_2_5').val('');
+			mtk.resetToken(transkey_surl);
+		}
+	}
+	
+	/**
+     * 설명       : 토스인증서 전자서명 호출
+     */
+	function fn_readyTossSign(signData, Callback, rTypeNm){
+		if(signData == null || typeof(signData) == 'undefined' || signData == ""){
+			alert("서명 데이터가 존재하지않습니다.");
+    		return ;
+		}
+		
+		if(Callback == null || typeof(Callback) == 'undefined' || Callback == ""){
+			alert("서명 콜백 함수가 존재하지않습니다.");
+    		return ;
+		}
+		
+		signTossCallback = Callback;
+		
+		var vUrl = "/co/coz/signTossRequest.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_signTossRequestCallback";
+        oOptions.requestData = 
+        {
+			"sign":signData,
+			"rTypeNm":rTypeNm
+        }
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+     * 설명       : 토스인증서 전자서명 Txid, access_token CallBack
+     */
+	function fn_signTossRequestCallback(vResBody, e){
+		if(vResBody.resultCode == 200) {
+			fn_Tosspop();
+			signReqTxId = vResBody.reqTxId;
+			signAccess_token = vResBody.access_token;
+        }else {
+            popupTossAlertMsg(vResBody.resultMsg,vResBody.msgRtn);
+		}
+	}
+	
+	/**
+     * 설명       : 토스인증서 전자서명 정보(ci,signedDoc 등)를 요청, 상담 서비스 전자서명 요청
+     */
+	function fn_TossSignResultCf(signTossCallback) {
+		$("#tossResultPop").dialog("close");
+		var vUrl;
+		if(signTossCallback == "fn_noLogintossSignDataCallback") {
+			vUrl = "/co/coz/noLoginSignTossResult.do";
+		}else {
+			vUrl = "/co/coz/signTossResult.do";
+		}
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = signTossCallback;
+        oOptions.requestData = 
+        {
+			"reqTxId":signReqTxId
+			,"access_token":signAccess_token
+        }
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+	 * 설명		: yeskey tab 입력값에 대한 유효성을 검사한다.
+	 * 사용방식	: fn_checkValidationForYeskey()
+	 * 주의		: 
+	 * 리턴		: boolean
+	 */
+	function fn_checkValidationForToss(){
+		var regExp = /[^0-9]/gi;
+		
+		if($('#name_5').length > 0 && gfn_isNull($.trim($('#name_5').val())))
+		{
+			
+			alert('이름 is required.');
+			$('#name_5').focus();
+			return false;
+		}
+		if($('#name_5').length > 0 && $('#name_5').val().length < 2)
+		{
+			
+			alert('이름 can not be less than 2 characters.');
+			$('#name_5').focus();
+			return false;
+		}
+		if($('#phone_5').length > 0 && gfn_isNull($.trim($('#phone_5').val())))
+		{
+			
+			alert('휴대폰번호 is required.');
+			$('#phone_5').focus();
+			return false;
+		}
+		if($('#phone_5').length > 0 && $('#phone_5').val().length < 9)
+		{
+			
+			alert('휴대폰번호 can not be less than 9 characters.');
+			$('#phone_5').focus();
+			return false;
+		}
+
+		if($('#jumin_1_5').length > 0 && gfn_isNull($.trim($('#jumin_1_5').val())))
+		{
+			
+			alert('주민등록번호 앞자리 is required.');
+			$('#jumin_1_5').focus();
+			return false;
+		}
+		if($('#jumin_1_5').length > 0 && $('#jumin_1_5').val().length < 6)
+		{
+			
+			alert('주민등록번호 앞자리 can not be less than 6 characters.');
+			$('#jumin_1_5').focus();
+			return false;
+		}
+		if(regExp.test($('#jumin_1_5').val()))
+		{
+			alert("주민등록번호 앞자리은(는) 숫자만 입력 가능합니다.");
+            $('#jumin_1_5').val('');
+			$('#jumin_1_5').focus();
+			return false;
+		}
+        
+		if($('#jumin_2_5').length > 0 && gfn_isNull($.trim($('#jumin_2_5').val())))
+		{
+			
+			alert('주민등록번호 뒷자리 is required.');
+			$('#jumin_2_5').focus();
+			return false;
+		}
+		
+		if($('#jumin_2_5').length > 0 && $('#jumin_2_5').val().length < 7)
+		{
+			
+			alert('주민등록번호 뒷자리 can not be less than 7 characters.');
+			$('#jumin_2_5').focus();
+			return false;
+		}
+		
+		return true;
+	}
+</script>
+
+
+
+<style>
+	#shbankResultPop {
+		height:400px !important;
+	}
+	#shbankResultPop img{
+		width:50%
+	}	
+	#shbankResultPop ul li ul li{
+		list-style: decimal-leading-zero;
+	    margin-left: 26px;
+	    font-size:90%;
+	}
+	#shbankResultPop ul li{
+		list-style: disc;
+	    margin-left: 20px;
+	    font-size:90%;
+	}
+	.ShbankalignC {
+	    text-align: center
+	}
+	.ShbankbigTxt {
+	    font-size: 1.5rem
+	}
+</style>
+<div style="display:none">
+<input type="hidden" id="encIdn6" name="encIdn6" value=""/>
+</div>
+
+<div id="shbankResultPop" class="popDiv" data-tit="신한인증서" style="display:none;">
+	<div class="popBody">
+		<div>
+			<p class="ShbankalignC"><img src="/images/kabhom/member/login_shbank_logo2.png" alt=""></p>
+	        <p class="mt_10 ShbankalignC ShbankbigTxt">인증 확인</p>
+		</div>
+		<div class="line_box">
+            <div class="line_content" style="padding:10px">
+	            <ul class="">
+					<li>입력하신 휴대폰으로 인증요청 알림을 보냈습니다.</li>					
+	                <li>신한인증서 인증 완료 후 현재 화면으로 돌아와 [인증 완료]를 눌러 주세요.</li>
+	                <li>신한 슈퍼SOL 앱 알림 설정 방법 (신한 고객센터 1599-8000)
+		                <ul class="">
+	                        <li>휴대폰 설정에서 신한 슈퍼SOL 앱 알림 ‘허용’으로 등록해주세요</li>
+	                    </ul>
+	                </li>
+	            </ul>
+            </div>
+        </div>
+		<div class="btn_box mt_20 btn_sm">
+			<button type="button" class="btn_cancel" id="btnShbankCancel" >취소</button>
+	        <button type="button" class="btn_cancel" id="btnShbankNext" onclick="javascript:fn_shbankResultConfirm();" data-action="N" title="신한 슈퍼SOL 앱에서 먼저 인증완료하셔야 합니다.">인증완료</button>
+	    </div>
+    </div>
+</div>
+
+<div id="pop_shbankalert" class="pop_info_cell" data-tit="오류" style="display:none;">
+	<div class="popBody">
+		<div id="pop_shbankcont"></div>
+		<div class="line_box">
+            <div class="line_content" style="padding:10px" id="pop_shbankmsgRtn"></div>
+        </div>
+		<div class="btn_box mt_20 btn_sm kbbtn_close">
+			<button type="button" class="btn_cancel" id="errShbankConfirm" style="height: 46px;">닫기</button>
+	    </div>
+    </div>
+</div>
+
+<script>
+	$(function(){
+		$("#btnShbankCancel").on("click", function()
+		{
+			$("#shbankResultPop").dialog("close");
+		});
+		
+		$("#errShbankConfirm").on("click", function()
+		{
+			$("#pop_shbankalert").dialog("close");
+		});
+	});
+	
+	function fn_Shbankpop() {
+		var oPopupOptions = new Object();
+		
+		oPopupOptions.title = "신한인증서";
+		oPopupOptions.divId = "shbankResultPop";
+		oPopupOptions.height = "500";
+		oPopupOptions.clazz ='pop_w_500';
+		
+		$pop.dialog(oPopupOptions);
+		$('#btnShbankNext').removeClass('btn_submit');
+		$('#btnShbankNext').addClass('btn_cancel');
+		$('#btnShbankNext').data('action', 'N');
+		$('.ui-state-default').hide();
+		//확인 버튼 딜레이
+		timeShbankId = setTimeout(fnBtnShbankEnable, 10000);
+	}
+	
+	function popupShbankAlertMsg(msg,msgRtn) {	
+		if($("#pop_shbankalert").length > 0) {
+			$("#pop_shbankcont").empty();
+			$("#pop_shbankmsgRtn").empty();
+			$("#pop_shbankcont").append(msg);
+			if(gfn_isNull(msgRtn)){
+			    $("#pop_shbankalert .line_box").hide();
+			}else{
+			    $("#pop_shbankalert .line_box").show();
+			    $("#pop_shbankmsgRtn").append(msgRtn);
+			}
+		} 
+		
+		var oPopupOptions = new Object();
+		oPopupOptions.title = "오류";
+		oPopupOptions.divId = 'pop_shbankalert';
+	 	oPopupOptions.height = '300';
+		oPopupOptions.clazz = 'pop_w_500';
+
+		$pop.dialog(oPopupOptions);
+		$('.ui-state-default').hide();
+	}
+	
+	var timeShbankId = null;
+	function fnBtnShbankEnable() {
+		$('#btnShbankNext').removeClass('btn_cancel');
+		$('#btnShbankNext').addClass('btn_submit');
+		$('#btnShbankNext').data('action', 'Y');
+		$('#btnShbankNext').attr('title', "신한 슈퍼SOL 앱에서 청약홈 간편인증완료 확인 후 클릭해 주세요.");
+		clearTimeout(timeShbankId);
+	}
+	
+	function fn_makeSignDataForShbank(serialArray) {
+    	var obj = {};
+    	
+    	if(serialArray) {
+    		jQuery.each(serialArray, function() {
+    			obj[this.name] = this.value;
+    		});
+    	}
+    	
+    	return obj;
+    }
+	
+	/**
+     * 설명       : 로그인 페이지 신한인증서 로그인 호출
+     */
+	function fn_ShbankLoginDo() {
+		if(!fn_checkValidationForShbank())
+			return;
+		
+		
+	    var strJumin6 = $('#jumin_1_6').length > 0 ? $('#jumin_1_6').val() : "";
+	    
+	    var vUrl = "/co/coz/selectShbankLoginDecIdn.do";
+	    var oOptions = new Object();
+	    oOptions.dataType = "json";
+	    oOptions.CallBack = "fn_selShbankDecIdnCallBack";
+	    oOptions.requestData = 
+	    {
+	        "transkeyUuid" : mtk.transkeyUuid
+	        ,"idnPre" : strJumin6
+	        ,"index" : "6"
+	    }
+	    var mtkValues = null;
+	    $('input[data-tk-kbdType]').each(function(idx){
+	        
+	        var id = $(this).attr('id');
+            id = id.substring(id.length - 1);
+            if(id == '6') {
+	            mtkValues = mtk.inputFillEncData(document.getElementById($(this).attr('id')));
+	            oOptions.requestData["transkey_"+ $(this).attr('id')] = mtkValues.hidden;       
+	            oOptions.requestData["transkey_HM_"+ $(this).attr('id')] = mtkValues.hmac + ""; 
+	    	}
+	    });
+	    
+	    if(mtkValues == null || typeof(mtkValues) == "undefined"){
+	    	$('#jumin_2_6').focus();
+	    	return;
+	    }
+	    
+	    $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+     * 설명       : 키보드보안 적용 된 주민등록번호 뒷자리 복호화, 신한 본인인증 API 호출 CallBack
+     * 사용방식 : fn_selShbankDecIdnCallBack(vResBody, e)
+     * 주의       : 
+     * 리턴       : 
+     */
+    function fn_selShbankDecIdnCallBack(vResBody, e){
+        if(vResBody.resultCode == 200) {
+            $('#encIdn6').val(vResBody.encIdn);//보안 이슈로 서버에서 암호화된 주민번호 받아서 사용.
+            
+            var vUrl = "/co/coz/authShbankRequest.do";
+            var oOptions = new Object();
+            oOptions.dataType = "json";
+            oOptions.CallBack = "fn_authShbankRequestCallBack";
+            oOptions.requestData = 
+            {
+    			"name":$('#name_6').val()
+    			,"phone":$('#phone_6').val()
+    			,"idn":$('#encIdn6').val()
+    			,"idnPre":$('#jumin_1_6').val()
+            }
+            
+            
+            $net.ajax(vUrl, oOptions);            
+        }else {
+        	if(gfn_isNull(vResBody.resultMsg))
+            	alert("키보드보안 적용 중 문제가 발생하였습니다. 다시 시도하여 주시기 바랍니다.");
+        	else
+        		alert(vResBody.resultMsg);
+            return false;
+        }
+    }
+	
+	var loginSignTxId;
+	var loginCertTxId;
+	var SignTxId;
+	var CertTxId;
+	var signShbankCallback;
+	
+	/**
+     * 설명       : 신한인증서 본인인증 CallBack
+     */
+	function fn_authShbankRequestCallBack(vResBody){
+		if(vResBody.resultCode == 200) {
+		    fn_Shbankpop();
+		    loginSignTxId = vResBody.signTxId;
+		    loginCertTxId = vResBody.certTxId;
+        }else {
+            popupShbankAlertMsg(vResBody.resultMsg,vResBody.msgRtn);
+			$('#jumin_2_6').val('');
+		}
+	}
+	
+	/**
+     * 설명       : 인증완료 팝업 인증완료 버튼 호출
+     */
+	function fn_shbankResultConfirm() {
+		var action = $('#btnShbankNext').data('action');
+		if(action == "Y"){
+		    if(signShbankCallback == null || typeof(signShbankCallback) == 'undefined' || signShbankCallback == "") {
+		        fn_ShbankAuthResultCf();
+			}else {
+			    fn_ShbankSignResultCf(signShbankCallback);
+			}
+		}else {
+			alert('신한 슈퍼SOL 앱에서 먼저 인증완료하셔야 합니다.');
+		}
+	}
+	
+	/**
+     * 설명       : 신한인증서 서버에 본인인증 정보(ci,signature 등)를 요청 
+     */
+	function fn_ShbankAuthResultCf() {
+		$("#shbankResultPop").dialog("close");
+		var vUrl;
+		vUrl = "/co/coz/authShbankResult.do";
+		
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_ShbankAuthResultCallBack";
+        oOptions.requestData = 
+        {
+            "idn":$('#encIdn6').val()
+   			,"idnPre":$('#jumin_1_6').val()
+   			,"signTxId":loginSignTxId
+   			,"certTxId":loginCertTxId
+   			,"nextUrl":"/wa/waa/selectAptPrzwinDescList.do"
+        }
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+     * 설명       : 신한인증서 서버에 본인인증 후 로그인 처리  CallBack
+     */
+	function fn_ShbankAuthResultCallBack(vResBody) {
+	    if(vResBody.resultCode == 200) {
+	    	//go to next page 
+	        //$net.href("/wa/waa/selectAptPrzwinDescList.do");
+			var nextUrl = "/wa/waa/selectAptPrzwinDescList.do";
+			if(vResBody.NFActIdAuth != null && vResBody.NFActIdAuth.length > 0) {
+				NetFunnel.href(nextUrl, vResBody.NFActIdAuth);
+			}else{
+				$net.href(nextUrl);
+			}
+        }else {
+            popupShbankAlertMsg(vResBody.resultMsg,vResBody.msgRtn);
+			$('#jumin_2_6').val('');
+			mtk.resetToken(transkey_surl);
+		}
+	}
+	
+	/**
+     * 설명       : 신한인증서 전자서명 호출
+     */
+	function fn_readyShbankSign(signData, Callback, rTypeNm){
+		if(signData == null || typeof(signData) == 'undefined' || signData == ""){
+			alert("서명 데이터가 존재하지않습니다.");
+    		return ;
+		}
+		
+		if(Callback == null || typeof(Callback) == 'undefined' || Callback == ""){
+			alert("서명 콜백 함수가 존재하지않습니다.");
+    		return ;
+		}
+		
+		signShbankCallback = Callback;
+		
+		var vUrl = "/co/coz/signShbankRequest.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_signShbankRequestCallback";
+        oOptions.requestData = 
+        {
+			"sign":signData,
+			"rTypeNm":rTypeNm
+        }
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+     * 설명       : 신한인증서 전자서명 Txid, access_token CallBack
+     */
+	function fn_signShbankRequestCallback(vResBody, e){
+		if(vResBody.resultCode == 200) {
+			fn_Shbankpop();
+			signTxId = vResBody.signTxId;
+		    certTxId = vResBody.certTxId;
+        }else {
+            popupShbankAlertMsg(vResBody.resultMsg,vResBody.msgRtn);
+		}
+	}
+	
+	/**
+     * 설명       : 신한인증서 전자서명 정보를 요청, 상담 서비스 전자서명 요청
+     */
+	function fn_ShbankSignResultCf(signShbankCallback) {
+		$("#shbankResultPop").dialog("close");
+		var vUrl;
+		if(signShbankCallback == "fn_noLoginshbankSignDataCallback") {
+			vUrl = "/co/coz/noLoginSignShbankResult.do";
+		}else {
+			vUrl = "/co/coz/signShbankResult.do";
+		}
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = signShbankCallback;
+        oOptions.requestData = 
+        {
+			"signTxId":signTxId
+			,"certTxId":certTxId
+        }
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+	 * 설명		: yeskey tab 입력값에 대한 유효성을 검사한다.
+	 * 사용방식	: fn_checkValidationForShbank()
+	 * 주의		: 
+	 * 리턴		: boolean
+	 */
+	function fn_checkValidationForShbank(){
+		var regExp = /[^0-9]/gi;
+		
+		if($('#name_6').length > 0 && gfn_isNull($.trim($('#name_6').val())))
+		{
+			
+			alert('이름 is required.');
+			$('#name_6').focus();
+			return false;
+		}
+		if($('#name_6').length > 0 && $('#name_6').val().length < 2)
+		{
+			
+			alert('이름 can not be less than 2 characters.');
+			$('#name_6').focus();
+			return false;
+		}
+		if($('#phone_6').length > 0 && gfn_isNull($.trim($('#phone_6').val())))
+		{
+			
+			alert('휴대폰번호 is required.');
+			$('#phone_6').focus();
+			return false;
+		}
+		if($('#phone_6').length > 0 && $('#phone_6').val().length < 9)
+		{
+			
+			alert('휴대폰번호 can not be less than 9 characters.');
+			$('#phone_6').focus();
+			return false;
+		}
+
+		if($('#jumin_1_6').length > 0 && gfn_isNull($.trim($('#jumin_1_6').val())))
+		{
+			
+			alert('주민등록번호 앞자리 is required.');
+			$('#jumin_1_6').focus();
+			return false;
+		}
+		if($('#jumin_1_6').length > 0 && $('#jumin_1_6').val().length < 6)
+		{
+			
+			alert('주민등록번호 앞자리 can not be less than 6 characters.');
+			$('#jumin_1_6').focus();
+			return false;
+		}
+		if(regExp.test($('#jumin_1_6').val()))
+		{
+			alert("주민등록번호 앞자리은(는) 숫자만 입력 가능합니다.");
+            $('#jumin_1_6').val('');
+			$('#jumin_1_6').focus();
+			return false;
+		}
+        
+		if($('#jumin_2_6').length > 0 && gfn_isNull($.trim($('#jumin_2_6').val())))
+		{
+			
+			alert('주민등록번호 뒷자리 is required.');
+			$('#jumin_2_6').focus();
+			return false;
+		}
+		
+		if($('#jumin_2_6').length > 0 && $('#jumin_2_6').val().length < 7)
+		{
+			
+			alert('주민등록번호 뒷자리 can not be less than 7 characters.');
+			$('#jumin_2_6').focus();
+			return false;
+		}
+		
+		return true;
+	}
+</script>
+
+
+
+<style>
+	.kkobtn_close{
+		position:absolute;
+		bottom: 20px;
+		left:25%;
+	}
+	
+	@media (max-width: 1024px){
+		.kkobtn_close{
+			left:26.5%;
+		}
+	}
+	
+	@media (max-width: 968px){
+		.kkobtn_close{
+			left:30.5%;
+		}
+	}
+	
+	@media (max-width: 580px){
+		.kkobtn_close{
+			left:37.5%;
+		}
+	}
+</style>
+<div style="display:none">
+<input type="hidden" id="encIdn7" name="encIdn7" value=""/>
+</div>
+
+<div id="kakaoResultPop" class="popDiv" data-tit="카카오톡 인증서" style="display:none;">
+	<div class="popBody">
+		<div>
+	        <p class="mt_10">카카오톡 인증을 진행해 주세요.</p>
+	        <p class="mt_10">입력하신 휴대폰으로 인증 요청 메세지를 보냈습니다.</p>
+	        <p>카카오톡 앱에서 인증을 진행해주세요.</p>
+		</div>
+		<div class="mt_20 login_kakao_step">
+			<div>
+				<p><img src="/images/kabhom/member/login_kakao_step01.png" alt=""></p>
+				<p class="mt_10">STEP 01</p>
+				<p><span style="font-weight:bold" class="color_red">카카오톡 앱에서</span>인증요청 메세지 확인</p>
+			</div>		
+			<div>
+				<p><img src="/images/kabhom/member/login_kakao_step02.png" alt=""></p>
+				<p class="mt_10">STEP 02</p>
+				<p><span style="font-weight:bold" class="color_red">인증진행</span>(비밀번호 등)</p>
+			</div>
+			<div>
+				<p><img src="/images/kabhom/member/login_kakao_step03.png" alt=""></p>
+				<p class="mt_10">STEP 03</p>
+				<p><span style="font-weight:bold" class="color_red">인증 완료 후,</span> 하단의 인증완료 클릭</p>
+			</div>
+		</div>
+		<div class="line_box">
+                <div class="line_content" style="padding:10px">
+                <ul class="">
+                        <li>&#8251; 문제 발생시 조치방법</li>
+                        <li>
+                        	<ul class="">
+		                        <li>- 카카오톡 인증서 이용에 문제가 있는 경우,[고객센터 도움말]에서 해결 방법을 찾아보세요.</li>
+		                        <li>- 문제가 지속되면[고객센터 문의하기] 또는 [상담톡 채널] 채팅하기를 통해 문의해 주세요.</li>
+		                        <li>- 카카오톡 고객센터 : 1577-3754</li>
+		                    </ul>                        
+                        </li>
+                    </ul>
+                </div>
+            </div>
+		<div class="btn_box mt_20 btn_sm">
+			<button type="button" class="btn_cancel" id="btnKakaoCancel" >닫기</button>
+	        <button type="button" class="btn_cancel" id="btnKakaoNext" onclick="javascript:fn_loginKakaoRequestConfirm();" data-action="N" title="카카오톡앱에서 먼저 인증완료하셔야 합니다.">인증 완료</button>
+	    </div>
+    </div>
+</div>
+
+<div id="pop_kakaoalert" class="pop_info_cell" data-tit="오류" style="display:none;">
+	<div class="popBody">
+		<div id="pop_kakaocont"></div>
+		<div class="line_box">
+            <div class="line_content" style="padding:10px" id="pop_kakaomsgRtn"></div>
+        </div>
+		<div class="btn_box mt_20 btn_sm kkobtn_close">
+			<button type="button" class="btn_cancel" id="errKakaoConfirm" style="height: 46px;">닫기</button>
+	    </div>
+    </div>
+</div>
+
+<script>
+	$(function(){
+		$("#btnKakaoCancel").on("click", function()
+		{
+			$("#kakaoResultPop").dialog("close");
+		});
+		
+		$("#errKakaoConfirm").on("click", function()
+		{
+			$("#pop_kakaoalert").dialog("close");
+		});
+	});
+	
+	function fn_Kakaopop() {
+		var oPopupOptions = new Object();
+		
+		oPopupOptions.title = "카카오톡 인증서";
+		oPopupOptions.divId = "kakaoResultPop";
+		oPopupOptions.height = "300";
+		oPopupOptions.clazz ='pop_w_500';
+		
+		$pop.dialog(oPopupOptions);
+		$('#btnKakaoNext').removeClass('btn_submit');
+		$('#btnKakaoNext').addClass('btn_cancel');
+		$('#btnKakaoNext').data('action', 'N');
+		$('.ui-state-default').hide();
+		//확인 버튼 딜레이
+		timeKakaoId = setTimeout(fnBtnKakaoEnable, 7000);
+	}
+	
+	function popupKakaoAlertMsg(msg,msgRtn) {	
+		if($("#pop_kakaoalert").length > 0) {
+			$("#pop_kakaocont").empty();
+			$("#pop_kakaomsgRtn").empty();
+			$("#pop_kakaocont").append(msg);
+			if(gfn_isNull(msgRtn)){
+			    $("#pop_kakaoalert .line_box").hide();
+			}else{
+			    $("#pop_kakaoalert .line_box").show();
+			    $("#pop_kakaomsgRtn").append(msgRtn);
+			}
+		} 
+		
+		var oPopupOptions = new Object();
+		oPopupOptions.title = "오류";
+		oPopupOptions.divId = 'pop_kakaoalert';
+	 	oPopupOptions.height = '300';
+		oPopupOptions.clazz = 'pop_w_500';
+
+		$pop.dialog(oPopupOptions);
+		$('.ui-state-default').hide();
+	}
+	
+	var timeKakaoId = null;
+	function fnBtnKakaoEnable() {
+		$('#btnKakaoNext').removeClass('btn_cancel');
+		$('#btnKakaoNext').addClass('btn_submit');
+		$('#btnKakaoNext').data('action', 'Y');
+		$('#btnKakaoNext').attr('title', "카카오톡 앱에서 청약홈 간편인증완료 확인 후 클릭해 주세요.");
+		clearTimeout(timeKakaoId);
+	}
+	
+	function fn_makeSignDataForKakao(serialArray) {
+    	var obj = {};
+    	
+    	if(serialArray) {
+    		jQuery.each(serialArray, function() {
+    			obj[this.name] = this.value;
+    		});
+    	}
+    	
+    	return obj;
+    }
+	
+	/**
+     * 설명       : 로그인 페이지 카카오인증서 로그인 호출
+     */
+	function fn_KakaoLoginDo() {
+		if(!fn_checkValidationForKakao())
+			return;
+		
+		
+	    var strJumin7 = $('#jumin_1_7').length > 0 ? $('#jumin_1_7').val() : "";
+	    
+	    var vUrl = "/co/coz/selectKakaoLoginDecIdn.do";
+	    var oOptions = new Object();
+	    oOptions.dataType = "json";
+	    oOptions.CallBack = "fn_selKakaoDecIdnCallBack";
+	    oOptions.requestData = 
+	    {
+	        "transkeyUuid" : mtk.transkeyUuid
+	        ,"idnPre" : strJumin7
+	        ,"index" : "7"
+	    }
+	    var mtkValues = null;
+	    $('input[data-tk-kbdType]').each(function(idx){
+	        
+	        var id = $(this).attr('id');
+            id = id.substring(id.length - 1);
+            if(id == '7') {
+	            mtkValues = mtk.inputFillEncData(document.getElementById($(this).attr('id')));
+	            oOptions.requestData["transkey_"+ $(this).attr('id')] = mtkValues.hidden;       
+	            oOptions.requestData["transkey_HM_"+ $(this).attr('id')] = mtkValues.hmac + ""; 
+	    	}
+	    });
+	    
+	    if(mtkValues == null || typeof(mtkValues) == "undefined"){
+	    	$('#jumin_2_7').focus();
+	    	return;
+	    }
+	    
+	    $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+     * 설명       : 키보드보안 적용 된 주민등록번호 뒷자리 복호화, 신한 본인인증 API 호출 CallBack
+     * 사용방식 : fn_selKakaoDecIdnCallBack(vResBody, e)
+     * 주의       : 
+     * 리턴       : 
+     */
+    function fn_selKakaoDecIdnCallBack(vResBody, e){
+        if(vResBody.resultCode == 200) {
+            $('#encIdn7').val(vResBody.encIdn);//보안 이슈로 서버에서 암호화된 주민번호 받아서 사용.
+            
+            var vUrl = "/co/coz/loginKakaoRequest.do";
+            var oOptions = new Object();
+            oOptions.dataType = "json";
+            oOptions.CallBack = "fn_loginKakaoRequestCallBack";
+            oOptions.requestData = 
+            {
+    			"name":$('#name_7').val()
+    			,"phone":$('#phone_7').val()
+    			,"idn":$('#encIdn7').val()
+    			,"idnPre":$('#jumin_1_7').val()
+            }
+            
+            
+            $net.ajax(vUrl, oOptions);            
+        }else {
+        	if(gfn_isNull(vResBody.resultMsg))
+            	alert("키보드보안 적용 중 문제가 발생하였습니다. 다시 시도하여 주시기 바랍니다.");
+        	else
+        		alert(vResBody.resultMsg);
+            return false;
+        }
+    }
+	
+	var loginRequestTxId;
+	var signRequestTxId;
+	var loginSignVerifyCallback;
+	
+	/**
+     * 설명       : 카카오인증서 본인인증 CallBack
+     */
+	function fn_loginKakaoRequestCallBack(vResBody){
+		if(vResBody.resultCode == 200) {
+		    fn_Kakaopop();
+		    loginRequestTxId = vResBody.request_txId;
+        }else {
+            popupKakaoAlertMsg(vResBody.resultMsg,vResBody.msgRtn);
+			$('#jumin_2_7').val('');
+		}
+	}
+	
+	/**
+     * 설명       : 인증완료 팝업 인증완료 버튼 호출
+     */
+	function fn_loginKakaoRequestConfirm() {
+		var action = $('#btnKakaoNext').data('action');
+		if(action == "Y"){
+		    if(loginSignVerifyCallback == null || typeof(loginSignVerifyCallback) == 'undefined' || loginSignVerifyCallback == "") {
+		        fn_loginKakaoRequestVf();
+			}else {
+			    fn_signKakaoRequestVf(loginSignVerifyCallback);
+			}
+		}else {
+			alert('카카오톡 앱에서 먼저 인증완료하셔야 합니다.');
+		}
+	}
+	
+	/**
+     * 설명       : 카카오인증서 서버에 본인인증 정보(ci 등)를 요청 
+     */
+	function fn_loginKakaoRequestVf() {
+		$("#kakaoResultPop").dialog("close");
+		var vUrl;
+		vUrl = "/co/coz/loginKakaoRequestVerify.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_loginKakaoRequestVfCallBack";
+        oOptions.requestData = 
+        {
+            "idn":$('#encIdn7').val()
+   			,"idnPre":$('#jumin_1_7').val()
+   			,"requestTxId":loginRequestTxId
+   			,"nextUrl":"/wa/waa/selectAptPrzwinDescList.do"
+        }
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+     * 설명       : 카카오인증서 서버에 본인인증 후 로그인 처리  CallBack
+     */
+	function fn_loginKakaoRequestVfCallBack(vResBody) {
+	    if(vResBody.resultCode == 200) {
+	    	//go to next page 
+	        //$net.href("/wa/waa/selectAptPrzwinDescList.do");
+			var nextUrl = "/wa/waa/selectAptPrzwinDescList.do";
+			if(vResBody.NFActIdAuth != null && vResBody.NFActIdAuth.length > 0) {
+				NetFunnel.href(nextUrl, vResBody.NFActIdAuth);
+			}else{
+				$net.href(nextUrl);
+			}
+        }else {
+            popupKakaoAlertMsg(vResBody.resultMsg,vResBody.msgRtn);
+			$('#jumin_2_7').val('');
+			mtk.resetToken(transkey_surl);
+		}
+	}
+	
+	/**
+     * 설명       : 카카오인증서 전자서명 호출
+     */
+	function fn_readyKakaoSign(signData, Callback, rTypeNm){
+		if(signData == null || typeof(signData) == 'undefined' || signData == ""){
+			alert("서명 데이터가 존재하지않습니다.");
+    		return ;
+		}
+		
+		if(Callback == null || typeof(Callback) == 'undefined' || Callback == ""){
+			alert("서명 콜백 함수가 존재하지않습니다.");
+    		return ;
+		}
+		
+		loginSignVerifyCallback = Callback;
+		
+		var vUrl = "/co/coz/signKakaoRequest.do";
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = "fn_signKakaoRequestCallback";
+        oOptions.requestData = 
+        {
+			"sign":signData,
+			"rTypeNm":rTypeNm
+        }
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+     * 설명       : 카카오인증서 전자서명 Txid CallBack
+     */
+	function fn_signKakaoRequestCallback(vResBody, e){
+		if(vResBody.resultCode == 200) {
+		    fn_Kakaopop();
+		    signRequestTxId = vResBody.request_txId;
+        }else {
+            popupKakaoAlertMsg(vResBody.resultMsg,vResBody.msgRtn);
+		}
+	}
+	
+	/**
+     * 설명       : 카카오인증서 전자서명 정보를 요청, 상담 서비스 전자서명 요청
+     */
+	function fn_signKakaoRequestVf(loginSignVerifyCallback) {
+		$("#kakaoResultPop").dialog("close");
+		var vUrl;
+		if(loginSignVerifyCallback == "fn_noLoginkakaoSignDataCallback") {
+			vUrl = "/co/coz/noLoginSignKakaoRequestVerify.do";
+		}else {
+			vUrl = "/co/coz/signKakaoRequestVerify.do";
+		}
+        var oOptions = new Object();
+        oOptions.dataType = "json";
+        oOptions.CallBack = loginSignVerifyCallback;
+        oOptions.requestData = 
+        {
+            "requestTxId":signRequestTxId
+        }
+        
+        
+        $net.ajax(vUrl, oOptions);
+	}
+	
+	/**
+	 * 설명		: yeskey tab 입력값에 대한 유효성을 검사한다.
+	 * 사용방식	: fn_checkValidationForKakao()
+	 * 주의		: 
+	 * 리턴		: boolean
+	 */
+	function fn_checkValidationForKakao(){
+		var regExp = /[^0-9]/gi;
+		
+		if($('#name_7').length > 0 && gfn_isNull($.trim($('#name_7').val())))
+		{
+			
+			alert('이름 is required.');
+			$('#name_7').focus();
+			return false;
+		}
+		if($('#name_7').length > 0 && $('#name_7').val().length < 2)
+		{
+			
+			alert('이름 can not be less than 2 characters.');
+			$('#name_7').focus();
+			return false;
+		}
+		if($('#phone_7').length > 0 && gfn_isNull($.trim($('#phone_7').val())))
+		{
+			
+			alert('휴대폰번호 is required.');
+			$('#phone_7').focus();
+			return false;
+		}
+		if($('#phone_7').length > 0 && $('#phone_7').val().length < 9)
+		{
+			
+			alert('휴대폰번호 can not be less than 9 characters.');
+			$('#phone_7').focus();
+			return false;
+		}
+
+		if($('#jumin_1_7').length > 0 && gfn_isNull($.trim($('#jumin_1_7').val())))
+		{
+			
+			alert('주민등록번호 앞자리 is required.');
+			$('#jumin_1_7').focus();
+			return false;
+		}
+		if($('#jumin_1_7').length > 0 && $('#jumin_1_7').val().length < 6)
+		{
+			
+			alert('주민등록번호 앞자리 can not be less than 6 characters.');
+			$('#jumin_1_7').focus();
+			return false;
+		}
+		if(regExp.test($('#jumin_1_7').val()))
+		{
+			alert("주민등록번호 앞자리은(는) 숫자만 입력 가능합니다.");
+            $('#jumin_1_7').val('');
+			$('#jumin_1_7').focus();
+			return false;
+		}
+        
+		if($('#jumin_2_7').length > 0 && gfn_isNull($.trim($('#jumin_2_7').val())))
+		{
+			
+			alert('주민등록번호 뒷자리 is required.');
+			$('#jumin_2_7').focus();
+			return false;
+		}
+		
+		if($('#jumin_2_7').length > 0 && $('#jumin_2_7').val().length < 7)
+		{
+			
+			alert('주민등록번호 뒷자리 can not be less than 7 characters.');
+			$('#jumin_2_7').focus();
+			return false;
+		}
+		
+		return true;
+	}
+</script>
+
+</div>
+
+<script src="/raonnx/cmn/TouchEnNx.js"></script>
+
+
+
+	</div>
+	<ul class="navigation-wrap txt-indent"></ul>
+	<div class="shadow"></div>
+</div>
+<div id="divForPopup"></div>
+
+
+<div class="loding_wrap" id="commonProgressBar">
+	<div class="lod_wrap_box">
+		<div class="lod_box">
+			<i class="xi-spinner-2 xi-spin"></i>
+			<p>처리중입니다.</p>
+		</div>
+	</div>
+</div>
+
+	
+<script>
+	var gvPgmId = "COZ14M01";
+</script>
+<script src="/js/kabhom/com/hom.core.js"></script>
+<script src="/js/kabhom/util/hom.all.js"></script>
+<script src="/js/kabhom/main/leftMenucommon.js"></script>
+</body>
+</html>
