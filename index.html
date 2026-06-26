@@ -775,7 +775,7 @@ const revealEl=el=>el&&el.classList.add("in");
 if(!REDUCE&&"IntersectionObserver"in window){
   const io=new IntersectionObserver((es)=>es.forEach(e=>{
     if(e.isIntersecting){revealEl(e.target);io.unobserve(e.target);}
-  }),{threshold:.06,rootMargin:"0px 0px -5% 0px"});
+  }),{threshold:0,rootMargin:"0px 0px -5% 0px"});
   document.querySelectorAll("[data-reveal]").forEach(el=>io.observe(el));
 }else{
   document.querySelectorAll("[data-reveal]").forEach(revealEl);
