@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>청약 인텔리전스 — 분양 도면 분석</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* ---- color: drafting paper + ink ---- */
+    --paper:#EAEEF0;
+    --paper-2:#E1E7EA;
+    --sheet:#F4F6F7;
+    --ink:#16242E;
+    --ink-2:#3C4D57;
+    --ink-3:#5A6B74;          /* darkened from #62727B for AA on paper */
+    --blue:#2B5C8A;
+    --blue-deep:#1C3F61;
+    --blue-line:rgba(43,92,138,.12);
+    --blue-line-2:rgba(43,92,138,.22);
+    --blue-tint:rgba(43,92,138,.06);
+    --stamp:#C0392B;
+    --stamp-deep:#93281E;
+    --stamp-soft:rgba(192,57,43,.10);
+    /* dedicated warning/neutral hue for deadlines — NOT brand red */
+    --warn:#B7791F;           /* drafting amber for D-day urgency */
+    --warn-deep:#8A5A12;
+    --warn-tint:rgba(183,121,31,.10);
+    --hair:rgba(22,36,46,.16);
+    --hair-strong:rgba(22,36,46,.30);
+
+    /* ---- type ---- */
+    --f-disp:'Space Grotesk', 'Pretendard', sans-serif;
+    --f-body:'Pretendard', system-ui, sans-serif;
+    --f-mono:'JetBrains Mono', 'Space Grotesk', monospace;
+
+    /* type scale — 1.25 ratio */
+    --t-0:0.78rem;   /* 12.5 caption */
+    --t-1:0.9375rem; /* 15  body min */
+    --t-2:1.0rem;
+    --t-3:1.25rem;
+    --t-4:1.5625rem;
+    --t-5:1.953rem;
+    --t-6:2.44rem;
+    --t-7:3.05rem;
+    --t-8:3.82rem;
+
+    /* ---- space ---- */
+    --sp-1:.375rem;
+    --sp-2:.625rem;
+    --sp-3:1rem;
+    --sp-4:1.5rem;
+    --sp-5:2.25rem;
+    --sp-6:3.5rem;
+    --sp-7:5rem;
+
+    --gridsize:26px;
+    --edge:clamp(1rem, 4vw, 3.25rem);
+    --maxw:1240px;
+  }
+
+  *{box-sizing:border-box;}
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    font-family:var(--f-body);
+    font-size:var(--t-1);
+    line-height:1.62;
+    color:var(--ink);
+    background-color:var(--paper);
+    /* blueprint technical grid */
+    background-image:
+      linear-gradient(var(--blue-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blue-line) 1px, transparent 1px),
+      linear-gradient(var(--blue-tint) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blue-tint) 1px, transparent 1px);
+    background-size:
+      calc(var(--gridsize)*5) calc(var(--gridsize)*5),
+      calc(var(--gridsize)*5) calc(var(--gridsize)*5),
+      var(--gridsize) var(--gridsize),
+      var(--gridsize) var(--gridsize);
+    background-position:-1px -1px;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  .num{ font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1; }
+  a{ color:inherit; text-decoration:none; }
+  h1,h2,h3,h4{ margin:0; font-weight:600; line-height:1.18; letter-spacing:-.01em; }
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--blue);
+    outline-offset:3px;
+  }
+
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding-inline:var(--edge); }
+
+  /* technical label — small caps mono */
+  .tlabel{
+    font-family:var(--f-mono);
+    font-size:var(--t-0);
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    color:var(--blue);
+    font-weight:500;
+  }
+
+  /* ====== SIGNATURE: dimension-line section divider (ticks at both ends) ====== */
+  .dimrule{
+    display:flex; align-items:center; gap:0;
+    height:1px; margin:0; position:relative;
+  }
+  .dimrule .line{ flex:1; height:1px; background:var(--blue-line-2); position:relative; }
+  .dimrule .line::before,.dimrule .line::after{
+    content:""; position:absolute; top:-4px; width:1px; height:9px; background:var(--blue);
+  }
+  .dimrule .line::before{ left:0; } .dimrule .line::after{ right:0; }
+  .dimrule .tag{
+    padding:0 12px; font-family:var(--f-mono); font-size:9.5px; letter-spacing:.14em;
+    color:var(--blue); text-transform:uppercase; white-space:nowrap; transform:translateY(-1px);
+  }
+  .section-divider{ padding-block:0; }
+  .section-divider .wrap{ padding-block:0; }
+
+  /* SIGNATURE: leader-line callout used at ledger / diagnosis edges */
+  .callout{
+    position:relative; display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--f-mono); font-size:9.5px; letter-spacing:.06em; color:var(--blue);
+    padding-left:30px;
+  }
+  .callout::before{
+    content:""; position:absolute; left:0; top:50%; width:22px; height:1px; background:var(--blue-line-2);
+  }
+  .callout::after{
+    content:""; position:absolute; left:0; top:50%; width:5px; height:5px;
+    border-radius:50%; border:1px solid var(--blue); background:var(--paper);
+    transform:translate(-1px,-50%);
+  }
+
+  /* ====== registration corner marks on the whole sheet ====== */
+  .regmark{ position:fixed; width:22px; height:22px; z-index:50; pointer-events:none; opacity:.7; }
+  .regmark::before,.regmark::after{ content:""; position:absolute; background:var(--blue); }
+  .regmark::before{ width:100%; height:1px; top:50%; }
+  .regmark::after{ width:1px; height:100%; left:50%; }
+  .rm-tl{ top:10px; left:10px; } .rm-tr{ top:10px; right:10px; }
+  .rm-bl{ bottom:10px; left:10px; } .rm-br{ bottom:10px; right:10px; }
+  @media (max-width:640px){ .regmark{ display:none; } }
+
+  /* ===================== UTILITY BAR ===================== */
+  .utilbar{
+    border-bottom:1px solid var(--hair);
+    background:rgba(244,246,247,.72);
+    backdrop-filter:saturate(1.1);
+  }
+  .utilbar .wrap{
+    display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3);
+    min-height:38px; flex-wrap:wrap;
+    font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2);
+    letter-spacing:.01em;
+  }
+  .live{ display:inline-flex; align-items:center; gap:8px; }
+  .live .dot{
+    width:8px; height:8px; border-radius:50%; background:var(--stamp);
+    box-shadow:0 0 0 0 rgba(192,57,43,.5);
+    animation:pulse 2.4s ease-out infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(192,57,43,.45); }
+    70%{ box-shadow:0 0 0 7px rgba(192,57,43,0); }
+    100%{ box-shadow:0 0 0 0 rgba(192,57,43,0); }
+  }
+  .utilbar .right{ color:var(--ink-2); }
+  .utilbar .right strong{ color:var(--ink); font-weight:600; }
+
+  /* ===================== NAV ===================== */
+  .nav{
+    border-bottom:1px solid var(--hair);
+    background:rgba(234,238,240,.86);
+    backdrop-filter:blur(2px);
+    position:sticky; top:0; z-index:40;
+  }
+  .nav .wrap{
+    display:flex; align-items:center; gap:var(--sp-4);
+    min-height:66px;
+  }
+  .brand{ display:inline-flex; align-items:center; gap:11px; margin-right:auto; }
+  .brand .stamp-mark{
+    width:38px; height:38px; flex:none;
+    border:1.5px solid var(--stamp); color:var(--stamp);
+    border-radius:50%;
+    display:grid; place-items:center;
+    font-family:var(--f-body); font-weight:800; font-size:1rem;
+    transform:rotate(-6deg);
+    position:relative;
+  }
+  .brand .stamp-mark::after{
+    content:""; position:absolute; inset:3px; border:1px solid var(--stamp); border-radius:50%; opacity:.45;
+  }
+  .brand .bname{ font-family:var(--f-disp); font-weight:600; font-size:1.06rem; letter-spacing:-.01em; color:var(--ink); }
+  .brand .bsub{ display:block; font-family:var(--f-mono); font-size:9px; letter-spacing:.22em; color:var(--blue); text-transform:uppercase; }
+
+  .nlinks{ display:flex; align-items:center; gap:2px; }
+  .nlinks a{
+    font-size:.9rem; color:var(--ink-2); padding:10px 13px; border-radius:2px;
+    position:relative; white-space:nowrap;
+  }
+  .nlinks a:hover{ color:var(--ink); background:var(--blue-tint); }
+  .nlinks a.active{ color:var(--blue-deep); font-weight:600; }
+  .nlinks a.active::after{
+    content:""; position:absolute; left:13px; right:13px; bottom:1px; height:2px; background:var(--stamp);
+  }
+  .cta{
+    font-family:var(--f-disp); font-weight:500; font-size:.9rem;
+    background:var(--blue); color:#F4F6F7;
+    padding:11px 18px; border-radius:2px;
+    border:1px solid var(--blue-deep);
+    display:inline-flex; align-items:center; gap:8px; white-space:nowrap;
+    min-height:44px;
+    transition:background .15s ease;
+  }
+  .cta:hover{ background:var(--blue-deep); }
+  .cta .ar{ font-family:var(--f-mono); }
+
+  .menutoggle{ display:none; }
+
+  /* ===================== HERO ===================== */
+  .hero{ position:relative; padding-top:var(--sp-6); padding-bottom:var(--sp-5); }
+  .hero .wrap{ position:relative; }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);
+    gap:var(--sp-6);
+    align-items:start;
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    margin-bottom:var(--sp-3);
+  }
+  .eyebrow .bar{ width:34px; height:1px; background:var(--blue-line-2); position:relative; }
+  .eyebrow .bar::before,.eyebrow .bar::after{
+    content:""; position:absolute; top:-3px; width:1px; height:7px; background:var(--blue);
+  }
+  .eyebrow .bar::before{ left:0; } .eyebrow .bar::after{ right:0; }
+
+  .hero h1{
+    font-family:var(--f-disp);
+    font-weight:600;
+    font-size:clamp(2.05rem, 5.4vw, 3.7rem);
+    line-height:1.1;
+    letter-spacing:-.02em;
+    color:var(--ink);
+    text-wrap:balance;
+    max-width:18ch;
+  }
+  .hero h1 em{
+    font-style:normal; color:var(--blue);
+    position:relative; white-space:nowrap;
+  }
+  .hero h1 em::after{
+    content:""; position:absolute; left:0; right:0; bottom:.04em; height:.42em;
+    background:rgba(43,92,138,.12); z-index:-1;
+  }
+  .lede{
+    margin-top:var(--sp-4); max-width:46ch;
+    font-size:1.06rem; line-height:1.66; color:var(--ink-2);
+    text-wrap:pretty;
+  }
+  .lede b{ font-weight:600; color:var(--ink); }
+  .hero-actions{ margin-top:var(--sp-4); display:flex; align-items:center; gap:var(--sp-4); flex-wrap:wrap; }
+  .btn-primary{
+    font-family:var(--f-disp); font-weight:600; font-size:1.02rem;
+    background:var(--stamp); color:#F7EFEE;
+    padding:14px 26px; border-radius:2px;
+    border:1px solid var(--stamp-deep);
+    display:inline-flex; align-items:center; gap:10px;
+    min-height:44px;
+    transition:transform .12s ease, background .15s ease;
+  }
+  .btn-primary:hover{ background:#A52E22; }
+  .btn-primary:active{ transform:translateY(1px); }
+  .btn-primary .tick{ font-family:var(--f-mono); }
+  .link-arrow{
+    font-size:.96rem; color:var(--blue-deep); font-weight:500;
+    border-bottom:1px solid var(--blue-line-2); padding-bottom:2px;
+    min-height:44px; display:inline-flex; align-items:center;
+  }
+  .link-arrow:hover{ border-color:var(--blue); }
+
+  /* dimension line under hero headline (SIGNATURE) */
+  .dimline{
+    margin-top:var(--sp-4);
+    display:flex; align-items:center;
+    font-family:var(--f-mono); font-size:var(--t-0); color:var(--blue);
+    letter-spacing:.06em;
+    max-width:430px;
+  }
+  .dimline .seg{ flex:1; height:1px; background:var(--blue-line-2); position:relative; }
+  .dimline .seg::before,.dimline .seg::after{
+    content:""; position:absolute; top:-4px; width:1px; height:9px; background:var(--blue);
+  }
+  .dimline .seg::before{ left:0; } .dimline .seg::after{ right:0; }
+  .dimline .val{ padding:0 12px; white-space:nowrap; }
+
+  /* hero floorplan card (SIGNATURE: little unit boxes) */
+  .plansheet{
+    background:var(--sheet);
+    border:1px solid var(--hair);
+    border-radius:2px;
+    padding:var(--sp-3) var(--sp-3) var(--sp-2);
+    position:relative;
+    box-shadow:0 1px 0 rgba(43,92,138,.05);
+  }
+  .plansheet::before{
+    content:"DWG-2026.0627"; position:absolute; top:-1px; right:-1px;
+    font-family:var(--f-mono); font-size:9px; letter-spacing:.14em; color:var(--blue);
+    background:var(--paper); border:1px solid var(--hair); border-top:none; border-right:none;
+    padding:3px 8px; border-bottom-left-radius:2px;
+  }
+  .planhead{
+    display:flex; justify-content:space-between; align-items:baseline;
+    border-bottom:1px solid var(--hair); padding-bottom:8px; margin-bottom:12px;
+  }
+  .planhead .ph-t{ font-family:var(--f-disp); font-weight:600; font-size:.92rem; color:var(--ink); }
+  .planhead .ph-s{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); }
+  .floorplan{
+    position:relative;
+    border:1.5px solid var(--blue);
+    aspect-ratio:1.32 / 1;
+    background:
+      linear-gradient(var(--blue-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blue-line) 1px, transparent 1px);
+    background-size:14px 14px;
+  }
+  .unit{
+    position:absolute; border:1.25px solid var(--blue);
+    background:rgba(43,92,138,.05);
+    font-family:var(--f-mono); font-size:10px; color:var(--blue-deep);
+    display:flex; flex-direction:column; justify-content:flex-end;
+    padding:4px;
+  }
+  .unit.match{ background:rgba(192,57,43,.08); border-color:var(--stamp); }
+  /* room labels: raised contrast for AA (was --ink-3) */
+  .unit .ud{ font-size:9px; color:var(--ink-2); letter-spacing:.03em; font-weight:500; }
+  .unit .un{ font-weight:600; color:var(--blue-deep); }
+  .unit.match .ud{ color:var(--stamp-deep); }
+  .unit.match .un{ color:var(--stamp-deep); }
+  .u1{ left:0; top:0; width:46%; height:58%; border-left:none; border-top:none; }
+  .u2{ left:46%; top:0; right:0; height:42%; border-top:none; border-right:none; }
+  .u3{ left:46%; top:42%; right:0; bottom:0; border-right:none; border-bottom:none; }
+  .u4{ left:0; top:58%; width:46%; bottom:0; border-left:none; border-bottom:none; }
+  /* dimension annotation along the plan top */
+  .plan-dim-top{
+    display:flex; align-items:center; margin-top:9px;
+    font-family:var(--f-mono); font-size:9px; color:var(--blue); letter-spacing:.04em;
+  }
+  .plan-dim-top .seg{ flex:1; height:1px; background:var(--blue-line-2); position:relative; }
+  .plan-dim-top .seg::before,.plan-dim-top .seg::after{ content:""; position:absolute; top:-3px; width:1px; height:7px; background:var(--blue); }
+  .plan-dim-top .seg::before{ left:0; } .plan-dim-top .seg::after{ right:0; }
+  .plan-dim-top .v{ padding:0 8px; }
+  .plan-note{
+    margin-top:10px; font-family:var(--f-mono); font-size:10px; color:var(--ink-2);
+    display:flex; justify-content:space-between; letter-spacing:.02em;
+  }
+  .plan-note .sw{ display:inline-flex; align-items:center; gap:6px; }
+  .plan-note .chip{ width:10px; height:10px; border:1px solid var(--stamp); background:rgba(192,57,43,.08); }
+  .plan-note .chip.b{ border-color:var(--blue); background:rgba(43,92,138,.05); }
+
+  /* ===================== SECTION SHELL ===================== */
+  .section{ padding-top:var(--sp-6); padding-bottom:var(--sp-6); }
+  .section-head{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:var(--sp-4); margin-bottom:var(--sp-5);
+    border-bottom:1px solid var(--hair); padding-bottom:var(--sp-3);
+    flex-wrap:wrap;
+  }
+  .section-head h2{
+    font-family:var(--f-disp); font-weight:600;
+    font-size:clamp(1.5rem,3vw,2rem); letter-spacing:-.015em; color:var(--ink);
+    text-wrap:balance;
+  }
+  .section-head .idx{
+    font-family:var(--f-mono); font-size:var(--t-0); color:var(--blue);
+    letter-spacing:.14em; text-transform:uppercase; display:block; margin-bottom:5px;
+  }
+  .section-head .hint{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); }
+
+  /* ===================== LEDGER METRICS ===================== */
+  .ledger{ display:grid; grid-template-columns:repeat(4,1fr); gap:0; border:1px solid var(--hair); background:var(--sheet); }
+  .metric{
+    padding:var(--sp-4) var(--sp-3);
+    border-right:1px solid var(--hair);
+    position:relative;
+  }
+  .metric:last-child{ border-right:none; }
+  .metric .mlabel{
+    font-family:var(--f-mono); font-size:var(--t-0); letter-spacing:.04em;
+    color:var(--ink-2); text-transform:uppercase; display:block; margin-bottom:14px;
+  }
+  .metric .mval{
+    font-family:var(--f-mono); font-weight:700; font-variant-numeric:tabular-nums;
+    font-size:clamp(2rem,4.4vw,2.9rem); line-height:1; color:var(--ink); letter-spacing:-.02em;
+    display:flex; align-items:baseline; gap:4px;
+  }
+  .metric .mval .unit-s{ font-size:1.1rem; font-weight:500; color:var(--blue); }
+  .metric .mnote{
+    margin-top:10px; font-size:.84rem; color:var(--ink-2);
+  }
+  .metric .mnote .em{ color:var(--stamp); font-weight:600; font-family:var(--f-mono); }
+  /* dimension tick on first metric to keep ledger motif */
+  .metric .corner{ position:absolute; top:8px; right:9px; width:9px; height:9px; border-top:1px solid var(--blue-line-2); border-right:1px solid var(--blue-line-2); }
+  /* SIGNATURE: leader-line callout anchored at ledger bottom edge */
+  .ledger-foot{ margin-top:var(--sp-3); }
+
+  /* ===================== STEPS ===================== */
+  .steps{ display:grid; grid-template-columns:repeat(5,1fr); gap:0; border-top:1px solid var(--hair); border-left:1px solid var(--hair); }
+  .step{
+    border-right:1px solid var(--hair); border-bottom:1px solid var(--hair);
+    padding:var(--sp-4) var(--sp-3) var(--sp-4);
+    position:relative; background:rgba(244,246,247,.4);
+    min-height:160px; display:flex; flex-direction:column;
+  }
+  .step:hover{ background:var(--sheet); }
+  .step .snum{
+    font-family:var(--f-mono); font-weight:700; font-size:1.5rem; color:var(--blue);
+    letter-spacing:.02em; line-height:1;
+  }
+  .step .sbar{ width:24px; height:2px; background:var(--stamp); margin:13px 0; }
+  .step h3{ font-family:var(--f-disp); font-weight:600; font-size:1.06rem; color:var(--ink); margin-bottom:7px; }
+  .step p{ font-size:.9rem; color:var(--ink-2); line-height:1.55; margin:0; }
+  .step .splus{ position:absolute; top:12px; right:12px; font-family:var(--f-mono); color:var(--blue-line-2); font-size:.8rem; }
+
+  /* ===================== DIAGNOSIS PANEL (B) ===================== */
+  .diag{
+    display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);
+    gap:0; border:1px solid var(--hair); background:var(--sheet);
+  }
+  .diag-bars{ padding:var(--sp-4); border-right:1px solid var(--hair); }
+  .diag-row{ margin-bottom:var(--sp-4); }
+  .diag-row:last-child{ margin-bottom:0; }
+  .diag-row .dr-head{
+    display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; gap:12px;
+  }
+  .diag-row .dr-name{ font-family:var(--f-disp); font-weight:600; font-size:1rem; color:var(--ink); }
+  .diag-row .dr-score{
+    font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-size:.92rem; color:var(--ink-2);
+  }
+  .diag-row .dr-score b{ color:var(--ink); font-weight:700; }
+  .diag-row .dr-score .max{ color:var(--ink-3); }
+  .bartrack{
+    position:relative; height:18px; border:1px solid var(--blue-line-2);
+    background:
+      repeating-linear-gradient(90deg, var(--blue-line) 0 1px, transparent 1px 14px);
+  }
+  .barfill{
+    position:absolute; left:0; top:0; bottom:0; background:var(--blue);
+    display:flex; align-items:center; justify-content:flex-end;
+  }
+  .barfill.over{ background:var(--stamp); }   /* exceeds prior estimate */
+  /* dimension caret marking the max (manjeom) on the track */
+  .barmax{
+    position:absolute; top:-5px; bottom:-5px; width:1px; background:var(--blue-deep);
+  }
+  .barmax::after{
+    content:attr(data-l); position:absolute; top:-15px; left:50%; transform:translateX(-50%);
+    font-family:var(--f-mono); font-size:8.5px; color:var(--blue-deep); white-space:nowrap; letter-spacing:.04em;
+  }
+  .diag-total{
+    padding:var(--sp-4); display:flex; flex-direction:column; justify-content:space-between;
+    background:rgba(43,92,138,.04);
+  }
+  .diag-total .dt-label{
+    font-family:var(--f-mono); font-size:var(--t-0); letter-spacing:.06em; text-transform:uppercase; color:var(--ink-2);
+  }
+  .diag-total .dt-val{
+    font-family:var(--f-mono); font-weight:700; font-variant-numeric:tabular-nums;
+    font-size:clamp(3rem,7vw,4.2rem); line-height:.95; color:var(--ink); letter-spacing:-.03em;
+    margin:6px 0 2px; display:flex; align-items:baseline; gap:6px;
+  }
+  .diag-total .dt-val .o{ font-size:1.2rem; font-weight:500; color:var(--blue); }
+  .diag-total .dt-pct{
+    font-family:var(--f-mono); font-size:.86rem; color:var(--stamp); font-weight:600;
+    display:inline-flex; align-items:center; gap:7px; margin-top:4px;
+  }
+  .diag-total .dt-pct .tick{ width:14px; height:1px; background:var(--stamp); }
+  .diag-total .dt-cta{
+    margin-top:var(--sp-4);
+    font-family:var(--f-disp); font-weight:600; font-size:.92rem;
+    border:1px solid var(--blue); color:var(--blue-deep); background:var(--paper);
+    padding:11px 16px; border-radius:2px; text-align:center;
+    min-height:44px; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    transition:background .15s ease;
+  }
+  .diag-total .dt-cta:hover{ background:var(--blue-tint); }
+
+  /* ===================== D-DAY TIMELINE (C) ===================== */
+  .timeline{
+    border:1px solid var(--hair); background:var(--sheet);
+    padding:var(--sp-5) var(--sp-4) var(--sp-4);
+    position:relative; overflow:hidden;
+  }
+  .tl-track{ position:relative; margin:0 8px; }
+  .tl-axis{
+    position:absolute; left:0; right:0; top:13px; height:1px; background:var(--blue-line-2);
+  }
+  .tl-axis::before,.tl-axis::after{
+    content:""; position:absolute; top:-4px; width:1px; height:9px; background:var(--blue);
+  }
+  .tl-axis::before{ left:0; } .tl-axis::after{ right:0; }
+  .tl-stops{ display:grid; grid-template-columns:repeat(5,1fr); position:relative; }
+  .tl-stop{ text-align:center; position:relative; padding-top:30px; }
+  .tl-stop::before{
+    content:""; position:absolute; top:8px; left:50%; transform:translateX(-50%);
+    width:11px; height:11px; border-radius:50%; border:1.5px solid var(--blue); background:var(--sheet);
+  }
+  .tl-stop .dd{
+    font-family:var(--f-mono); font-weight:700; font-variant-numeric:tabular-nums;
+    font-size:1.15rem; color:var(--ink); line-height:1;
+  }
+  .tl-stop .dt{ font-family:var(--f-mono); font-size:.74rem; color:var(--ink-2); margin-top:4px; display:block; }
+  .tl-stop .dn{ font-size:.82rem; color:var(--ink-2); margin-top:6px; display:block; line-height:1.35; }
+  /* urgent stop uses WARN amber, not brand red */
+  .tl-stop.urgent::before{
+    border-color:var(--warn); background:var(--warn); box-shadow:0 0 0 4px var(--warn-tint);
+  }
+  .tl-stop.urgent .dd{ color:var(--warn-deep); }
+  .tl-stop.urgent .badge{
+    display:inline-block; margin-top:7px; font-family:var(--f-mono); font-size:8.5px;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--warn-deep);
+    border:1px solid var(--warn); background:var(--warn-tint); padding:2px 6px; border-radius:2px;
+  }
+  .tl-foot{
+    margin-top:var(--sp-4); padding-top:var(--sp-3); border-top:1px solid var(--hair);
+    font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); display:flex;
+    align-items:center; gap:8px; flex-wrap:wrap;
+  }
+  .tl-foot .swatch{ width:11px; height:11px; border-radius:50%; background:var(--warn); flex:none; }
+
+  /* ===================== ALERT TABLE (A) ===================== */
+  /* filter chips + sort label */
+  .filterbar{
+    display:flex; align-items:center; justify-content:space-between; gap:var(--sp-3);
+    margin-bottom:var(--sp-3); flex-wrap:wrap;
+  }
+  .chips{ display:flex; gap:8px; flex-wrap:wrap; }
+  .chip-btn{
+    font-family:var(--f-mono); font-size:var(--t-0); letter-spacing:.02em;
+    color:var(--ink-2); background:var(--sheet); border:1px solid var(--hair);
+    padding:9px 14px; border-radius:2px; cursor:pointer; min-height:44px;
+    display:inline-flex; align-items:center;
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .chip-btn:hover{ border-color:var(--blue-line-2); background:var(--blue-tint); }
+  .chip-btn[aria-pressed="true"]{
+    color:#F4F6F7; background:var(--blue); border-color:var(--blue-deep);
+  }
+  .sortlabel{
+    font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2);
+    display:inline-flex; align-items:center; gap:7px; white-space:nowrap;
+  }
+  .sortlabel b{ color:var(--blue-deep); font-weight:700; }
+
+  .tablecard{ border:1px solid var(--hair); background:var(--sheet); }
+  .alert-table{ width:100%; border-collapse:collapse; }
+  .alert-table thead th{
+    font-family:var(--f-mono); font-size:var(--t-0); text-transform:uppercase; letter-spacing:.08em;
+    color:var(--blue); font-weight:500; text-align:left;
+    padding:13px var(--sp-3); border-bottom:1px solid var(--hair-strong);
+    background:rgba(43,92,138,.04); white-space:nowrap;
+  }
+  .alert-table thead th.rt{ text-align:right; }
+  .alert-table tbody td{
+    padding:16px var(--sp-3); border-bottom:1px solid var(--hair); vertical-align:middle;
+  }
+  .alert-table tbody tr:last-child td{ border-bottom:none; }
+  .alert-table tbody tr:hover{ background:rgba(43,92,138,.03); }
+
+  /* SIGNATURE: per-row unit-plan thumbnail + dimension annotation */
+  .cx-cell{ display:flex; align-items:center; gap:14px; }
+  .planthumb{
+    flex:none; width:52px; height:40px; border:1.25px solid var(--blue); position:relative;
+    background:
+      linear-gradient(var(--blue-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--blue-line) 1px, transparent 1px);
+    background-size:7px 7px;
+  }
+  .planthumb i{ position:absolute; border:1px solid var(--blue); background:rgba(43,92,138,.05); }
+  .planthumb i.a{ left:0; top:0; width:58%; height:60%; border-left:none; border-top:none; }
+  .planthumb i.b{ left:58%; top:0; right:0; height:60%; border-top:none; border-right:none; }
+  .planthumb i.c{ left:0; top:60%; right:0; bottom:0; border-left:none; border-bottom:none; border-right:none; }
+  .planthumb.match i.b{ background:rgba(192,57,43,.10); border-color:var(--stamp); }
+  /* dimension annotation tag on the thumbnail */
+  .planthumb::after{
+    content:attr(data-dim); position:absolute; bottom:-15px; left:0;
+    font-family:var(--f-mono); font-size:8.5px; color:var(--blue); letter-spacing:.02em; white-space:nowrap;
+  }
+  .cx-name{ font-family:var(--f-disp); font-weight:600; font-size:1.02rem; color:var(--ink); }
+  .cx-meta{ font-family:var(--f-mono); font-size:.78rem; color:var(--ink-2); margin-top:3px; letter-spacing:.01em; }
+  .cx-meta .sz{ color:var(--blue); font-weight:500; }
+  .cx-rate{ font-family:var(--f-mono); font-weight:600; font-variant-numeric:tabular-nums; font-size:1.05rem; color:var(--ink); text-align:right; }
+  .cx-rate small{ display:block; font-weight:400; font-size:.72rem; color:var(--ink-2); letter-spacing:.04em; }
+  .cx-due{ font-family:var(--f-mono); font-variant-numeric:tabular-nums; text-align:right; }
+  .cx-due .d{ font-weight:700; font-size:1rem; color:var(--warn-deep); }
+  .cx-due .date{ display:block; font-size:.76rem; color:var(--ink-2); margin-top:2px; }
+  .cx-due.calm .d{ color:var(--blue); }
+
+  /* stamp judgment */
+  .jcell{ text-align:right; }
+  .stampbadge{
+    display:inline-flex; align-items:center; justify-content:center;
+    font-family:var(--f-body); font-weight:800; font-size:.84rem; letter-spacing:.02em;
+    border:2px solid var(--stamp); color:var(--stamp);
+    padding:7px 13px; border-radius:3px;
+    transform:rotate(-3deg);
+    background:rgba(192,57,43,.05);
+    line-height:1.1; white-space:nowrap;
+  }
+  .stampbadge.solid{ background:var(--stamp); color:#F7EFEE; border-color:var(--stamp-deep); box-shadow:0 1px 0 rgba(147,40,30,.4); }
+  .stampbadge.faded{ border-color:rgba(90,107,116,.55); color:var(--ink-3); background:transparent; border-style:dashed; transform:rotate(2deg); }
+  .stampbadge.calm{ border-color:var(--blue); color:var(--blue-deep); background:rgba(43,92,138,.06); }
+
+  .table-foot{
+    display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3);
+    margin-top:var(--sp-3); font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2);
+    flex-wrap:wrap;
+  }
+  .table-foot a{ color:var(--blue-deep); border-bottom:1px solid var(--blue-line-2); padding-bottom:1px; }
+  .table-foot a:hover{ border-color:var(--blue); }
+
+  /* mobile-only stacked card row (hidden on desktop) */
+  .m-cards{ display:none; }
+
+  /* ===================== FOOTER (D) ===================== */
+  footer{ border-top:1px solid var(--hair); margin-top:var(--sp-6); background:rgba(225,231,234,.5); }
+  footer .wrap{ padding-top:var(--sp-6); padding-bottom:var(--sp-5); }
+  .foot-top{
+    display:grid; grid-template-columns:minmax(0,1.3fr) repeat(3,minmax(0,1fr));
+    gap:var(--sp-5); padding-bottom:var(--sp-5); border-bottom:1px solid var(--hair);
+  }
+  .foot-brand{ display:flex; flex-direction:column; gap:12px; }
+  .foot-brand .fb-mark{ display:inline-flex; align-items:center; gap:10px; }
+  .foot-brand .fm{ width:34px; height:34px; border:1.25px solid var(--stamp); color:var(--stamp); border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:.9rem; transform:rotate(-6deg); position:relative; }
+  .foot-brand .fn{ font-family:var(--f-disp); font-weight:600; font-size:1.05rem; color:var(--ink); }
+  .foot-brand .ftrust{
+    font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); line-height:1.6;
+    display:inline-flex; align-items:flex-start; gap:8px; max-width:34ch;
+  }
+  .foot-brand .ftrust .lock{ color:var(--blue); flex:none; transform:translateY(1px); }
+  .foot-col h4{
+    font-family:var(--f-mono); font-size:var(--t-0); letter-spacing:.1em; text-transform:uppercase;
+    color:var(--blue); font-weight:500; margin-bottom:14px;
+  }
+  .foot-col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:3px; }
+  .foot-col a{
+    font-size:.9rem; color:var(--ink-2); display:inline-flex; align-items:center;
+    min-height:34px; padding:2px 0;
+  }
+  .foot-col a:hover{ color:var(--blue-deep); }
+  .foot-col a.cur{ color:var(--blue-deep); font-weight:600; }
+  .foot-bottom{
+    display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3);
+    padding-top:var(--sp-4); flex-wrap:wrap;
+  }
+  .foot-bottom .disc{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); max-width:62ch; line-height:1.6; }
+  .foot-bottom .meta{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-3); white-space:nowrap; }
+
+  /* ===================== RESPONSIVE ===================== */
+  @media (max-width:980px){
+    .hero-grid{ grid-template-columns:1fr; gap:var(--sp-5); }
+    .plansheet{ max-width:480px; }
+    .ledger{ grid-template-columns:repeat(2,1fr); }
+    .metric:nth-child(2){ border-right:none; }
+    .metric:nth-child(1),.metric:nth-child(2){ border-bottom:1px solid var(--hair); }
+    .steps{ grid-template-columns:repeat(2,1fr); }
+    .diag{ grid-template-columns:1fr; }
+    .diag-bars{ border-right:none; border-bottom:1px solid var(--hair); }
+    .foot-top{ grid-template-columns:1fr 1fr; gap:var(--sp-4); }
+    .foot-brand{ grid-column:1 / -1; }
+  }
+  @media (max-width:760px){
+    .nlinks{
+      display:none; position:absolute; top:66px; left:0; right:0;
+      flex-direction:column; align-items:stretch; gap:0;
+      background:var(--sheet); border-bottom:1px solid var(--hair); padding:8px var(--edge);
+    }
+    .nlinks.open{ display:flex; }
+    .nlinks a{ padding:13px 4px; border-bottom:1px solid var(--hair); min-height:44px; }
+    .nlinks a.active::after{ display:none; }
+    .nlinks a.active{ color:var(--blue-deep); }
+    .menutoggle{
+      display:inline-grid; place-items:center; width:44px; height:44px; order:3;
+      border:1px solid var(--hair); border-radius:2px; background:var(--sheet);
+      font-family:var(--f-mono); cursor:pointer; color:var(--ink);
+    }
+    .nav .cta{ order:2; }
+    /* timeline: horizontal scroll-free — drop date row, keep D-day + name */
+    .tl-stop .dt{ display:none; }
+  }
+  @media (max-width:560px){
+    .nav .cta .lbl{ display:none; }
+    .nav .cta{ padding:10px 13px; }
+    .steps{ grid-template-columns:1fr; }
+    .step{ min-height:auto; }
+    /* timeline becomes a vertical stack to avoid cramped 5-up on 390px */
+    .tl-track{ margin:0; }
+    .tl-axis{ display:none; }
+    .tl-stops{ grid-template-columns:1fr; gap:0; }
+    .tl-stop{
+      text-align:left; padding:14px 0 14px 26px; border-bottom:1px solid var(--hair);
+      display:flex; align-items:baseline; gap:12px; flex-wrap:wrap;
+    }
+    .tl-stop::before{ top:18px; left:0; transform:none; }
+    .tl-stop:last-child{ border-bottom:none; }
+    .tl-stop .dt{ display:inline; }
+    .tl-stop .dn{ margin-top:0; }
+    .tl-stop .badge{ margin-top:0; }
+    /* table -> stacked cards: keep only essential columns */
+    .alert-table{ display:none; }
+    .m-cards{ display:grid; gap:var(--sp-3); }
+    .mcard{
+      border:1px solid var(--hair); background:var(--sheet); padding:var(--sp-3); position:relative;
+    }
+    .mcard .mc-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+    .mcard .mc-head{ display:flex; align-items:center; gap:11px; }
+    /* shrunk plan thumbnail keeps the signature on mobile */
+    .mcard .planthumb{ width:42px; height:33px; }
+    .mcard .planthumb::after{ display:none; }
+    .mcard .mc-name{ font-family:var(--f-disp); font-weight:600; font-size:1rem; color:var(--ink); }
+    .mcard .mc-meta{ font-family:var(--f-mono); font-size:.76rem; color:var(--ink-2); margin-top:3px; }
+    .mcard .mc-meta .sz{ color:var(--blue); }
+    .mcard .mc-stats{ display:flex; gap:var(--sp-4); margin-top:13px; padding-top:11px; border-top:1px solid var(--hair); font-family:var(--f-mono); }
+    .mcard .mc-stats .k{ font-size:.68rem; color:var(--ink-2); text-transform:uppercase; letter-spacing:.06em; display:block; margin-bottom:3px; }
+    .mcard .mc-stats .v{ font-weight:600; font-variant-numeric:tabular-nums; font-size:.95rem; color:var(--ink); }
+    .mcard .mc-stats .v.due{ color:var(--warn-deep); }
+    .mcard .mc-stats .v.due.calm{ color:var(--blue); }
+    .foot-top{ grid-template-columns:1fr; }
+    .foot-bottom{ flex-direction:column; align-items:flex-start; }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .live .dot{ animation:none; }
+    *{ transition:none !important; }
+  }
+</style>
+</head>
+<body>
+  <span class="regmark rm-tl" aria-hidden="true"></span>
+  <span class="regmark rm-tr" aria-hidden="true"></span>
+  <span class="regmark rm-bl" aria-hidden="true"></span>
+  <span class="regmark rm-br" aria-hidden="true"></span>
+
+  <!-- UTILITY BAR -->
+  <div class="utilbar">
+    <div class="wrap">
+      <span class="live"><span class="dot" aria-hidden="true"></span>실시간 분양 데이터 · 청약홈 수집 <span class="num">2026-06-27</span></span>
+      <span class="right">청약 문의 <strong class="num">1644-7445</strong> · 평일 <span class="num">09:00–17:30</span></span>
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="#" aria-label="청약 인텔리전스 홈">
+        <span class="stamp-mark" aria-hidden="true">印</span>
+        <span class="bname">청약 인텔리전스<span class="bsub">Cheongyak Intelligence</span></span>
+      </a>
+      <nav class="nlinks" id="nav" aria-label="주요 메뉴">
+        <a href="#" class="active" aria-current="page">청약 여정</a>
+        <a href="#">청약 준비</a>
+        <a href="#">분양현장</a>
+        <a href="#">내 청약 관리</a>
+        <a href="#">게시판</a>
+      </nav>
+      <a class="cta" href="#"><span class="lbl">내 청약 관리</span><span class="ar" aria-hidden="true">↗</span></a>
+      <button class="menutoggle" id="menubtn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav">☰</button>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <span class="eyebrow tlabel"><span class="bar" aria-hidden="true"></span>Cheongyak Intelligence</span>
+          <h1>내 가점이 닿는 집을 <em>도면처럼</em> 읽어 드립니다</h1>
+          <p class="lede">분양 공고를 내 가점·자격으로 자동 매칭한다. <b>광고가 아니라 원장이다.</b> 입력값은 이 기기에만 저장된다.</p>
+          <div class="hero-actions">
+            <a class="btn-primary" href="#"><span class="tick" aria-hidden="true">＋</span>내 가점 확인</a>
+            <a class="link-arrow" href="#">분양현장 먼저 보기 →</a>
+          </div>
+          <!-- SIGNATURE: dimension line annotation -->
+          <div class="dimline" aria-hidden="true">
+            <span class="seg"></span>
+            <span class="val num">입력 → 매칭 = 약 90초</span>
+            <span class="seg"></span>
+          </div>
+        </div>
+
+        <!-- SIGNATURE: floor-plan unit sheet -->
+        <aside class="plansheet" aria-label="평면도 미리보기">
+          <div class="planhead">
+            <span class="ph-t">UNIT PLAN · 84A</span>
+            <span class="ph-s num">SCALE 1:120</span>
+          </div>
+          <div class="floorplan" aria-hidden="true">
+            <span class="unit u1"><span class="ud">LDK</span><span class="un">34.2㎡</span></span>
+            <span class="unit u2"><span class="ud">BED 1</span><span class="un">14.8㎡</span></span>
+            <span class="unit u3 match"><span class="ud">BED 2 · 매칭</span><span class="un">11.6㎡</span></span>
+            <span class="unit u4"><span class="ud">BED 3 · BATH</span><span class="un">10.4㎡</span></span>
+          </div>
+          <div class="plan-dim-top" aria-hidden="true">
+            <span class="seg"></span><span class="v num">전용 84.00㎡</span><span class="seg"></span>
+          </div>
+          <div class="plan-note">
+            <span class="sw"><span class="chip b" aria-hidden="true"></span>도면 영역</span>
+            <span class="sw"><span class="chip" aria-hidden="true"></span>내 조건 적합 구획</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE divider -->
+  <div class="section-divider"><div class="wrap"><div class="dimrule" aria-hidden="true"><span class="line"></span><span class="tag">Sheet 01</span><span class="line"></span></div></div></div>
+
+  <!-- LEDGER METRICS -->
+  <section class="section" aria-labelledby="ledger-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="idx">SHEET 01 — TODAY</span>
+          <h2 id="ledger-h">오늘의 청약 원장</h2>
+        </div>
+        <span class="hint num">기준일 2026-06-27 · 수도권 표본</span>
+      </div>
+      <div class="ledger">
+        <div class="metric">
+          <span class="corner" aria-hidden="true"></span>
+          <span class="mlabel">마감 임박</span>
+          <span class="mval"><span class="num">3</span></span>
+          <span class="mnote"><span class="em">D-2</span> 이내 접수 마감</span>
+        </div>
+        <div class="metric">
+          <span class="mlabel">1순위 평균 경쟁률</span>
+          <span class="mval"><span class="num">13.4</span><span class="unit-s">:1</span></span>
+          <span class="mnote">수도권 민영 기준</span>
+        </div>
+        <div class="metric">
+          <span class="mlabel">내 예상 가점</span>
+          <span class="mval"><span class="num">64</span><span class="unit-s">점</span></span>
+          <span class="mnote">상위 <span class="num">18%</span> 추정</span>
+        </div>
+        <div class="metric">
+          <span class="mlabel">조건 맞는 단지</span>
+          <span class="mval"><span class="num">5</span></span>
+          <span class="mnote">총 <span class="num">333</span>건 중 매칭</span>
+        </div>
+      </div>
+      <!-- SIGNATURE: leader-line callout repeats the drawing motif at the ledger edge -->
+      <div class="ledger-foot"><span class="callout">DETAIL A — 매칭 5건은 아래 분양현장 시트에서 도면으로 펼침</span></div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE divider -->
+  <div class="section-divider"><div class="wrap"><div class="dimrule" aria-hidden="true"><span class="line"></span><span class="tag">Sheet 02</span><span class="line"></span></div></div></div>
+
+  <!-- STEPS -->
+  <section class="section" aria-labelledby="steps-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="idx">SHEET 02 — PROCESS</span>
+          <h2 id="steps-h">청약, 5단계로 끝낸다</h2>
+        </div>
+        <span class="hint num">통장 개설 → 신청·결과</span>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <span class="splus" aria-hidden="true">＋</span>
+          <span class="snum num">01</span>
+          <span class="sbar" aria-hidden="true"></span>
+          <h3>통장 만들기</h3>
+          <p>주택청약종합저축 개설과 예치금 기준을 한눈에 확인한다.</p>
+        </div>
+        <div class="step">
+          <span class="splus" aria-hidden="true">＋</span>
+          <span class="snum num">02</span>
+          <span class="sbar" aria-hidden="true"></span>
+          <h3>내 점수·자격</h3>
+          <p>무주택 기간·부양가족·납입 횟수로 가점을 정확히 계산한다.</p>
+        </div>
+        <div class="step">
+          <span class="splus" aria-hidden="true">＋</span>
+          <span class="snum num">03</span>
+          <span class="sbar" aria-hidden="true"></span>
+          <h3>조건 매칭</h3>
+          <p>내 가점·지역·평형에 맞는 공고만 자동으로 걸러 낸다.</p>
+        </div>
+        <div class="step">
+          <span class="splus" aria-hidden="true">＋</span>
+          <span class="snum num">04</span>
+          <span class="sbar" aria-hidden="true"></span>
+          <h3>단지 찾기</h3>
+          <p>경쟁률·당첨선·마감일을 비교해 노릴 단지를 추린다.</p>
+        </div>
+        <div class="step">
+          <span class="splus" aria-hidden="true">＋</span>
+          <span class="snum num">05</span>
+          <span class="sbar" aria-hidden="true"></span>
+          <h3>신청·결과</h3>
+          <p>순위별 접수 일정과 당첨·낙첨 결과를 추적·기록한다.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE divider -->
+  <div class="section-divider"><div class="wrap"><div class="dimrule" aria-hidden="true"><span class="line"></span><span class="tag">Sheet 03</span><span class="line"></span></div></div></div>
+
+  <!-- DIAGNOSIS PANEL (B) -->
+  <section class="section" aria-labelledby="diag-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="idx">SHEET 03 — DIAGNOSIS</span>
+          <h2 id="diag-h">내 가점 진단</h2>
+        </div>
+        <span class="hint num">만점 84 기준 · 항목별 실측</span>
+      </div>
+      <div class="diag">
+        <div class="diag-bars">
+          <div class="diag-row">
+            <div class="dr-head">
+              <span class="dr-name">무주택 기간</span>
+              <span class="dr-score num"><b>26</b><span class="max"> / 32</span></span>
+            </div>
+            <div class="bartrack" role="img" aria-label="무주택 기간 26점, 만점 32점">
+              <span class="barfill" style="width:81.25%"></span>
+              <span class="barmax" style="left:100%" data-l="만점 32"></span>
+            </div>
+          </div>
+          <div class="diag-row">
+            <div class="dr-head">
+              <span class="dr-name">부양가족</span>
+              <span class="dr-score num"><b>20</b><span class="max"> / 35</span></span>
+            </div>
+            <div class="bartrack" role="img" aria-label="부양가족 20점, 만점 35점">
+              <span class="barfill" style="width:57.14%"></span>
+              <span class="barmax" style="left:100%" data-l="만점 35"></span>
+            </div>
+          </div>
+          <div class="diag-row">
+            <div class="dr-head">
+              <span class="dr-name">통장 가입기간</span>
+              <span class="dr-score num"><b>18</b><span class="max"> / 17</span></span>
+            </div>
+            <div class="bartrack" role="img" aria-label="통장 가입기간 18점, 만점 17점, 만점 도달">
+              <!-- capped at 100% of own max; over-flag colors red -->
+              <span class="barfill over" style="width:100%"></span>
+              <span class="barmax" style="left:100%" data-l="만점 17"></span>
+            </div>
+          </div>
+        </div>
+        <div class="diag-total">
+          <div>
+            <span class="dt-label">합계 추정 가점</span>
+            <span class="dt-val num">64<span class="o">/ 84</span></span>
+            <span class="dt-pct"><span class="tick" aria-hidden="true"></span>상위 <span class="num">18%</span> 추정</span>
+          </div>
+          <a class="dt-cta" href="#"><span aria-hidden="true">＋</span>가점 다시 계산</a>
+        </div>
+      </div>
+      <!-- SIGNATURE: leader-line callout at the diagnosis boundary -->
+      <div class="ledger-foot"><span class="callout">NOTE — 통장 가입기간은 만점 도달, 부양가족 구간에 +15점 여지</span></div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE divider -->
+  <div class="section-divider"><div class="wrap"><div class="dimrule" aria-hidden="true"><span class="line"></span><span class="tag">Sheet 04</span><span class="line"></span></div></div></div>
+
+  <!-- D-DAY TIMELINE (C) -->
+  <section class="section" aria-labelledby="tl-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="idx">SHEET 04 — DEADLINES</span>
+          <h2 id="tl-h">마감 임박 D-day</h2>
+        </div>
+        <span class="hint num">접수 마감 순 · 5건</span>
+      </div>
+      <div class="timeline">
+        <div class="tl-track">
+          <span class="tl-axis" aria-hidden="true"></span>
+          <div class="tl-stops">
+            <div class="tl-stop urgent">
+              <span class="dd num">D-2</span>
+              <span class="dt num">06-29</span>
+              <span class="dn">래미안 원페를라</span>
+              <span class="badge">최우선 마감</span>
+            </div>
+            <div class="tl-stop">
+              <span class="dd num">D-3</span>
+              <span class="dt num">06-30</span>
+              <span class="dn">SK뷰 더포레</span>
+            </div>
+            <div class="tl-stop">
+              <span class="dd num">D-5</span>
+              <span class="dt num">07-02</span>
+              <span class="dn">힐스테이트 어울림</span>
+            </div>
+            <div class="tl-stop">
+              <span class="dd num">D-7</span>
+              <span class="dt num">07-04</span>
+              <span class="dn">푸르지오 센트럴</span>
+            </div>
+            <div class="tl-stop">
+              <span class="dd num">D-9</span>
+              <span class="dt num">07-06</span>
+              <span class="dn">자이 더 시그니처</span>
+            </div>
+          </div>
+        </div>
+        <div class="tl-foot">
+          <span class="swatch" aria-hidden="true"></span>
+          가장 임박한 D-2는 경고색으로 표기 · 마감일은 청약홈 접수 기준이며 변경될 수 있다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE divider -->
+  <div class="section-divider"><div class="wrap"><div class="dimrule" aria-hidden="true"><span class="line"></span><span class="tag">Sheet 05</span><span class="line"></span></div></div></div>
+
+  <!-- ALERT TABLE (A) -->
+  <section class="section" aria-labelledby="alert-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="idx">SHEET 05 — ALERTS</span>
+          <h2 id="alert-h">분양현장 알리미</h2>
+        </div>
+        <span class="hint num">총 6건 표시 · 전용면적 도면 주석</span>
+      </div>
+
+      <!-- filter chips + sort label -->
+      <div class="filterbar">
+        <div class="chips" role="group" aria-label="분양현장 필터">
+          <button class="chip-btn" type="button" aria-pressed="true">전체</button>
+          <button class="chip-btn" type="button" aria-pressed="false">수도권</button>
+          <button class="chip-btn" type="button" aria-pressed="false">광역시</button>
+          <button class="chip-btn" type="button" aria-pressed="false">분양가상한제</button>
+        </div>
+        <span class="sortlabel">정렬 · 내 가점 <b class="num">64</b> 기준</span>
+      </div>
+
+      <div class="tablecard">
+        <table class="alert-table">
+          <thead>
+            <tr>
+              <th scope="col">단지 / 평형 구획</th>
+              <th scope="col" class="rt">1순위 경쟁률</th>
+              <th scope="col" class="rt">접수 마감</th>
+              <th scope="col" class="rt">판정</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="cx-cell">
+                  <span class="planthumb match" data-dim="84.00㎡" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                  <div>
+                    <div class="cx-name">래미안 원페를라</div>
+                    <div class="cx-meta">서초구 · <span class="sz">84㎡</span> · 수도권·분양가상한제</div>
+                  </div>
+                </div>
+              </td>
+              <td class="cx-rate"><span class="num">28.7:1</span><small>최고 경쟁 구획</small></td>
+              <td class="cx-due"><span class="d num">D-2</span><span class="date num">06-29 마감</span></td>
+              <td class="jcell"><span class="stampbadge solid">당첨 유력</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="cx-cell">
+                  <span class="planthumb match" data-dim="59.00㎡" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                  <div>
+                    <div class="cx-name">힐스테이트 어울림</div>
+                    <div class="cx-meta">광명시 · <span class="sz">59㎡</span> · 수도권·민영</div>
+                  </div>
+                </div>
+              </td>
+              <td class="cx-rate"><span class="num">9.1:1</span><small>안정 구간</small></td>
+              <td class="cx-due calm"><span class="d num">D-5</span><span class="date num">07-02 마감</span></td>
+              <td class="jcell"><span class="stampbadge calm">적합·안정</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="cx-cell">
+                  <span class="planthumb" data-dim="74.00㎡" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                  <div>
+                    <div class="cx-name">자이 더 시그니처</div>
+                    <div class="cx-meta">인천 · <span class="sz">74㎡</span> · 광역시·공공</div>
+                  </div>
+                </div>
+              </td>
+              <td class="cx-rate"><span class="num">3.4:1</span><small>낮은 경쟁</small></td>
+              <td class="cx-due calm"><span class="d num">D-9</span><span class="date num">07-06 마감</span></td>
+              <td class="jcell"><span class="stampbadge faded">가점 부족</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="cx-cell">
+                  <span class="planthumb match" data-dim="84.00㎡" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                  <div>
+                    <div class="cx-name">푸르지오 센트럴</div>
+                    <div class="cx-meta">수원시 · <span class="sz">84㎡</span> · 수도권·민영</div>
+                  </div>
+                </div>
+              </td>
+              <td class="cx-rate"><span class="num">15.2:1</span><small>경쟁 보통</small></td>
+              <td class="cx-due"><span class="d num">D-7</span><span class="date num">07-04 마감</span></td>
+              <td class="jcell"><span class="stampbadge calm">적합</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="cx-cell">
+                  <span class="planthumb match" data-dim="72.00㎡" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                  <div>
+                    <div class="cx-name">e편한세상 강일</div>
+                    <div class="cx-meta">하남시 · <span class="sz">72㎡</span> · 수도권·민영</div>
+                  </div>
+                </div>
+              </td>
+              <td class="cx-rate"><span class="num">6.8:1</span><small>안정 구간</small></td>
+              <td class="cx-due calm"><span class="d num">D-12</span><span class="date num">07-09 마감</span></td>
+              <td class="jcell"><span class="stampbadge calm">적합·안정</span></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="cx-cell">
+                  <span class="planthumb" data-dim="59.00㎡" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                  <div>
+                    <div class="cx-name">SK뷰 더포레</div>
+                    <div class="cx-meta">부천시 · <span class="sz">59㎡</span> · 수도권·민영</div>
+                  </div>
+                </div>
+              </td>
+              <td class="cx-rate"><span class="num">4.1:1</span><small>낮은 경쟁</small></td>
+              <td class="cx-due"><span class="d num">D-3</span><span class="date num">06-30 마감</span></td>
+              <td class="jcell"><span class="stampbadge calm">검토</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- mobile stacked version: essential columns + shrunk plan thumbnail -->
+        <div class="m-cards">
+          <div class="mcard">
+            <div class="mc-top">
+              <div class="mc-head">
+                <span class="planthumb match" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                <div>
+                  <div class="mc-name">래미안 원페를라</div>
+                  <div class="mc-meta">서초구 · <span class="sz">84.00㎡</span></div>
+                </div>
+              </div>
+              <span class="stampbadge solid">당첨 유력</span>
+            </div>
+            <div class="mc-stats">
+              <div><span class="k">경쟁률</span><span class="v num">28.7:1</span></div>
+              <div><span class="k">마감</span><span class="v due num">D-2 · 06-29</span></div>
+            </div>
+          </div>
+          <div class="mcard">
+            <div class="mc-top">
+              <div class="mc-head">
+                <span class="planthumb match" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                <div>
+                  <div class="mc-name">힐스테이트 어울림</div>
+                  <div class="mc-meta">광명시 · <span class="sz">59.00㎡</span></div>
+                </div>
+              </div>
+              <span class="stampbadge calm">적합·안정</span>
+            </div>
+            <div class="mc-stats">
+              <div><span class="k">경쟁률</span><span class="v num">9.1:1</span></div>
+              <div><span class="k">마감</span><span class="v due calm num">D-5 · 07-02</span></div>
+            </div>
+          </div>
+          <div class="mcard">
+            <div class="mc-top">
+              <div class="mc-head">
+                <span class="planthumb" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                <div>
+                  <div class="mc-name">자이 더 시그니처</div>
+                  <div class="mc-meta">인천 · <span class="sz">74.00㎡</span></div>
+                </div>
+              </div>
+              <span class="stampbadge faded">가점 부족</span>
+            </div>
+            <div class="mc-stats">
+              <div><span class="k">경쟁률</span><span class="v num">3.4:1</span></div>
+              <div><span class="k">마감</span><span class="v due calm num">D-9 · 07-06</span></div>
+            </div>
+          </div>
+          <div class="mcard">
+            <div class="mc-top">
+              <div class="mc-head">
+                <span class="planthumb match" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                <div>
+                  <div class="mc-name">푸르지오 센트럴</div>
+                  <div class="mc-meta">수원시 · <span class="sz">84.00㎡</span></div>
+                </div>
+              </div>
+              <span class="stampbadge calm">적합</span>
+            </div>
+            <div class="mc-stats">
+              <div><span class="k">경쟁률</span><span class="v num">15.2:1</span></div>
+              <div><span class="k">마감</span><span class="v due num">D-7 · 07-04</span></div>
+            </div>
+          </div>
+          <div class="mcard">
+            <div class="mc-top">
+              <div class="mc-head">
+                <span class="planthumb match" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                <div>
+                  <div class="mc-name">e편한세상 강일</div>
+                  <div class="mc-meta">하남시 · <span class="sz">72.00㎡</span></div>
+                </div>
+              </div>
+              <span class="stampbadge calm">적합·안정</span>
+            </div>
+            <div class="mc-stats">
+              <div><span class="k">경쟁률</span><span class="v num">6.8:1</span></div>
+              <div><span class="k">마감</span><span class="v due calm num">D-12 · 07-09</span></div>
+            </div>
+          </div>
+          <div class="mcard">
+            <div class="mc-top">
+              <div class="mc-head">
+                <span class="planthumb" aria-hidden="true"><i class="a"></i><i class="b"></i><i class="c"></i></span>
+                <div>
+                  <div class="mc-name">SK뷰 더포레</div>
+                  <div class="mc-meta">부천시 · <span class="sz">59.00㎡</span></div>
+                </div>
+              </div>
+              <span class="stampbadge calm">검토</span>
+            </div>
+            <div class="mc-stats">
+              <div><span class="k">경쟁률</span><span class="v num">4.1:1</span></div>
+              <div><span class="k">마감</span><span class="v due num">D-3 · 06-30</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-foot">
+        <span>도장 판정은 내 가점·자격 입력값 기준 추정이며 확정 결과가 아니다.</span>
+        <a href="#">전체 333건 도면 펼치기 →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER (D) -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <span class="fb-mark">
+            <span class="fm" aria-hidden="true">印</span>
+            <span class="fn">청약 인텔리전스</span>
+          </span>
+          <span class="ftrust"><span class="lock" aria-hidden="true">⛁</span>입력값과 가점 데이터는 localStorage에만 저장 · 서버 전송 없음. 기기를 바꾸면 데이터는 함께 옮겨지지 않는다.</span>
+        </div>
+        <nav class="foot-col" aria-label="청약 여정">
+          <h4>청약 여정</h4>
+          <ul>
+            <li><a href="#" class="cur" aria-current="page">청약 여정</a></li>
+            <li><a href="#">통장 만들기</a></li>
+            <li><a href="#">내 점수·자격</a></li>
+            <li><a href="#">조건 매칭</a></li>
+          </ul>
+        </nav>
+        <nav class="foot-col" aria-label="분양·관리">
+          <h4>분양 · 관리</h4>
+          <ul>
+            <li><a href="#">분양현장</a></li>
+            <li><a href="#">마감 임박 D-day</a></li>
+            <li><a href="#">내 청약 관리</a></li>
+            <li><a href="#">가점 진단</a></li>
+          </ul>
+        </nav>
+        <nav class="foot-col" aria-label="자료·지원">
+          <h4>자료 · 지원</h4>
+          <ul>
+            <li><a href="#">청약 준비</a></li>
+            <li><a href="#">게시판</a></li>
+            <li><a href="#">자주 묻는 질문</a></li>
+            <li><a href="#">고객센터 1644-7445</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="foot-bottom">
+        <span class="disc">본 서비스의 경쟁률·당첨선·판정은 공개 청약 데이터 기반 추정치이며 법적·금융적 자문이 아니다. 실제 청약 신청·결과는 청약홈(applyhome.co.kr) 공고를 반드시 확인하라.</span>
+        <span class="meta num">© 2026 Cheongyak Intelligence</span>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      var btn=document.getElementById('menubtn');
+      var nav=document.getElementById('nav');
+      if(btn&&nav){
+        btn.addEventListener('click',function(){
+          var open=nav.classList.toggle('open');
+          btn.setAttribute('aria-expanded',open?'true':'false');
+          btn.textContent=open?'✕':'☰';
+        });
+      }
+      // filter chips — single-select visual toggle (client-side only, no data fetch)
+      var chips=document.querySelectorAll('.chip-btn');
+      chips.forEach(function(c){
+        c.addEventListener('click',function(){
+          chips.forEach(function(o){ o.setAttribute('aria-pressed','false'); });
+          c.setAttribute('aria-pressed','true');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
