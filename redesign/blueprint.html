@@ -906,9 +906,9 @@
         <a href="#steps-h" class="active" aria-current="page">청약 여정</a>
         <a href="#diag-h">청약 준비</a>
         <a href="#alert-h">분양현장</a>
-        <a href="#care-h">내 청약 관리</a>
+        <a href="../manage.html">내 청약 관리</a>
       </nav>
-      <a class="cta" href="#care-h"><span class="lbl">내 청약 관리</span><span class="ar" aria-hidden="true">↗</span></a>
+      <a class="cta" href="../manage.html"><span class="lbl">내 청약 관리</span><span class="ar" aria-hidden="true">↗</span></a>
       <button class="menutoggle" id="menubtn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav">☰</button>
     </div>
   </header>
@@ -1795,7 +1795,7 @@
         var io=new IntersectionObserver(function(es){
           es.forEach(function(en){ if(en.isIntersecting) setActive(en.target.id); });
         },{rootMargin:"-45% 0px -50% 0px"});
-        ["steps-h","diag-h","alert-h","care-h"].forEach(function(id){ var el=document.getElementById(id); if(el)io.observe(el); });
+        ["steps-h","diag-h","alert-h"].forEach(function(id){ var el=document.getElementById(id); if(el)io.observe(el); });
       }
     })();
 
