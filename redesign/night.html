@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>청약 인텔리전스 — 야간 관제 터미널</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+  :root{
+    /* ── 색: 잉크/차콜 야간 팔레트 ── */
+    --ink-900:#0E0F12;        /* 페이지 바닥 */
+    --ink-850:#121317;        /* 유틸바/푸터 */
+    --ink-800:#15171C;        /* 섹션 바닥 변주 */
+    --surf-1:#1B1E24;         /* 표면 카드 */
+    --surf-2:#21252C;         /* 살짝 더 밝은 표면 */
+    --surf-hover:#262B33;
+
+    --off-white:#EAE8E2;      /* 본문 오프화이트 — 한 단계 밝게 */
+    --dim:#C2C1BB;            /* 보조 텍스트 — AA 확보 위해 상향 */
+    --faint:#8C8D90;          /* 흐린 라벨 — 비-본문 전용 */
+    --dim-mono:#9DA0A6;       /* 영문/모노 dim 라벨 */
+
+    /* 빨강 = 단일 의미: 오직 primary CTA */
+    --stamp:#C8463A;
+    --stamp-deep:#9A372E;
+
+    /* 라이브 그린 — 긍정 상태(당첨 유력·충족) */
+    --live:#46BC84;
+    --live-dim:#2C7E57;
+
+    /* 앰버/중립 — 마감·위험·가점 부족(빨강 아님) */
+    --warn:#D9A03B;
+    --warn-dim:#8A6A28;
+    --neutral:#9DA0A6;
+
+    --hair:rgba(255,255,255,.08);   /* 헤어라인 괘선 */
+    --hair-2:rgba(255,255,255,.16);
+    --hair-3:rgba(255,255,255,.05);
+
+    /* ── 타입 ── */
+    --f-display:"Space Grotesk","Pretendard",sans-serif;
+    --f-body:"Pretendard",system-ui,sans-serif;
+    --f-mono:"JetBrains Mono","Spline Sans Mono",monospace;
+
+    /* ── 스케일 (≈1.25 비율) ── */
+    --t-xs:.75rem;     /* 12 */
+    --t-sm:.8125rem;   /* 13 */
+    --t-base:.9375rem; /* 15 본문 바닥 */
+    --t-md:1.0625rem;  /* 17 */
+    --t-lg:1.375rem;   /* 22 */
+    --t-xl:1.75rem;    /* 28 */
+    --t-2xl:2.25rem;   /* 36 */
+    --t-hero:clamp(2.4rem,6.2vw,4.6rem);
+
+    /* ── 간격 ── */
+    --sp-1:.5rem;  --sp-2:.75rem; --sp-3:1rem; --sp-4:1.5rem;
+    --sp-5:2rem;   --sp-6:3rem;   --sp-7:4.5rem;
+
+    --r-card:2px;        /* 각진 터미널 패널 (0–2px) */
+    --r-sharp:1px;
+    --r-pill:999px;
+    --maxw:1180px;
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:var(--ink-900);
+    color:var(--off-white);
+    font-family:var(--f-body);
+    font-size:var(--t-base);
+    line-height:1.62;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    /* ss01/cv01 stylistic sets caused Pretendard 한글 헤딩에 고스트/이중 글리프 → 제거 */
+    font-feature-settings:normal;
+    overflow-x:hidden;
+  }
+  .num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum";letter-spacing:-.01em;}
+
+  a{color:inherit;text-decoration:none;}
+  :focus-visible{outline:2px solid var(--live);outline-offset:3px;border-radius:1px;}
+
+  .wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:clamp(1.1rem,4vw,2.25rem);}
+
+  /* 시그니처 메아리: 도트매트릭스 절취선 (섹션 경계 반복) */
+  .perf{
+    position:relative;height:0;
+    border-top:1px dashed var(--hair-2);
+  }
+  .perf::before,.perf::after{
+    content:"";position:absolute;top:-7px;width:14px;height:14px;border-radius:50%;
+    background:var(--ink-900);border:1px solid var(--hair-2);
+  }
+  .perf::before{left:-7px;}
+  .perf::after{right:-7px;}
+  /* 모노 도트매트릭스 질감 띠 */
+  .dotband{
+    height:14px;width:100%;
+    background-image:radial-gradient(var(--hair-2) 1px,transparent 1.4px);
+    background-size:9px 9px;
+    opacity:.5;
+  }
+
+  /* ───────────── 유틸바 ───────────── */
+  .util{
+    background:var(--ink-850);
+    border-bottom:1px solid var(--hair);
+    font-size:var(--t-xs);
+    color:var(--dim);
+  }
+  .util .wrap{display:flex;justify-content:space-between;align-items:center;gap:1rem;
+    padding-top:.55rem;padding-bottom:.55rem;flex-wrap:wrap;}
+  .util-l{display:flex;align-items:center;gap:.55rem;}
+  .util .num{color:var(--off-white);}
+  .util-r{color:var(--dim);}
+  .util-r .num{color:var(--off-white);}
+
+  .live-dot{
+    width:7px;height:7px;border-radius:50%;
+    background:var(--live);
+    box-shadow:0 0 0 0 rgba(70,188,132,.55);
+    animation:pulse 2.4s ease-out infinite;
+    flex:none;
+  }
+  @keyframes pulse{
+    0%{box-shadow:0 0 0 0 rgba(70,188,132,.55);}
+    70%{box-shadow:0 0 0 7px rgba(70,188,132,0);}
+    100%{box-shadow:0 0 0 0 rgba(70,188,132,0);}
+  }
+
+  /* ───────────── 내비 ───────────── */
+  .nav{
+    position:sticky;top:0;z-index:30;
+    background:rgba(14,15,18,.88);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--hair);
+  }
+  .nav .wrap{display:flex;align-items:center;gap:1.5rem;
+    padding-top:.85rem;padding-bottom:.85rem;}
+  .brand{display:flex;align-items:center;gap:.65rem;flex:none;min-height:44px;}
+  .brand-name{
+    font-family:var(--f-display);font-weight:700;letter-spacing:-.02em;
+    font-size:var(--t-md);color:var(--off-white);white-space:nowrap;
+  }
+  /* 印 도장 마크 — 빨강 대신 오프화이트 외곽(빨강은 CTA 전용) */
+  .stamp-mark{
+    width:34px;height:34px;flex:none;position:relative;
+    border:1.5px solid var(--off-white);
+    border-radius:2px;
+    display:grid;place-items:center;
+    color:var(--off-white);
+    font-family:var(--f-body);font-weight:800;font-size:.95rem;
+    transform:rotate(-6deg);
+    box-shadow:inset 0 0 12px rgba(255,255,255,.06);
+  }
+  .stamp-mark::after{
+    content:"印";line-height:1;letter-spacing:0;
+  }
+  .nav-links{display:flex;align-items:center;gap:.25rem;margin-left:.5rem;flex:1;}
+  .nav-links a{
+    font-size:var(--t-sm);color:var(--dim);
+    padding:.55rem .7rem;border-radius:1px;white-space:nowrap;
+    display:inline-flex;align-items:center;min-height:40px;
+    transition:color .15s,background .15s;
+  }
+  .nav-links a:hover{color:var(--off-white);background:var(--surf-1);}
+  .nav-links a.active{
+    color:var(--off-white);
+    box-shadow:inset 0 -2px 0 var(--off-white);
+    border-radius:0;
+  }
+  .nav-cta{
+    flex:none;font-size:var(--t-sm);font-weight:500;
+    color:var(--off-white);
+    border:1px solid var(--hair-2);
+    padding:.55rem .95rem;border-radius:1px;min-height:40px;
+    display:inline-flex;align-items:center;gap:.45rem;
+    transition:border-color .15s,background .15s;
+  }
+  .nav-cta:hover{border-color:var(--off-white);background:var(--surf-1);}
+  .nav-cta .led{width:6px;height:6px;border-radius:50%;background:var(--live);flex:none;}
+
+  .menu-btn{display:none;}
+
+  /* ───────────── 히어로 ───────────── */
+  .hero{
+    position:relative;overflow:hidden;
+    border-bottom:1px solid var(--hair);
+    background:linear-gradient(180deg,var(--ink-900),var(--ink-850));
+  }
+  /* 미세 괘선 그리드 — 원장 느낌 */
+  .hero::before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:linear-gradient(var(--hair-3) 1px,transparent 1px);
+    background-size:100% 38px;
+    opacity:.9;mask-image:linear-gradient(180deg,transparent,#000 18%,#000 75%,transparent);
+  }
+  .hero .wrap{position:relative;padding-top:var(--sp-7);padding-bottom:var(--sp-6);}
+  .hero-grid{display:grid;grid-template-columns:1.55fr 1fr;gap:var(--sp-6);align-items:start;}
+
+  .eyebrow{
+    font-family:var(--f-mono);font-size:var(--t-xs);font-weight:600;
+    letter-spacing:.28em;color:var(--dim-mono);
+    text-transform:uppercase;margin-bottom:1.4rem;
+    display:flex;align-items:center;gap:.7rem;
+  }
+  .eyebrow::before{content:"";width:26px;height:1px;background:var(--dim-mono);display:inline-block;}
+
+  h1.headline{
+    font-family:var(--f-display);
+    font-weight:700;
+    font-size:var(--t-hero);
+    line-height:1.04;
+    letter-spacing:-.03em;
+    margin:0 0 1.5rem;
+    color:var(--off-white);
+    text-wrap:balance;
+  }
+  /* 강조도 빨강 아닌 오프화이트 위계로 (빨강은 CTA 단일 의미) */
+  h1.headline .hl{color:#fff;border-bottom:3px solid var(--stamp);padding-bottom:2px;}
+  .lede{
+    font-size:var(--t-md);color:var(--dim);
+    max-width:33em;margin:0 0 2rem;line-height:1.7;
+  }
+  .lede b{color:var(--off-white);font-weight:600;}
+
+  .hero-cta{display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;}
+  /* 유일한 빨강: primary action */
+  .btn-primary{
+    font-family:var(--f-body);font-size:var(--t-md);font-weight:600;
+    background:var(--stamp);color:#fff;
+    border:1px solid var(--stamp);
+    padding:.85rem 1.7rem;border-radius:2px;min-height:48px;
+    display:inline-flex;align-items:center;gap:.6rem;cursor:pointer;
+    box-shadow:0 0 0 1px rgba(200,70,58,.25),0 6px 22px -8px rgba(200,70,58,.55);
+    transition:background .15s,transform .12s;
+  }
+  .btn-primary:hover{background:var(--stamp-deep);}
+  .btn-primary:active{transform:translateY(1px);}
+  /* 보조 링크 — 무게 낮춤 */
+  .link-arrow{
+    font-size:var(--t-base);color:var(--dim);
+    display:inline-flex;align-items:center;gap:.4rem;min-height:44px;
+    transition:color .15s;
+  }
+  .link-arrow:hover{color:var(--off-white);}
+  .link-arrow span[aria-hidden]{transition:transform .15s;}
+  .link-arrow:hover span[aria-hidden]{transform:translateX(3px);}
+
+  /* 히어로 우측 — 도장 영수증 카드 (시그니처) */
+  .receipt{
+    background:var(--surf-1);
+    border:1px solid var(--hair);
+    border-radius:var(--r-card);
+    padding:1.3rem 1.4rem 1.5rem;
+    position:relative;
+  }
+  .receipt-top{
+    display:flex;justify-content:space-between;align-items:baseline;
+    border-bottom:1px dashed var(--hair-2);padding-bottom:.8rem;margin-bottom:1rem;
+  }
+  .receipt-label{font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.12em;
+    color:var(--dim-mono);text-transform:uppercase;}
+  .receipt-row{display:flex;justify-content:space-between;align-items:baseline;
+    padding:.5rem 0;border-bottom:1px solid var(--hair-3);}
+  .receipt-row:last-of-type{border-bottom:none;}
+  .receipt-k{font-size:var(--t-sm);color:var(--dim);}
+  .receipt-v{font-family:var(--f-mono);font-size:var(--t-base);color:var(--off-white);
+    font-variant-numeric:tabular-nums;font-weight:500;}
+  .receipt-v.good{color:var(--live);}
+  /* 발급·검증 중립 인장 (점괘 아님) — 값(우측 정렬) 위로 겹치지 않게 카드 좌하단 빈 공간에 배치 */
+  .glow-stamp{
+    position:absolute;left:1.3rem;bottom:.85rem;
+    width:74px;height:74px;border-radius:2px;
+    border:2px solid var(--live-dim);
+    color:var(--live);
+    display:grid;place-items:center;text-align:center;
+    transform:rotate(-9deg);
+    font-family:var(--f-mono);font-weight:700;line-height:1.15;
+    box-shadow:inset 0 0 14px rgba(70,188,132,.1);
+    background:repeating-linear-gradient(-45deg,rgba(70,188,132,.05) 0 2px,transparent 2px 6px);
+  }
+  .glow-stamp .gs-big{font-size:.78rem;letter-spacing:.04em;}
+  .glow-stamp .gs-no{font-size:1.1rem;letter-spacing:-.02em;font-weight:700;margin-top:1px;}
+  .glow-stamp .gs-sm{font-size:.5rem;letter-spacing:.12em;margin-top:3px;color:var(--dim-mono);}
+  /* 스탬프가 좌하단을 차지 → 발급 안내 문구는 우측 정렬로 분리(겹침 방지) */
+  .receipt-foot{font-family:var(--f-mono);font-size:.7rem;color:var(--dim-mono);
+    letter-spacing:.1em;margin-top:1.3rem;text-align:right;}
+
+  /* ───────────── 섹션 공통 ───────────── */
+  section.block{padding-top:var(--sp-6);padding-bottom:var(--sp-6);}
+  .sec-head{display:flex;align-items:baseline;gap:.9rem;margin-bottom:var(--sp-4);
+    flex-wrap:wrap;}
+  /* 섹션 영문 라벨 — dim 무채색 */
+  .sec-kicker{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--dim-mono);
+    letter-spacing:.16em;text-transform:uppercase;}
+  h2.sec-title{
+    font-family:var(--f-display);font-weight:600;
+    font-size:var(--t-xl);letter-spacing:-.02em;margin:0;color:var(--off-white);
+    text-wrap:balance;
+  }
+  .sec-note{font-size:var(--t-sm);color:var(--dim);margin-left:auto;}
+  .sec-note .num{color:var(--off-white);}
+
+  /* ── 오늘의 청약 원장: 지표 4 ── */
+  .ledger{
+    display:grid;grid-template-columns:repeat(4,1fr);
+    border:1px solid var(--hair);border-radius:var(--r-card);
+    background:var(--surf-1);overflow:hidden;
+  }
+  .metric{padding:1.4rem 1.4rem 1.5rem;border-right:1px solid var(--hair);position:relative;}
+  .metric:last-child{border-right:none;}
+  .metric-label{font-size:var(--t-sm);color:var(--dim);margin-bottom:.9rem;
+    display:flex;align-items:center;gap:.45rem;}
+  .metric-num{
+    font-family:var(--f-mono);font-weight:700;
+    font-size:var(--t-2xl);line-height:1;color:var(--off-white);
+    font-variant-numeric:tabular-nums;letter-spacing:-.03em;
+    display:flex;align-items:baseline;gap:.25rem;
+  }
+  .metric-num .unit{font-size:var(--t-md);font-weight:500;color:var(--dim);}
+  .metric-num.live{color:var(--live);}
+  .metric-sub{font-size:var(--t-xs);color:var(--faint);margin-top:.7rem;
+    font-family:var(--f-mono);letter-spacing:.02em;}
+  /* 마감 임박 태그 — 앰버(위험/마감), 빨강 아님 */
+  .metric .tag-d{position:absolute;top:1.4rem;right:1.4rem;
+    font-family:var(--f-mono);font-size:.65rem;color:var(--warn);
+    border:1px solid rgba(217,160,59,.45);border-radius:1px;padding:1px 5px;letter-spacing:.05em;}
+
+  /* ── 5단계 스텝 ── */
+  .steps{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;
+    background:var(--hair);border:1px solid var(--hair);border-radius:var(--r-card);overflow:hidden;}
+  .step{background:var(--surf-1);padding:1.3rem 1.2rem 1.5rem;position:relative;
+    transition:background .15s;}
+  /* 시그니처 메아리: 스텝 상단 도트매트릭스 펀치 */
+  .step::before{
+    content:"";position:absolute;top:0;left:1.2rem;right:1.2rem;height:8px;
+    background-image:radial-gradient(var(--hair-2) 1px,transparent 1.3px);
+    background-size:8px 8px;opacity:.45;
+  }
+  .step:hover{background:var(--surf-2);}
+  .step-no{font-family:var(--f-mono);font-size:var(--t-lg);font-weight:700;
+    color:var(--dim-mono);letter-spacing:-.02em;display:block;margin-bottom:.7rem;
+    margin-top:.6rem;font-variant-numeric:tabular-nums;}
+  .step-no::before{content:"";display:block;width:20px;height:2px;background:var(--hair-2);
+    margin-bottom:.8rem;}
+  .step-h{font-size:var(--t-md);font-weight:600;color:var(--off-white);margin:0 0 .4rem;}
+  .step-d{font-size:var(--t-sm);color:var(--dim);line-height:1.55;margin:0;}
+
+  /* ── 분양현장 알리미 표 ── */
+  .filters{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;margin-bottom:var(--sp-3);}
+  .chip{
+    font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.03em;
+    color:var(--dim);background:var(--surf-1);
+    border:1px solid var(--hair-2);border-radius:1px;
+    padding:.5rem .85rem;min-height:36px;display:inline-flex;align-items:center;cursor:pointer;
+    transition:color .15s,border-color .15s,background .15s;
+  }
+  .chip:hover{color:var(--off-white);border-color:var(--off-white);}
+  .chip[aria-pressed="true"]{color:var(--ink-900);background:var(--off-white);border-color:var(--off-white);font-weight:600;}
+  .sort-label{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--dim-mono);margin-left:auto;}
+  .sort-label .num{color:var(--off-white);}
+
+  .alarm-wrap{border:1px solid var(--hair);border-radius:var(--r-card);overflow:hidden;
+    background:var(--surf-1);}
+  .alarm-foot{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--dim-mono);
+    letter-spacing:.04em;margin:.85rem 0 0;}
+  .alarm-foot .num{color:var(--off-white);}
+  table.alarm{width:100%;border-collapse:collapse;font-size:var(--t-sm);}
+  table.alarm thead th{
+    text-align:left;font-family:var(--f-mono);font-size:var(--t-xs);font-weight:500;
+    color:var(--dim-mono);letter-spacing:.08em;text-transform:uppercase;
+    padding:.85rem 1.2rem;background:var(--ink-800);border-bottom:1px solid var(--hair);
+  }
+  table.alarm thead th.r{text-align:right;}
+  table.alarm tbody td{padding:1.05rem 1.2rem;border-bottom:1px solid var(--hair-3);vertical-align:middle;}
+  table.alarm tbody tr:last-child td{border-bottom:none;}
+  table.alarm tbody tr:hover{background:var(--surf-2);}
+  .site-name{font-size:var(--t-base);font-weight:600;color:var(--off-white);margin:0 0 .2rem;}
+  .site-meta{font-size:var(--t-xs);color:var(--dim);font-family:var(--f-body);}
+  .rate{font-family:var(--f-mono);font-size:var(--t-md);font-weight:600;color:var(--off-white);
+    font-variant-numeric:tabular-nums;text-align:right;display:block;letter-spacing:-.02em;}
+  .ddays{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;}
+  .ddays .dnum{color:var(--off-white);font-weight:600;font-size:var(--t-base);}
+  .ddays .ddate{color:var(--faint);font-size:var(--t-xs);display:block;margin-top:.15rem;}
+  /* 임박 = 앰버(빨강 아님) */
+  .ddays .dnum.soon{color:var(--warn);}
+
+  /* 판정 인장 — 빨강 의미 충돌 제거 */
+  .verdict{display:inline-flex;align-items:center;justify-content:center;
+    font-family:var(--f-body);font-weight:700;font-size:var(--t-xs);
+    letter-spacing:.02em;padding:.4rem .7rem;border-radius:1px;
+    border:1.5px solid;transform:rotate(-2deg);white-space:nowrap;}
+  /* 당첨 유력 = 라이브 그린 (긍정 상태) */
+  .v-win{color:var(--live);border-color:var(--live);
+    box-shadow:inset 0 0 8px rgba(70,188,132,.12);
+    background:rgba(70,188,132,.07);}
+  .v-ok{color:var(--live);border-color:var(--live-dim);
+    background:rgba(70,188,132,.05);transform:rotate(-1deg);}
+  /* 가점 부족 = 중립/앰버 점선 (위험, 빨강 아님) */
+  .v-low{color:var(--warn);border-color:var(--warn-dim);
+    background:transparent;transform:rotate(2deg);border-style:dashed;}
+  .v-check{color:var(--dim);border-color:var(--hair-2);
+    background:transparent;transform:rotate(1deg);}
+  .vc{text-align:right;}
+
+  /* ── 내 가점 진단 + D-day 타임라인 (2열) ── */
+  .diag-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:var(--sp-4);align-items:stretch;}
+  .panel{
+    background:var(--surf-1);border:1px solid var(--hair);border-radius:var(--r-card);
+    padding:1.4rem 1.5rem 1.6rem;position:relative;display:flex;flex-direction:column;
+  }
+  /* 시그니처 메아리: 패널 상단 절취 점선 + 펀치 */
+  .panel{overflow:hidden;}
+  .panel::before{
+    content:"";position:absolute;top:14px;left:0;right:0;height:1px;
+    border-top:1px dashed var(--hair-2);
+  }
+  .panel-head{display:flex;justify-content:space-between;align-items:baseline;
+    margin-bottom:1.3rem;padding-top:.4rem;}
+  .panel-title{font-family:var(--f-display);font-weight:600;font-size:var(--t-lg);
+    color:var(--off-white);margin:0;letter-spacing:-.01em;}
+  .panel-tag{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--dim-mono);
+    letter-spacing:.12em;text-transform:uppercase;}
+
+  /* 가점 막대 */
+  .score-row{margin-bottom:1.05rem;}
+  .score-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.4rem;}
+  .score-name{font-size:var(--t-sm);color:var(--dim);}
+  .score-val{font-family:var(--f-mono);font-size:var(--t-sm);color:var(--off-white);
+    font-variant-numeric:tabular-nums;}
+  .score-val .max{color:var(--faint);}
+  .bar{height:8px;background:var(--ink-800);border:1px solid var(--hair);border-radius:1px;overflow:hidden;}
+  .bar > i{display:block;height:100%;background:var(--live);border-radius:0;}
+  .bar > i.warn{background:var(--warn);}
+  .score-total{
+    margin-top:.4rem;padding-top:1.1rem;border-top:1px dashed var(--hair-2);
+    display:flex;justify-content:space-between;align-items:flex-end;
+  }
+  .total-num{font-family:var(--f-mono);font-weight:700;font-size:var(--t-2xl);
+    color:var(--live);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.03em;}
+  .total-num .unit{font-size:var(--t-md);color:var(--dim);font-weight:500;}
+  .total-meta{text-align:right;}
+  .total-pct{font-family:var(--f-mono);font-size:var(--t-sm);color:var(--off-white);}
+  .total-cap{font-size:var(--t-xs);color:var(--faint);margin-top:.2rem;}
+  .panel-cta{
+    margin-top:1.3rem;align-self:flex-start;
+    font-family:var(--f-body);font-size:var(--t-sm);font-weight:500;color:var(--off-white);
+    border:1px solid var(--hair-2);background:transparent;border-radius:1px;
+    padding:.55rem 1rem;min-height:40px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:.4rem;
+    transition:border-color .15s,background .15s;
+  }
+  .panel-cta:hover{border-color:var(--off-white);background:var(--surf-2);}
+
+  /* D-day 타임라인 */
+  .timeline{display:flex;flex-direction:column;gap:0;margin-top:.2rem;flex:1;}
+  .tl-item{display:flex;align-items:center;gap:1rem;padding:.7rem 0;
+    border-bottom:1px solid var(--hair-3);}
+  .tl-item:last-child{border-bottom:none;}
+  .tl-d{font-family:var(--f-mono);font-weight:700;font-size:var(--t-md);
+    color:var(--dim);min-width:3.2em;text-align:right;font-variant-numeric:tabular-nums;letter-spacing:-.02em;}
+  .tl-d.soon{color:var(--warn);font-size:var(--t-lg);}
+  .tl-track{flex:1;height:2px;background:var(--hair);position:relative;}
+  .tl-dot{width:9px;height:9px;border-radius:50%;background:var(--neutral);
+    position:absolute;left:0;top:50%;transform:translateY(-50%);}
+  .tl-dot.soon{background:var(--warn);box-shadow:0 0 0 3px rgba(217,160,59,.18);width:11px;height:11px;}
+  .tl-name{font-size:var(--t-sm);color:var(--dim);min-width:0;flex:1.2;}
+  .tl-name b{color:var(--off-white);font-weight:600;}
+  .tl-date{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--faint);
+    font-variant-numeric:tabular-nums;}
+
+  /* ── 가점 입력 폼 (계산기) ── */
+  .gj-form{display:grid;grid-template-columns:1fr 1fr;gap:.7rem .9rem;margin-bottom:1.2rem;}
+  .gj-field{display:flex;flex-direction:column;gap:.3rem;}
+  .gj-field.full{grid-column:1 / -1;}
+  .gj-field label{font-size:var(--t-xs);color:var(--dim);font-family:var(--f-mono);
+    letter-spacing:.04em;}
+  .gj-field input,.gj-field select{
+    font-family:var(--f-mono);font-size:var(--t-sm);color:var(--off-white);
+    background:var(--ink-800);border:1px solid var(--hair-2);border-radius:1px;
+    padding:.55rem .7rem;min-height:40px;width:100%;
+    transition:border-color .15s,box-shadow .15s;
+  }
+  .gj-field input::-webkit-calendar-picker-indicator{filter:invert(.7);}
+  .gj-field input:focus,.gj-field select:focus{outline:none;border-color:var(--live);
+    box-shadow:0 0 0 3px rgba(70,188,132,.15);}
+  .gj-field input[type=checkbox]{width:auto;min-height:auto;}
+  .gj-check{flex-direction:row;align-items:center;gap:.5rem;}
+  .gj-check input{accent-color:var(--live);width:18px;height:18px;}
+  .gj-check label{font-size:var(--t-sm);color:var(--off-white);}
+  .gj-empty{font-size:var(--t-sm);color:var(--faint);padding:.4rem 0 1rem;line-height:1.6;}
+
+  /* 전망 인장 (가점 vs 지역 커트라인) */
+  .gj-outlook{display:inline-flex;align-items:center;gap:.5rem;margin-top:1rem;
+    font-family:var(--f-mono);font-size:var(--t-xs);letter-spacing:.04em;
+    border:1px solid;border-radius:1px;padding:.45rem .75rem;}
+  .gj-outlook.hi{color:var(--live);border-color:var(--live);background:rgba(70,188,132,.07);}
+  .gj-outlook.mid{color:var(--warn);border-color:var(--warn-dim);background:rgba(217,160,59,.06);}
+  .gj-outlook.lo{color:var(--neutral);border-color:var(--hair-2);background:transparent;}
+  .gj-outlook .ocut{color:var(--dim-mono);}
+
+  /* 표: 경쟁률 상세 펼침 행 */
+  table.alarm tbody tr.has-detail td:first-child{cursor:pointer;}
+  .alarm-exp{display:inline-flex;align-items:center;gap:.25rem;margin-left:.5rem;
+    font-family:var(--f-mono);font-size:.65rem;color:var(--dim-mono);
+    border:1px solid var(--hair-2);border-radius:1px;padding:1px 5px;letter-spacing:.04em;
+    vertical-align:middle;transition:color .15s,border-color .15s;}
+  table.alarm tbody tr.has-detail:hover .alarm-exp{color:var(--off-white);border-color:var(--off-white);}
+  tr.detail-row > td{padding:0 !important;background:var(--ink-800);}
+  tr.detail-row .detail-in{padding:1rem 1.2rem 1.3rem;max-height:340px;overflow:auto;}
+  tr.detail-row h5{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--dim-mono);
+    letter-spacing:.08em;text-transform:uppercase;margin:0 0 .7rem;}
+  table.cz{width:100%;border-collapse:collapse;font-size:var(--t-xs);}
+  table.cz th,table.cz td{padding:.5rem .6rem;border-bottom:1px solid var(--hair-3);
+    text-align:center;white-space:nowrap;}
+  table.cz th{font-family:var(--f-mono);color:var(--dim-mono);font-weight:500;
+    letter-spacing:.04em;background:var(--ink-850);position:sticky;top:0;}
+  table.cz td{font-family:var(--f-mono);color:var(--off-white);font-variant-numeric:tabular-nums;}
+  table.cz td.u{color:var(--warn);}
+  table.cz td:first-child,table.cz th:first-child{text-align:left;}
+  .empty-row td{padding:2.4rem 1.2rem !important;text-align:center;color:var(--faint);}
+
+  /* ── 사후관리 섹션: 절차 8 + 셀프체크 11 ── */
+  .care-tabs{display:flex;gap:.4rem;margin-bottom:var(--sp-4);flex-wrap:wrap;}
+  .acc-group{border:1px solid var(--hair);border-radius:var(--r-card);overflow:hidden;
+    background:var(--surf-1);}
+  .acc-item{border-bottom:1px solid var(--hair-3);}
+  .acc-item:last-child{border-bottom:none;}
+  .acc-head{width:100%;display:flex;align-items:center;gap:1rem;text-align:left;
+    background:transparent;border:none;color:var(--off-white);cursor:pointer;
+    padding:1.05rem 1.3rem;font-family:var(--f-body);font-size:var(--t-base);
+    transition:background .15s;min-height:56px;}
+  .acc-head:hover{background:var(--surf-2);}
+  .acc-no{font-family:var(--f-mono);font-weight:700;font-size:var(--t-sm);
+    color:var(--dim-mono);min-width:2.4em;font-variant-numeric:tabular-nums;flex:none;}
+  .acc-cat{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--warn);
+    border:1px solid var(--warn-dim);border-radius:1px;padding:1px 6px;letter-spacing:.03em;
+    flex:none;}
+  .acc-title{font-weight:600;flex:1;line-height:1.45;}
+  .acc-chevron{font-family:var(--f-mono);color:var(--dim-mono);flex:none;
+    transition:transform .2s var(--ease,ease);font-size:var(--t-md);}
+  .acc-item.open .acc-chevron{transform:rotate(45deg);}
+  .acc-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease;}
+  .acc-item.open .acc-body{grid-template-rows:1fr;}
+  .acc-body > div{overflow:hidden;}
+  .acc-detail{padding:.2rem 1.3rem 1.3rem 4.4rem;font-size:var(--t-sm);color:var(--dim);
+    line-height:1.7;}
+  .acc-detail .docs{display:block;margin-top:.8rem;font-family:var(--f-mono);font-size:var(--t-xs);
+    color:var(--dim-mono);letter-spacing:.02em;border-top:1px dashed var(--hair-2);padding-top:.7rem;}
+  .acc-detail .docs b{color:var(--off-white);font-weight:500;}
+  .acc-detail .why{color:var(--off-white);}
+  .acc-detail .risk{display:inline-flex;align-items:center;gap:.4rem;margin-top:.7rem;
+    font-size:var(--t-xs);color:var(--warn);font-family:var(--f-mono);letter-spacing:.02em;}
+  .disclaim{margin-top:var(--sp-4);font-size:var(--t-xs);color:var(--faint);line-height:1.7;
+    border-left:2px solid var(--warn-dim);padding-left:1rem;max-width:62em;}
+
+  /* ───────────── 푸터 ───────────── */
+  footer{background:var(--ink-850);border-top:1px solid var(--hair);
+    padding-top:var(--sp-5);padding-bottom:var(--sp-5);}
+  .foot-top{display:flex;justify-content:space-between;gap:var(--sp-5);flex-wrap:wrap;
+    padding-bottom:var(--sp-4);border-bottom:1px solid var(--hair);}
+  .foot-brand{display:flex;align-items:center;gap:.6rem;
+    font-family:var(--f-display);font-weight:700;color:var(--off-white);font-size:var(--t-md);}
+  .foot-brand .stamp-mark{width:30px;height:30px;font-size:.85rem;}
+  .foot-brand-wrap{max-width:22em;}
+  .foot-tagline{font-size:var(--t-sm);color:var(--dim);margin:.9rem 0 0;line-height:1.6;}
+  .foot-nav{display:flex;gap:var(--sp-5);flex-wrap:wrap;}
+  .foot-col h4{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--dim-mono);
+    letter-spacing:.1em;text-transform:uppercase;margin:0 0 .9rem;font-weight:500;}
+  .foot-col a{display:block;font-size:var(--t-sm);color:var(--dim);padding:.4rem 0;min-height:36px;
+    transition:color .15s;}
+  .foot-col a:hover{color:var(--off-white);}
+  .foot-bottom{display:flex;justify-content:space-between;align-items:center;
+    gap:1rem;flex-wrap:wrap;padding-top:var(--sp-4);}
+  .foot-note{font-family:var(--f-mono);font-size:var(--t-xs);color:var(--dim);
+    letter-spacing:.04em;display:flex;align-items:center;gap:.5rem;}
+  .foot-note .lock{color:var(--live);}
+  .foot-legal{font-size:var(--t-xs);color:var(--faint);max-width:40em;}
+
+  /* ───────────── 반응형 ───────────── */
+  @media (max-width:920px){
+    .hero-grid{grid-template-columns:1fr;gap:var(--sp-5);}
+    .receipt{max-width:440px;}
+    .ledger{grid-template-columns:repeat(2,1fr);}
+    .metric:nth-child(2){border-right:none;}
+    .metric:nth-child(1),.metric:nth-child(2){border-bottom:1px solid var(--hair);}
+    .steps{grid-template-columns:repeat(2,1fr);}
+    .steps .step:nth-child(5){grid-column:1 / -1;}
+    .diag-grid{grid-template-columns:1fr;}
+  }
+  @media (max-width:680px){
+    .nav-links{display:none;}
+    .menu-btn{display:inline-flex;align-items:center;justify-content:center;
+      margin-left:auto;width:44px;height:44px;border:1px solid var(--hair-2);
+      border-radius:1px;color:var(--off-white);background:transparent;cursor:pointer;font-size:1.1rem;}
+    .nav-cta{display:none;}
+    .ledger{grid-template-columns:repeat(2,1fr);}
+    .metric{border-right:1px solid var(--hair);}
+    .metric:nth-child(2n){border-right:none;}
+    .metric:nth-child(1),.metric:nth-child(2){border-bottom:1px solid var(--hair);}
+    .steps{grid-template-columns:1fr;}
+    .steps .step:nth-child(5){grid-column:auto;}
+    /* 표: 핵심 열만 — 경쟁률 열 숨김(가점 정렬 핵심: 단지+마감+판정) */
+    table.alarm .col-rate{display:none;}
+    table.alarm thead th,table.alarm tbody td{padding:.85rem .8rem;}
+    .verdict{transform:none;font-size:.7rem;padding:.4rem .55rem;}
+    .sort-label{margin-left:0;width:100%;}
+  }
+  @media (max-width:430px){
+    .ledger{grid-template-columns:1fr;}
+    .metric{border-right:none !important;border-bottom:1px solid var(--hair);}
+    .metric:last-child{border-bottom:none;}
+    .util .wrap{font-size:.7rem;}
+    /* 표를 카드형으로 재배치: 마감 열 숨기고 단지 셀에 흡수 */
+    table.alarm .col-dday{display:none;}
+    .tl-name{flex:1;}
+    .tl-track{display:none;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important;transition:none !important;}
+    .live-dot{box-shadow:0 0 0 2px rgba(70,188,132,.3);}
+  }
+</style>
+</head>
+<body>
+
+<!-- ───── 유틸바 ───── -->
+<div class="util">
+  <div class="wrap">
+    <div class="util-l">
+      <span class="live-dot" aria-hidden="true"></span>
+      <span>실시간 분양 데이터 · 청약홈 수집 <span class="num" id="util-updated">—</span></span>
+    </div>
+    <div class="util-r">청약 문의 <span class="num">1644-7445</span> · 평일 <span class="num">09:00–17:30</span></div>
+  </div>
+</div>
+
+<!-- ───── 내비 ───── -->
+<nav class="nav">
+  <div class="wrap">
+    <a class="brand" href="#" aria-label="청약 인텔리전스 홈">
+      <span class="stamp-mark" aria-hidden="true"></span>
+      <span class="brand-name">청약 인텔리전스</span>
+    </a>
+    <div class="nav-links">
+      <a href="#" class="active" aria-current="page">청약 여정</a>
+      <a href="#">청약 준비</a>
+      <a href="#">분양현장</a>
+      <a href="#">내 청약 관리</a>
+      <a href="#">게시판</a>
+    </div>
+    <a href="#" class="nav-cta"><span class="led" aria-hidden="true"></span>내 청약 관리</a>
+    <button class="menu-btn" aria-label="메뉴 열기">☰</button>
+  </div>
+</nav>
+
+<!-- ───── 히어로 ───── -->
+<header class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <p class="eyebrow">CHEONGYAK INTELLIGENCE</p>
+        <h1 class="headline">기다림은 운이 아니다.<br><span class="hl">숫자로 읽는</span> 단 한 번의 청약.</h1>
+        <p class="lede">분양 공고를 내 가점·자격으로 자동 매칭한다. <b>광고가 아니라 원장이다.</b> 입력값은 이 기기에만 저장된다.</p>
+        <div class="hero-cta">
+          <button class="btn-primary" data-jump="diagnosis">내 가점 확인 <span aria-hidden="true">→</span></button>
+          <a href="#sites" class="link-arrow">분양현장 먼저 보기 <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
+      <!-- 도장 영수증 카드 (시그니처) -->
+      <aside class="receipt" aria-label="내 청약 요약">
+        <div class="receipt-top">
+          <span class="receipt-label">내 청약 원장</span>
+          <span class="receipt-label num">No.064</span>
+        </div>
+        <div class="receipt-row"><span class="receipt-k">예상 가점</span><span class="receipt-v" id="rc-gj">미입력</span></div>
+        <div class="receipt-row"><span class="receipt-k">가점 전망</span><span class="receipt-v" id="rc-outlook">—</span></div>
+        <div class="receipt-row"><span class="receipt-k">청약 진행중</span><span class="receipt-v good" id="rc-live">—건</span></div>
+        <div class="receipt-row"><span class="receipt-k">미달 현장</span><span class="receipt-v good" id="rc-under">—건</span></div>
+        <p class="receipt-foot">LOCAL-ONLY · NO SERVER SYNC</p>
+        <!-- 발급·검증 중립 인장 -->
+        <div class="glow-stamp" aria-hidden="true">
+          <span>
+            <span class="gs-big">VERIFIED</span>
+            <span class="gs-no">No.064</span>
+            <span class="gs-sm">06-27 09:14</span>
+          </span>
+        </div>
+      </aside>
+    </div>
+  </div>
+</header>
+
+<!-- ───── 오늘의 청약 원장 ───── -->
+<section class="block" style="background:var(--ink-850);border-bottom:1px solid var(--hair);">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-kicker" id="ledger-kicker">LEDGER</span>
+      <h2 class="sec-title">오늘의 청약 원장</h2>
+      <span class="sec-note">청약홈 수집 기준 · <span class="num" id="ledger-total">—건</span> 모니터링</span>
+    </div>
+    <div class="ledger">
+      <div class="metric">
+        <span class="tag-d">접수중</span>
+        <div class="metric-label">청약 진행중</div>
+        <div class="metric-num live"><span id="m-live">0</span><span class="unit">건</span></div>
+        <div class="metric-sub">지금 접수 가능</div>
+      </div>
+      <div class="metric">
+        <span class="tag-d">D-7 이내</span>
+        <div class="metric-label">청약 임박</div>
+        <div class="metric-num"><span id="m-soon">0</span><span class="unit">건</span></div>
+        <div class="metric-sub">7일 내 접수 시작</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">미달 현장</div>
+        <div class="metric-num"><span id="m-under">0</span><span class="unit">건</span></div>
+        <div class="metric-sub">경쟁률 1:1 미만 · 기회</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">수집 현장</div>
+        <div class="metric-num"><span id="m-total">0</span><span class="unit">건</span></div>
+        <div class="metric-sub">청약홈 연동 분양정보</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── 5단계 ───── -->
+<section class="block">
+  <div class="wrap">
+    <div class="dotband" aria-hidden="true" style="margin-bottom:var(--sp-5);"></div>
+    <div class="sec-head">
+      <span class="sec-kicker">PROCESS</span>
+      <h2 class="sec-title">청약, 5단계로 끝낸다</h2>
+      <span class="sec-note">통장 개설부터 결과 확인까지</span>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <span class="step-no">01</span>
+        <h3 class="step-h">통장 만들기</h3>
+        <p class="step-d">주택청약종합저축 개설, 납입 회차를 쌓는다.</p>
+      </div>
+      <div class="step">
+        <span class="step-no">02</span>
+        <h3 class="step-h">내 점수·자격</h3>
+        <p class="step-d">무주택 기간·부양가족·가입 기간으로 가점 산정.</p>
+      </div>
+      <div class="step">
+        <span class="step-no">03</span>
+        <h3 class="step-h">조건 매칭</h3>
+        <p class="step-d">예치금·거주지·순위로 신청 가능 공고를 거른다.</p>
+      </div>
+      <div class="step">
+        <span class="step-no">04</span>
+        <h3 class="step-h">단지 찾기</h3>
+        <p class="step-d">경쟁률과 가점 커트라인으로 당첨 가능성을 본다.</p>
+      </div>
+      <div class="step">
+        <span class="step-no">05</span>
+        <h3 class="step-h">신청·결과</h3>
+        <p class="step-d">마감 전 신청, 당첨·낙첨 결과를 추적한다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── 분양현장 알리미 ───── -->
+<section class="block" id="sites" style="background:var(--ink-850);border-top:1px solid var(--hair);">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="sec-kicker">ALERTS</span>
+      <h2 class="sec-title">분양현장 알리미</h2>
+      <span class="sec-note">청약홈 직수집 · 무광고</span>
+    </div>
+    <div class="filters" role="group" aria-label="분양현장 필터">
+      <div class="filters" id="seg-status" role="group" aria-label="상태 필터" style="margin-bottom:0;gap:.5rem;">
+        <button class="chip" data-st="" aria-pressed="true">전체</button>
+        <button class="chip" data-st="soon" aria-pressed="false">임박</button>
+        <button class="chip" data-st="live" aria-pressed="false">진행중</button>
+        <button class="chip" data-st="wait" aria-pressed="false">예정</button>
+        <button class="chip" data-st="done" aria-pressed="false">마감</button>
+      </div>
+      <label class="sr-only" for="f-reg" style="position:absolute;left:-9999px;">지역 필터</label>
+      <select id="f-reg" class="gj-field" style="font-family:var(--f-mono);font-size:var(--t-xs);background:var(--ink-800);color:var(--off-white);border:1px solid var(--hair-2);border-radius:1px;padding:.5rem .7rem;min-height:36px;">
+        <option value="">전체 지역</option>
+      </select>
+      <input id="f-q" type="search" placeholder="단지명 검색" aria-label="단지명 검색"
+        style="font-family:var(--f-mono);font-size:var(--t-xs);background:var(--ink-800);color:var(--off-white);border:1px solid var(--hair-2);border-radius:1px;padding:.5rem .7rem;min-height:36px;width:160px;">
+      <span class="sort-label">정렬 · 내 가점 <span class="num" id="sort-gj">—</span> 기준 · <span class="num" id="alarm-count">0</span>건</span>
+    </div>
+    <div class="alarm-wrap">
+      <table class="alarm">
+        <thead>
+          <tr>
+            <th scope="col">단지</th>
+            <th scope="col" class="r col-rate">종합 경쟁률</th>
+            <th scope="col" class="r col-dday">마감</th>
+            <th scope="col" class="r">판정</th>
+          </tr>
+        </thead>
+        <tbody id="alarm-body"></tbody>
+      </table>
+    </div>
+    <p class="alarm-foot"><span class="num" id="alarm-shown">표시 0 / 전체 0건</span> · 임박순 정렬</p>
+  </div>
+</section>
+
+<!-- ───── 내 가점 진단 + D-day 타임라인 ───── -->
+<section class="block" id="diagnosis">
+  <div class="wrap">
+    <div class="dotband" aria-hidden="true" style="margin-bottom:var(--sp-5);"></div>
+    <div class="sec-head">
+      <span class="sec-kicker">DIAGNOSIS</span>
+      <h2 class="sec-title">내 가점 진단 · 마감 타임라인</h2>
+      <span class="sec-note">입력값은 이 기기에만 저장</span>
+    </div>
+    <div class="diag-grid">
+
+      <!-- 가점 진단 패널 (실계산기) -->
+      <div class="panel" aria-label="내 가점 진단">
+        <div class="panel-head">
+          <h3 class="panel-title">내 가점 진단</h3>
+          <span class="panel-tag">LOCAL-ONLY</span>
+        </div>
+
+        <form class="gj-form" id="gj-form" autocomplete="off">
+          <div class="gj-field">
+            <label for="i-birth">생년월일</label>
+            <input type="date" id="i-birth" max="2026-06-28">
+          </div>
+          <div class="gj-field">
+            <label for="i-marry">혼인신고일 (선택)</label>
+            <input type="date" id="i-marry" max="2026-06-28">
+          </div>
+          <div class="gj-field">
+            <label for="i-join">통장 가입일</label>
+            <input type="date" id="i-join" max="2026-06-28">
+          </div>
+          <div class="gj-field">
+            <label for="i-fam">부양가족 수</label>
+            <input type="number" id="i-fam" min="0" max="10" step="1" inputmode="numeric" placeholder="0">
+          </div>
+          <div class="gj-field">
+            <label for="i-region">희망 지역</label>
+            <select id="i-region">
+              <option value="">희망 지역 선택</option>
+            </select>
+          </div>
+          <div class="gj-field gj-check">
+            <input type="checkbox" id="i-own">
+            <label for="i-own">주택 보유 (유주택)</label>
+          </div>
+        </form>
+
+        <p class="gj-empty" id="gj-empty">생년월일·통장 가입일·부양가족 수를 입력하면 가점이 자동 계산됩니다. 입력값은 이 기기(localStorage)에만 저장됩니다.</p>
+
+        <div class="score-row">
+          <div class="score-top">
+            <span class="score-name">무주택 기간</span>
+            <span class="score-val"><span id="g1-val">0</span><span class="max"> / 32</span></span>
+          </div>
+          <div class="bar"><i id="g1-bar" style="width:0%"></i></div>
+        </div>
+
+        <div class="score-row">
+          <div class="score-top">
+            <span class="score-name">부양가족</span>
+            <span class="score-val"><span id="g2-val">0</span><span class="max"> / 35</span></span>
+          </div>
+          <div class="bar"><i id="g2-bar" class="warn" style="width:0%"></i></div>
+        </div>
+
+        <div class="score-row">
+          <div class="score-top">
+            <span class="score-name">통장 가입기간</span>
+            <span class="score-val"><span id="g3-val">0</span><span class="max"> / 17</span></span>
+          </div>
+          <div class="bar"><i id="g3-bar" style="width:0%"></i></div>
+        </div>
+
+        <div class="score-total">
+          <div class="total-num"><span id="gj-total">0</span><span class="unit">점</span></div>
+          <div class="total-meta">
+            <div class="total-pct">84점 만점 가점제</div>
+            <div class="total-cap" id="gj-cap">무주택32 · 부양35 · 통장17</div>
+          </div>
+        </div>
+        <div class="gj-outlook lo" id="gj-outlook" hidden>
+          <span id="gj-outlook-label">—</span>
+          <span class="ocut" id="gj-outlook-cut"></span>
+        </div>
+      </div>
+
+      <!-- D-day 타임라인 패널 (실데이터) -->
+      <div class="panel" aria-label="마감 임박 타임라인">
+        <div class="panel-head">
+          <h3 class="panel-title">마감 임박 D-day</h3>
+          <span class="panel-tag" id="tl-count">0건</span>
+        </div>
+        <div class="timeline" id="timeline"></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ───── 사후관리: 청약 절차 + 셀프체크 ───── -->
+<section class="block" id="care" style="background:var(--ink-850);border-top:1px solid var(--hair);">
+  <div class="wrap">
+    <div class="dotband" aria-hidden="true" style="margin-bottom:var(--sp-5);"></div>
+    <div class="sec-head">
+      <span class="sec-kicker">AFTERCARE</span>
+      <h2 class="sec-title">신청 그 다음 · 사후관리</h2>
+      <span class="sec-note">청약 절차 <span class="num">8</span>단계 · 부적격 셀프체크 <span class="num">11</span></span>
+    </div>
+
+    <div class="care-tabs" role="tablist" aria-label="사후관리 보기 전환">
+      <button class="chip" id="tab-proc" role="tab" aria-selected="true" aria-controls="acc-proc">청약 절차 8단계</button>
+      <button class="chip" id="tab-check" role="tab" aria-selected="false" aria-controls="acc-check">부적격 셀프체크 11</button>
+    </div>
+
+    <div class="acc-group" id="acc-proc" role="tabpanel" aria-labelledby="tab-proc"></div>
+    <div class="acc-group" id="acc-check" role="tabpanel" aria-labelledby="tab-check" hidden></div>
+
+    <p class="disclaim" id="disclaimer"></p>
+  </div>
+</section>
+
+<!-- ───── 푸터 ───── -->
+<footer>
+  <div class="wrap">
+    <div class="dotband" aria-hidden="true" style="margin-bottom:var(--sp-4);"></div>
+    <div class="foot-top">
+      <div class="foot-brand-wrap">
+        <div class="foot-brand">
+          <span class="stamp-mark" aria-hidden="true"></span>
+          청약 인텔리전스
+        </div>
+        <p class="foot-tagline">분양 공고를 내 가점·자격으로 자동 매칭하는 청약 원장. 광고 없이 청약홈 데이터만 읽는다.</p>
+      </div>
+      <nav class="foot-nav" aria-label="푸터 내비게이션">
+        <div class="foot-col">
+          <h4>청약 여정</h4>
+          <a href="#">청약 준비</a>
+          <a href="#sites">분양현장</a>
+          <a href="#">내 청약 관리</a>
+          <a href="#">게시판</a>
+        </div>
+        <div class="foot-col">
+          <h4>도구</h4>
+          <a href="#">가점 계산기</a>
+          <a href="#">자격 진단</a>
+          <a href="#">경쟁률 분석</a>
+          <a href="#">마감 알림</a>
+        </div>
+        <div class="foot-col">
+          <h4>안내</h4>
+          <a href="#">이용 가이드</a>
+          <a href="#">자주 묻는 질문</a>
+          <a href="#">데이터 출처</a>
+          <a href="#">문의하기</a>
+        </div>
+      </nav>
+    </div>
+    <div class="foot-bottom">
+      <div class="foot-note">
+        <span class="lock" aria-hidden="true">●</span>
+        데이터는 localStorage에만 저장 · 서버 전송 없음
+      </div>
+      <p class="foot-legal">제공 정보는 청약홈 공개 데이터를 가공한 참고용이며, 실제 당첨·자격 판정은 청약 신청 기관의 공식 결과를 따릅니다.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- 데이터/로직: 상위 폴더 상대경로 -->
+<script src="../bunyang.js"></script>
+<script src="../matching.js"></script>
+<script src="../kb.js"></script>
+<script>
+(function(){
+  "use strict";
+  var D = window.BUNYANG || { items: [], updated: "" };
+  var DATA = Array.isArray(D.items) ? D.items : [];
+  var M = window.MATCH || null;
+  var KB = window.KB || null;
+  var $ = function(id){ return document.getElementById(id); };
+  var REDUCE = matchMedia("(prefers-reduced-motion:reduce)").matches;
+
+  // ── 기준 날짜: 데이터 수집일을 "오늘"로 사용(데이터-현실 일관성) ──
+  var updatedStr = D.updated || "";
+  var baseMatch = String(updatedStr).match(/\d{4}-\d{2}-\d{2}/);
+  var TODAY = baseMatch ? new Date(baseMatch[0]) : new Date();
+  TODAY.setHours(0,0,0,0);
+
+  // ── 유틸바 수집시각 ──
+  if ($("util-updated")) $("util-updated").textContent = updatedStr || "—";
+
+  // ── 청약기간 → 날짜 파싱 → 상태/D-day (index.html status() 이식) ──
+  function pd(s){
+    var m = String(s||"").match(/\d{4}-\d{2}-\d{2}/g);
+    return m ? m.map(function(x){ return new Date(x); }) : [];
+  }
+  function status(it){
+    var dr = pd(it.청약기간), st = dr[0], en = dr[1];
+    if (!st) return { key:"wait", label:"예정", dday:null };
+    var dd = Math.round((st - TODAY)/864e5);
+    var ddE = en ? Math.round((en - TODAY)/864e5) : dd;
+    if (dd > 0) return { key: dd<=7?"soon":"wait", label: dd<=7?"임박":"예정", dday: dd };
+    if (ddE >= 0) return { key:"live", label:"진행중", dday:0 };
+    return { key:"done", label:"마감", dday: ddE };
+  }
+  var cz = function(it){ return it.경쟁률 && it.경쟁률.summary; };
+  var rateVal = function(it){ var s = cz(it); return s ? (s.종합경쟁률 != null ? s.종합경쟁률 : null) : null; };
+  var isUnder = function(it){ var s = cz(it); return !!(s && (s.미달 || (s.종합경쟁률 != null && s.종합경쟁률 < 1))); };
+  var pad2 = function(n){ return n < 10 ? "0"+n : ""+n; };
+  var mmdd = function(s){ var m = String(s||"").match(/(\d{4})-(\d{2})-(\d{2})/); return m ? m[2]+"-"+m[3] : "—"; };
+
+  // ── countUp (index.html 이식) ──
+  function countUp(el, to){
+    if (!el) return;
+    if (REDUCE || !isFinite(to)) { el.textContent = to; return; }
+    var dur = 900, t0 = performance.now();
+    (function step(t){
+      var p = Math.min(1,(t-t0)/dur), e = 1 - Math.pow(1-p,3);
+      el.textContent = Math.round(to*e);
+      if (p < 1) requestAnimationFrame(step);
+    })(performance.now());
+  }
+
+  // ── 상단 지표 4 ──
+  var allStatus = DATA.map(status);
+  var nLive  = allStatus.filter(function(s){ return s.key==="live"; }).length;
+  var nSoon  = allStatus.filter(function(s){ return s.key==="soon"; }).length;
+  var nUnder = DATA.filter(isUnder).length;
+  var nTotal = DATA.length;
+  countUp($("m-live"), nLive);
+  countUp($("m-soon"), nSoon);
+  countUp($("m-under"), nUnder);
+  countUp($("m-total"), nTotal);
+  if ($("ledger-total")) $("ledger-total").textContent = "총 " + nTotal + "건";
+  if ($("ledger-kicker")) $("ledger-kicker").textContent = "LEDGER · " + mmdd(updatedStr);
+  // 영수증 카드 라이브 값
+  if ($("rc-live"))  $("rc-live").textContent  = nLive + "건";
+  if ($("rc-under")) $("rc-under").textContent = nUnder + "건";
+
+  // ── 지역 옵션 채우기 (필터 + 희망지역) ──
+  var regions = Array.from(new Set(DATA.map(function(d){ return d.지역; }))).filter(Boolean).sort();
+  function fillRegionSelect(sel, firstLabel){
+    if (!sel) return;
+    sel.innerHTML = '<option value="">' + firstLabel + '</option>';
+    regions.forEach(function(r){
+      var o = document.createElement("option");
+      o.value = r; o.textContent = r; sel.appendChild(o);
+    });
+  }
+  fillRegionSelect($("f-reg"), "전체 지역");
+  fillRegionSelect($("i-region"), "희망 지역 선택");
+
+  // ── 가점 → 디자인 판정 클래스 매핑 ──
+  // MATCH.fit band(hi/mid/lo) + gajeomOutlook 을 verdict 클래스로
+  function verdictFor(item, gajeom){
+    if (gajeom == null || !M){
+      return { cls:"v-check", label:"가점 입력" };
+    }
+    var f = M.fit(item, { regions: [] }, gajeom); // 지역 무관 평가(표 전체 노출)
+    var ol = f.outlook || M.gajeomOutlook(gajeom, item.지역);
+    if (ol.tone === "hi")  return { cls:"v-win",   label:"당첨 유력" };
+    if (ol.tone === "mid") return { cls:"v-ok",    label:"적합·경합" };
+    return { cls:"v-low", label:"가점 부족" };
+  }
+
+  // ── 경쟁률 상세 (index.html detailHTML 이식, 디자인 표로) ──
+  function detailHTML(it){
+    var s = cz(it), h = "";
+    if (s){
+      h += '<h5>주택형별 경쟁률 · 공급 ' + (s.공급합!=null?s.공급합:"-") +
+           ' · 접수 ' + (s.접수합!=null?s.접수합:"-") +
+           ' · 종합 ' + (s.종합경쟁률!=null?s.종합경쟁률:"-") + ':1' +
+           (s.미달 ? ' (미달)' : '') + '</h5>';
+      h += '<table class="cz"><thead><tr><th>주택형</th><th>공급</th><th>순위</th><th>접수</th><th>경쟁률</th><th>가점(최저~최고)</th></tr></thead><tbody>';
+      (it.경쟁률.rows || []).forEach(function(r){
+        var u = String(r.경쟁률||"").indexOf("△") !== -1;
+        h += '<tr><td>' + (r.주택형||"-") + '</td><td>' + (r.공급||"-") + '</td><td>' + (r.순위||"-") +
+             '</td><td>' + (r.접수||"-") + '</td><td class="' + (u?"u":"") + '">' + (r.경쟁률||"-") +
+             '</td><td>' + ((r.가점최저||"-") + " ~ " + (r.가점최고||"-")) + '</td></tr>';
+      });
+      h += '</tbody></table>';
+    } else {
+      h = '<p style="color:var(--dim);font-size:var(--t-sm);padding:.4rem 0">청약 종료 후 경쟁률이 집계되면 주택형별 상세가 표시됩니다. (문의 ' + (it.문의처||"-") + ')</p>';
+    }
+    return h;
+  }
+
+  // ── 분양현장 표 렌더 (필터/검색/정렬 동작) ──
+  var state = { st:"", reg:"", q:"", gajeom:null };
+  var ORD = { soon:0, live:1, wait:2, done:3 };
+  var LIMIT = 14; // 화면 표시 상한: 임박순 상위 14건 (필터/검색은 전체 333건 대상 평가)
+
+  function render(){
+    var body = $("alarm-body");
+    if (!body) return;
+    var rows = DATA.map(function(d){ return Object.assign({}, d, { _s: status(d) }); });
+    rows.sort(function(a,b){
+      return (ORD[a._s.key]-ORD[b._s.key]) || ((a._s.dday==null?999:a._s.dday)-(b._s.dday==null?999:b._s.dday));
+    });
+    rows = rows.filter(function(d){
+      return (!state.reg || d.지역===state.reg) &&
+             (!state.st  || d._s.key===state.st) &&
+             (!state.q   || (d.주택명||"").indexOf(state.q) !== -1);
+    });
+    // 필터·검색은 전체(333건) 대상으로 평가하되, 화면 표시는 상위 14건(임박순)으로 제한
+    var totalMatched = rows.length;
+    var top = rows.slice(0, LIMIT);
+    if ($("alarm-count")) $("alarm-count").textContent = totalMatched;
+    if ($("alarm-shown"))
+      $("alarm-shown").textContent = "표시 " + top.length + " / 전체 " + totalMatched + "건";
+
+    if (!top.length){
+      body.innerHTML = '<tr class="empty-row"><td colspan="4">조건에 맞는 현장이 없습니다.</td></tr>';
+      return;
+    }
+    var html = top.map(function(d){
+      var s = d._s;
+      var dt = s.dday==null ? "·" : (s.dday>0 ? "D-"+s.dday : (s.key==="live" ? "접수중" : "D+"+(-s.dday)));
+      var soonCls = (s.key==="soon" || s.key==="live") ? " soon" : "";
+      var rv = rateVal(d);
+      var rateCell = rv==null ? '<span class="rate" style="color:var(--faint)">—</span>'
+                   : (isUnder(d) ? '<span class="rate" style="color:var(--warn)">미달 '+rv+':1</span>'
+                                 : '<span class="rate">'+rv+':1</span>');
+      var v = verdictFor(d, state.gajeom);
+      var hasDetail = !!cz(d);
+      var meta = [d.지역, d.주택구분, d.분양임대].filter(Boolean).join(" · ");
+      var expBadge = hasDetail ? '<span class="alarm-exp">상세 ▾</span>' : '';
+      var tr = '<tr class="' + (hasDetail?'has-detail':'') + '"' + (hasDetail?' role="button" tabindex="0" aria-expanded="false"':'') + '>' +
+        '<td><p class="site-name">' + (d.주택명||"-") + expBadge + '</p>' +
+        '<span class="site-meta">' + meta + (d.시공사?(' · '+d.시공사):'') + '</span></td>' +
+        '<td class="col-rate">' + rateCell + '</td>' +
+        '<td class="ddays col-dday"><span class="dnum' + soonCls + '">' + dt + '</span>' +
+        '<span class="ddate">' + mmdd((d.청약기간||"").split("~")[0]) + '</span></td>' +
+        '<td class="vc"><span class="verdict ' + v.cls + '">' + v.label + '</span></td></tr>';
+      if (hasDetail){
+        tr += '<tr class="detail-row" hidden><td colspan="4"><div class="detail-in">' + detailHTML(d) + '</div></td></tr>';
+      }
+      return tr;
+    }).join("");
+    body.innerHTML = html;
+  }
+
+  // 표 펼침: 이벤트 위임 (클릭 + 키보드)
+  function toggleDetail(tr){
+    if (!tr.classList.contains("has-detail")) return;
+    var dr = tr.nextElementSibling;
+    if (!dr || !dr.classList.contains("detail-row")) return;
+    var open = dr.hasAttribute("hidden");
+    if (open){ dr.removeAttribute("hidden"); tr.setAttribute("aria-expanded","true"); }
+    else { dr.setAttribute("hidden",""); tr.setAttribute("aria-expanded","false"); }
+  }
+  (function(){
+    var body = $("alarm-body");
+    if (!body) return;
+    body.addEventListener("click", function(e){
+      var tr = e.target.closest("tr.has-detail"); if (tr) toggleDetail(tr);
+    });
+    body.addEventListener("keydown", function(e){
+      var tr = e.target.closest("tr.has-detail");
+      if (tr && (e.key==="Enter" || e.key===" ")){ e.preventDefault(); toggleDetail(tr); }
+    });
+  })();
+
+  // 상태 필터 칩
+  (function(){
+    var seg = $("seg-status");
+    if (!seg) return;
+    seg.addEventListener("click", function(e){
+      var b = e.target.closest("button"); if (!b) return;
+      Array.prototype.forEach.call(seg.children, function(x){
+        x.setAttribute("aria-pressed", x===b ? "true" : "false");
+      });
+      state.st = b.dataset.st || ""; render();
+    });
+  })();
+  if ($("f-reg")) $("f-reg").addEventListener("change", function(e){ state.reg = e.target.value; render(); });
+  if ($("f-q"))   $("f-q").addEventListener("input", function(e){ state.q = e.target.value.trim(); render(); });
+
+  // ── D-day 타임라인: 가장 임박한 청약 5건 (미마감, 임박순) ──
+  function renderTimeline(){
+    var tl = $("timeline"); if (!tl) return;
+    var upcoming = DATA.map(function(d){ return { d:d, s:status(d) }; })
+      .filter(function(x){ return x.s.dday != null && x.s.dday >= 0 && x.s.key !== "done"; })
+      .sort(function(a,b){ return a.s.dday - b.s.dday; })
+      .slice(0,5);
+    if ($("tl-count")) $("tl-count").textContent = upcoming.length + "건";
+    if (!upcoming.length){
+      tl.innerHTML = '<p class="gj-empty">임박한 청약 일정이 없습니다.</p>';
+      return;
+    }
+    tl.innerHTML = upcoming.map(function(x){
+      var dd = x.s.dday, soon = dd <= 3;
+      var dlabel = dd === 0 ? "접수중" : "D-"+dd;
+      var startDate = mmdd((x.d.청약기간||"").split("~")[0]);
+      return '<div class="tl-item">' +
+        '<span class="tl-d' + (soon?" soon":"") + '">' + dlabel + '</span>' +
+        '<span class="tl-track"><span class="tl-dot' + (soon?" soon":"") + '"></span></span>' +
+        '<span class="tl-name"><b>' + (x.d.주택명||"-") + '</b> ' + (x.d.지역||"") + '</span>' +
+        '<span class="tl-date">' + startDate + '</span></div>';
+    }).join("");
+  }
+
+  // ── 내 가점 진단 (실계산기) ──
+  var FIELDS = ["i-birth","i-marry","i-own","i-join","i-fam","i-region"];
+  var LS_KEY = "ci.night.gajeom";
+
+  function readInputs(){
+    return {
+      "i-birth": $("i-birth") ? $("i-birth").value : "",
+      "i-marry": $("i-marry") ? $("i-marry").value : "",
+      "i-own":   $("i-own") ? $("i-own").checked : false,
+      "i-join":  $("i-join") ? $("i-join").value : "",
+      "i-fam":   $("i-fam") ? $("i-fam").value : "",
+      "i-region":$("i-region") ? $("i-region").value : ""
+    };
+  }
+  function saveInputs(v){
+    try { localStorage.setItem(LS_KEY, JSON.stringify(v)); } catch(e){}
+  }
+  function loadInputs(){
+    try {
+      var raw = localStorage.getItem(LS_KEY);
+      if (!raw) return;
+      var v = JSON.parse(raw);
+      if ($("i-birth")) $("i-birth").value = v["i-birth"]||"";
+      if ($("i-marry")) $("i-marry").value = v["i-marry"]||"";
+      if ($("i-own"))   $("i-own").checked = !!v["i-own"];
+      if ($("i-join"))  $("i-join").value = v["i-join"]||"";
+      if ($("i-fam"))   $("i-fam").value = (v["i-fam"]!=null?v["i-fam"]:"");
+      if ($("i-region")) $("i-region").value = v["i-region"]||"";
+    } catch(e){}
+  }
+
+  function setBar(barEl, valEl, val, max){
+    if (valEl) valEl.textContent = val;
+    if (barEl) barEl.style.width = Math.max(0, Math.min(100, (val/max)*100)) + "%";
+  }
+
+  function computeAndRender(animate){
+    var v = readInputs();
+    var hasInput = v["i-birth"] || v["i-join"] || (v["i-fam"]!=="" && v["i-fam"]!=null);
+    if ($("gj-empty")) $("gj-empty").style.display = hasInput ? "none" : "block";
+
+    var g = M ? M.computeGajeom(v, TODAY) : { g1:0,g2:0,g3:0,total:0 };
+    setBar($("g1-bar"), $("g1-val"), g.g1, 32);
+    setBar($("g2-bar"), $("g2-val"), g.g2, 35);
+    setBar($("g3-bar"), $("g3-val"), g.g3, 17);
+
+    if ($("gj-total")){
+      if (animate && !REDUCE) countUp($("gj-total"), g.total);
+      else $("gj-total").textContent = g.total;
+    }
+
+    // 희망지역 대비 전망 (gajeomOutlook)
+    var ol = null;
+    var outBox = $("gj-outlook");
+    if (hasInput && M){
+      state.gajeom = g.total;
+      var region = v["i-region"];
+      if (region){
+        ol = M.gajeomOutlook(g.total, region);
+        if (outBox){
+          outBox.hidden = false;
+          outBox.className = "gj-outlook " + ol.tone;
+          $("gj-outlook-label").textContent = region + " · " + ol.label;
+          $("gj-outlook-cut").textContent = "커트라인 ~" + M.expectedCutoff(region) + "점";
+        }
+      } else if (outBox){
+        outBox.hidden = false;
+        outBox.className = "gj-outlook lo";
+        $("gj-outlook-label").textContent = "희망 지역을 선택하면 당첨 전망 표시";
+        $("gj-outlook-cut").textContent = "";
+      }
+    } else {
+      state.gajeom = null;
+      if (outBox) outBox.hidden = true;
+    }
+
+    // 영수증 카드 동기화
+    if ($("rc-gj")) $("rc-gj").textContent = hasInput ? (g.total + "점") : "미입력";
+    if ($("rc-outlook")){
+      if (ol){ $("rc-outlook").textContent = ol.label; $("rc-outlook").className = "receipt-v" + (ol.tone==="hi"?" good":""); }
+      else { $("rc-outlook").textContent = "—"; $("rc-outlook").className = "receipt-v"; }
+    }
+    if ($("sort-gj")) $("sort-gj").textContent = hasInput ? g.total : "—";
+
+    saveInputs(v);
+    render(); // 가점 변동 → 표 판정 갱신
+  }
+
+  // 입력 바인딩
+  FIELDS.forEach(function(id){
+    var el = $(id); if (!el) return;
+    var ev = (el.type==="checkbox" || el.tagName==="SELECT") ? "change" : "input";
+    el.addEventListener(ev, function(){ computeAndRender(false); });
+  });
+
+  // ── 사후관리: KB.procedure / KB.selfCheck 아코디언 ──
+  function buildProcedure(){
+    var box = $("acc-proc"); if (!box || !KB || !KB.procedure) return;
+    box.innerHTML = KB.procedure.map(function(p, i){
+      return '<div class="acc-item">' +
+        '<button class="acc-head" aria-expanded="false">' +
+        '<span class="acc-no">' + pad2(i+1) + '</span>' +
+        '<span class="acc-title">' + p.step.replace(/^\d+\.\s*/, "") + '</span>' +
+        '<span class="acc-chevron" aria-hidden="true">+</span>' +
+        '</button>' +
+        '<div class="acc-body"><div><div class="acc-detail">' + p.detail +
+        (p.docs ? '<span class="docs">필요 서류 · <b>' + p.docs + '</b></span>' : '') +
+        '</div></div></div></div>';
+    }).join("");
+  }
+  function buildSelfCheck(){
+    var box = $("acc-check"); if (!box || !KB || !KB.selfCheck) return;
+    box.innerHTML = KB.selfCheck.map(function(c, i){
+      return '<div class="acc-item">' +
+        '<button class="acc-head" aria-expanded="false">' +
+        '<span class="acc-no">' + pad2(i+1) + '</span>' +
+        '<span class="acc-cat">' + c.category + '</span>' +
+        '<span class="acc-title">' + c.item + '</span>' +
+        '<span class="acc-chevron" aria-hidden="true">+</span>' +
+        '</button>' +
+        '<div class="acc-body"><div><div class="acc-detail">' +
+        '<span class="why">' + c.why + '</span>' +
+        '<span class="risk">⚠ ' + c.risk + '</span>' +
+        '</div></div></div></div>';
+    }).join("");
+  }
+  function bindAccordion(box){
+    if (!box) return;
+    box.addEventListener("click", function(e){
+      var head = e.target.closest(".acc-head"); if (!head) return;
+      var item = head.closest(".acc-item");
+      var open = item.classList.toggle("open");
+      head.setAttribute("aria-expanded", open ? "true" : "false");
+      head.querySelector(".acc-chevron").textContent = open ? "+" : "+"; // rotate via CSS
+    });
+  }
+  buildProcedure();
+  buildSelfCheck();
+  bindAccordion($("acc-proc"));
+  bindAccordion($("acc-check"));
+
+  // 사후관리 탭 전환
+  (function(){
+    var tabProc = $("tab-proc"), tabCheck = $("tab-check");
+    var accProc = $("acc-proc"), accCheck = $("acc-check");
+    if (!tabProc || !tabCheck) return;
+    function activate(which){
+      var proc = which === "proc";
+      tabProc.setAttribute("aria-selected", proc?"true":"false");
+      tabCheck.setAttribute("aria-selected", proc?"false":"true");
+      tabProc.setAttribute("aria-pressed", proc?"true":"false");
+      tabCheck.setAttribute("aria-pressed", proc?"false":"true");
+      if (accProc)  accProc.hidden  = !proc;
+      if (accCheck) accCheck.hidden = proc;
+    }
+    tabProc.addEventListener("click", function(){ activate("proc"); });
+    tabCheck.addEventListener("click", function(){ activate("check"); });
+    activate("proc");
+  })();
+
+  // disclaimer
+  if ($("disclaimer") && KB && KB.disclaimer) $("disclaimer").textContent = KB.disclaimer;
+
+  // ── 앵커 점프 (CTA → 진단 섹션 등) ──
+  document.querySelectorAll("[data-jump]").forEach(function(el){
+    el.addEventListener("click", function(){
+      var t = document.getElementById(el.dataset.jump);
+      if (t) t.scrollIntoView({ behavior: REDUCE?"auto":"smooth", block:"start" });
+    });
+  });
+
+  // ── 초기 실행 ──
+  loadInputs();
+  computeAndRender(true);
+  renderTimeline();
+  render();
+})();
+</script>
+
+</body>
+</html>
