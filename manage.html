@@ -606,12 +606,16 @@
   }
   html{ scroll-behavior:smooth; }
   h2[id], section[id]{ scroll-margin-top:84px; }
+  @view-transition{ navigation:auto; }
   @media (prefers-reduced-motion:reduce){
     html{ scroll-behavior:auto; }
     .live .dot{ animation:none; }
     *{ transition:none !important; }
   }
 </style>
+<script type="speculationrules">
+{"prerender":[{"urls":["index.html","board.html"],"eagerness":"moderate"}]}
+</script>
 </head>
 <body>
   <span class="regmark rm-tl" aria-hidden="true"></span>

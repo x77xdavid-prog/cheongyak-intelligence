@@ -95,9 +95,9 @@
   h1,h2,h3,h4{ margin:0; font-weight:600; line-height:1.18; letter-spacing:-.01em; }
 
   /* focus visibility */
-  a:focus-visible, button:focus-visible, input:focus-visible{
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible{
     outline:2px solid var(--blue);
-    outline-offset:3px;
+    outline-offset:2px;
   }
 
   .wrap{ max-width:var(--maxw); margin:0 auto; padding-inline:var(--edge); }
@@ -499,6 +499,7 @@
     .foot-top{ grid-template-columns:1fr; }
     .foot-bottom{ flex-direction:column; align-items:flex-start; }
   }
+  @view-transition{ navigation:auto; }
   /* 인페이지 네비 스크롤 */
   html{ scroll-behavior:smooth; }
   h2[id], section[id]{ scroll-margin-top:84px; }
@@ -508,6 +509,9 @@
     *{ transition:none !important; }
   }
 </style>
+<script type="speculationrules">
+{"prerender":[{"urls":["index.html","manage.html"],"eagerness":"moderate"}]}
+</script>
 </head>
 <body>
   <span class="regmark rm-tl" aria-hidden="true"></span>
