@@ -871,7 +871,11 @@
     .foot-top{ grid-template-columns:1fr; }
     .foot-bottom{ flex-direction:column; align-items:flex-start; }
   }
+  /* 인페이지 네비 스크롤 */
+  html{ scroll-behavior:smooth; }
+  h2[id], section[id]{ scroll-margin-top:84px; }
   @media (prefers-reduced-motion:reduce){
+    html{ scroll-behavior:auto; }
     .live .dot{ animation:none; }
     *{ transition:none !important; }
   }
@@ -899,13 +903,13 @@
         <span class="bname">청약 인텔리전스<span class="bsub">Cheongyak Intelligence</span></span>
       </a>
       <nav class="nlinks" id="nav" aria-label="주요 메뉴">
-        <a href="#" class="active" aria-current="page">청약 여정</a>
-        <a href="#">청약 준비</a>
-        <a href="#">분양현장</a>
-        <a href="#">내 청약 관리</a>
-        <a href="#">게시판</a>
+        <a href="board.html">게시판</a>
+        <a href="#steps-h" class="active" aria-current="page">청약 여정</a>
+        <a href="#diag-h">청약 준비</a>
+        <a href="#alert-h">분양현장</a>
+        <a href="#care-h">내 청약 관리</a>
       </nav>
-      <a class="cta" href="#"><span class="lbl">내 청약 관리</span><span class="ar" aria-hidden="true">↗</span></a>
+      <a class="cta" href="#care-h"><span class="lbl">내 청약 관리</span><span class="ar" aria-hidden="true">↗</span></a>
       <button class="menutoggle" id="menubtn" aria-label="메뉴 열기" aria-expanded="false" aria-controls="nav">☰</button>
     </div>
   </header>
@@ -919,8 +923,8 @@
           <h1>내 가점이 닿는 집을 <em>도면처럼</em> 읽어 드립니다</h1>
           <p class="lede">분양 공고를 내 가점·자격으로 자동 매칭한다. <b>광고가 아니라 원장이다.</b> 입력값은 이 기기에만 저장된다.</p>
           <div class="hero-actions">
-            <a class="btn-primary" href="#"><span class="tick" aria-hidden="true">＋</span>내 가점 확인</a>
-            <a class="link-arrow" href="#">분양현장 먼저 보기 →</a>
+            <a class="btn-primary" href="#diag-h"><span class="tick" aria-hidden="true">＋</span>내 가점 확인</a>
+            <a class="link-arrow" href="#alert-h">분양현장 먼저 보기 →</a>
           </div>
           <!-- SIGNATURE: dimension line annotation -->
           <div class="dimline" aria-hidden="true">
@@ -1769,12 +1773,30 @@
     /* ---------- 모바일 메뉴 + 푸터 disclaimer ---------- */
     (function(){
       var btn=$("menubtn"), nav=$("nav");
+      function closeMenu(){ if(nav)nav.classList.remove("open"); if(btn){btn.setAttribute("aria-expanded","false");btn.textContent="☰";} }
       if(btn&&nav){
         btn.addEventListener("click",function(){
           var open=nav.classList.toggle("open");
           btn.setAttribute("aria-expanded",open?"true":"false");
           btn.textContent=open?"✕":"☰";
         });
+      }
+      var navAnchors={};
+      document.querySelectorAll('.nlinks a[href^="#"]').forEach(function(a){ navAnchors[a.getAttribute("href").slice(1)]=a; });
+      function setActive(id){
+        Object.keys(navAnchors).forEach(function(k){ navAnchors[k].classList.remove("active"); navAnchors[k].removeAttribute("aria-current"); });
+        if(navAnchors[id]){ navAnchors[id].classList.add("active"); navAnchors[id].setAttribute("aria-current","page"); }
+      }
+      // 인페이지 앵커(네비+CTA+히어로): 클릭 시 모바일 메뉴 닫고 active 갱신 (스크롤은 CSS smooth)
+      document.querySelectorAll('a[href^="#"]').forEach(function(a){
+        a.addEventListener("click",function(){ closeMenu(); if(a.closest(".nlinks")) setActive(a.getAttribute("href").slice(1)); });
+      });
+      // 스크롤스파이: 현재 섹션에 맞춰 네비 active 자동 갱신
+      if("IntersectionObserver" in window){
+        var io=new IntersectionObserver(function(es){
+          es.forEach(function(en){ if(en.isIntersecting) setActive(en.target.id); });
+        },{rootMargin:"-45% 0px -50% 0px"});
+        ["steps-h","diag-h","alert-h","care-h"].forEach(function(id){ var el=document.getElementById(id); if(el)io.observe(el); });
       }
     })();
 
