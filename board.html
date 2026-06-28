@@ -99,6 +99,7 @@
     outline:2px solid var(--blue);
     outline-offset:2px;
   }
+  [disabled],[aria-disabled="true"]{ opacity:.45; cursor:not-allowed; pointer-events:none; }
 
   .wrap{ max-width:var(--maxw); margin:0 auto; padding-inline:var(--edge); }
 
@@ -123,7 +124,7 @@
   }
   .dimrule .line::before{ left:0; } .dimrule .line::after{ right:0; }
   .dimrule .tag{
-    padding:0 12px; font-family:var(--f-mono); font-size:9.5px; letter-spacing:.14em;
+    padding:0 12px; font-family:var(--f-mono); font-size:10px; letter-spacing:.14em;
     color:var(--blue); text-transform:uppercase; white-space:nowrap; transform:translateY(-1px);
   }
   .section-divider{ padding-block:0; }
@@ -219,7 +220,7 @@
   }
   .cta{
     font-family:var(--f-disp); font-weight:500; font-size:.9rem;
-    background:var(--blue); color:#F4F6F7;
+    background:var(--blue); color:var(--sheet);
     padding:11px 18px; border-radius:2px;
     border:1px solid var(--blue-deep);
     display:inline-flex; align-items:center; gap:8px; white-space:nowrap;
@@ -313,7 +314,7 @@
     transition:background .15s ease, border-color .15s ease;
   }
   .sheet-tab:hover{ border-color:var(--blue-line-2); background:var(--blue-tint); }
-  .sheet-tab[aria-selected="true"]{ color:#F4F6F7; background:var(--blue); border-color:var(--blue-deep); }
+  .sheet-tab[aria-selected="true"]{ color:var(--sheet); background:var(--blue); border-color:var(--blue-deep); }
   .sheet-tab .cn{ font-weight:700; }
   .care-panel[hidden]{ display:none; }
 
@@ -332,7 +333,7 @@
   }
   .chip-btn:hover{ border-color:var(--blue-line-2); background:var(--blue-tint); }
   .chip-btn[aria-pressed="true"]{
-    color:#F4F6F7; background:var(--blue); border-color:var(--blue-deep);
+    color:var(--sheet); background:var(--blue); border-color:var(--blue-deep);
   }
   .b-search{
     position:relative; display:inline-flex; align-items:center;
@@ -360,6 +361,7 @@
   .nitem{
     display:grid; grid-template-columns:104px 1fr auto; align-items:center; gap:18px;
     padding:16px var(--sp-3); border-bottom:1px solid var(--hair);
+    min-height:44px;
     transition:background .15s ease;
   }
   .nitem:last-child{ border-bottom:none; }
@@ -448,7 +450,7 @@
     display:inline-flex; align-items:flex-start; gap:8px; max-width:34ch;
   }
   .foot-brand .ftrust .lock{ color:var(--blue); flex:none; transform:translateY(1px); }
-  .foot-col h4{
+  .foot-col h3{
     font-family:var(--f-mono); font-size:var(--t-0); letter-spacing:.1em; text-transform:uppercase;
     color:var(--blue); font-weight:500; margin-bottom:14px;
   }
@@ -537,7 +539,7 @@
     <div class="wrap">
       <a class="brand" href="index.html" aria-label="청약 인텔리전스 홈">
         <span class="stamp-mark" aria-hidden="true">印</span>
-        <span class="bname">청약 인텔리전스<span class="bsub">Cheongyak Intelligence</span></span>
+        <span class="bname">청약 인텔리전스<span class="bsub" aria-hidden="true">Cheongyak Intelligence</span></span>
       </a>
       <nav class="nlinks" id="nav" aria-label="주요 메뉴">
         <a href="board.html" class="active" aria-current="page">게시판</a>
@@ -635,7 +637,7 @@
           <span class="ftrust"><span class="lock" aria-hidden="true">⛁</span>입력값과 가점 데이터는 localStorage에만 저장 · 서버 전송 없음. 청약 신청은 청약홈에서 진행하라.</span>
         </div>
         <nav class="foot-col" aria-label="청약 여정">
-          <h4>청약 여정</h4>
+          <h3>청약 여정</h3>
           <ul>
             <li><a href="index.html#steps-h">청약 여정</a></li>
             <li><a href="index.html#diag-h">내 점수·자격</a></li>
@@ -644,7 +646,7 @@
           </ul>
         </nav>
         <nav class="foot-col" aria-label="분양·관리">
-          <h4>분양 · 관리</h4>
+          <h3>분양 · 관리</h3>
           <ul>
             <li><a href="index.html#alert-h">분양현장</a></li>
             <li><a href="index.html#alert-h">마감 임박 D-day</a></li>
@@ -652,11 +654,11 @@
           </ul>
         </nav>
         <nav class="foot-col" aria-label="자료·지원">
-          <h4>자료 · 지원</h4>
+          <h3>자료 · 지원</h3>
           <ul>
             <li><a href="board.html" class="cur" aria-current="page">게시판</a></li>
-            <li><a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">자주 묻는 질문 ↗</a></li>
-            <li><a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">청약제도 안내 ↗</a></li>
+            <li><a href="board.html">자주 묻는 질문</a></li>
+            <li><a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">청약제도 안내</a></li>
             <li><a href="index.html#care-h">고객센터 1644-7445</a></li>
           </ul>
         </nav>

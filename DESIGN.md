@@ -140,3 +140,30 @@
 3. (med) disabled/빈입력 버튼 상태 `opacity:.45; cursor:not-allowed` + `aria-disabled` 정의.
 4. (med) Pretendard `@latest` → 버전 핀 + Space Grotesk 히어로 weight `preload`.
 5. (polish) `--ease-out-expo` `:root` 정의, 본문 16px, 4겹 그리드 → 3겹 축소.
+
+---
+
+## 8-1. 재리뷰 (2026-06-28 · 폴리시·게시판 수정 후 · 4렌즈 워크플로)
+
+> 등급 폴리시(모션/인터랙션/성능감/색대비)와 게시판 폰트·딥링크 수정 후, 4개 디자인 렌즈(타이포·위계 / 색·간격·반응형 / 인터랙션·모션·성능감 / 슬롭·콘텐츠)로 재채점하고 종합.
+
+**종합 Design `A−`** (밴드 하단, 가중 GPA 3.605) · **AI-slop `A`** (CLEAN 유지).
+
+| 시각위계 | 타이포 | 색·대비 | 간격·레이아웃 | 인터랙션 | 반응형 | 모션 | 콘텐츠 | AI-slop | 성능감 |
+|---|---|---|---|---|---|---|---|---|---|
+| A− | A− | B+ | A− | B+ | A | A− | B+ | A | B+ |
+
+**핵심 통찰 — a11y는 별도 커브로 채점하라.** 같은 결함(H2→H4 헤딩 스킵·44px 미만 터치타깃 74개·9px 라이브 텍스트)이 **4개 렌즈에 전부 독립적으로 잡힘 = systemic**. 강한 기반(16토큰 시맨틱 팔레트·3역할 타이포·ledger 그리드·컴포지터 모션)이 약한 a11y 레이어를 세탁해 등급을 부풀리지 않게 할 것. "디자인으로는 출시 가능, a11y 레이어는 완료 전 수정."
+
+**이전 폴리시 완료 확인:** 게이지 `scaleX` 채움 모션 ✓ · `--ease-out-expo` 정의 ✓ · barmax/ff-hint 10px ✓ · 게시판 한글 `--f-mono` Pretendard 폴백 ✓ · content-visibility/Speculation Rules(좁힘) ✓.
+
+**이번 리뷰 우선순위 — 6개 파일 전부 적용·라이브 검증 완료 ✅ (systemic a11y 레이어 정리):**
+1. **(high) 헤딩 레벨 스킵 ✅** — 푸터 `.foot-col h4` → `h3` (CSS+마크업, 6파일). 시각 변화 0, H2→H4 점프 제거.
+2. **(high) 공지행 터치타깃 ✅** — `.nitem`에 `min-height:44px` (렌더 22→57px). board·site/board.
+3. **(med) 9~9.5px 라이브 텍스트 ✅** — `.bsub` `aria-hidden`(부모 aria-label 중복) · `.dimrule .tag` 9.5→10px.
+4. **(med) focus-visible + disabled ✅** — 진단 폼 페이지(blueprint·site/index) `:focus-visible`에 `input,select` 추가 + 공용 `[disabled],[aria-disabled]{opacity:.45;cursor:not-allowed;pointer-events:none}` (6파일).
+5. **(polish) 토큰·링크 정직성 ✅** — 리터럴 `#F4F6F7` → `var(--sheet)`(정의줄 보존) · 푸터 "자주 묻는 질문"은 내부 `board.html`로(↗ 제거), homepage-root ↗ 마커 제거.
+
+> 검증: board·blueprint 라이브에서 전 항목 렌더 확인, 게이지·MATCH 무손상, 신규 콘솔 에러 0. a11y 레이어가 기반 수준으로 올라옴.
+
+> **AI-slop A (A+ 아님)인 이유:** disclaimer 3중 중복 + 푸터 ↗가 홈으로 가는 미완 엣지. 슬롭의 반증은 여전히 실재 — `darkened for AA` / `blur causes heading ghosting` 같은 *결정의 흔적* 주석.
