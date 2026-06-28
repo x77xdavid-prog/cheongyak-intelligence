@@ -669,7 +669,7 @@
   </footer>
 
   <!-- 데이터: 형제 board-data.js (디자인 무관 순수 데이터) -->
-  <script src="board-data.js"></script>
+  <script src="board-data.js?v=20260628"></script>
   <script>
   (function(){
     "use strict";
@@ -716,7 +716,7 @@
           var cat=n.cat||"기타";
           return '<div class="nitem">'
             +'<span class="ncat '+catClass(cat)+'">'+esc(cat)+'</span>'
-            +'<a class="ntitle" href="https://search.naver.com/search.naver?query='+encodeURIComponent(n.title+' 청약홈 공지')+'" target="_blank" rel="noopener" title="청약홈 원문 검색">'+pin+esc(n.title)+'<span class="nout" aria-hidden="true"> ↗</span></a>'
+            +'<a class="ntitle" href="'+(n.sn?'https://www.applyhome.co.kr/cu/cua/selectNoticeDetailView.do?bbsSn='+n.sn:'https://search.naver.com/search.naver?query='+encodeURIComponent(n.title+' 청약홈 공지'))+'" target="_blank" rel="noopener" title="청약홈 원문 보기">'+pin+esc(n.title)+'<span class="nout" aria-hidden="true"> ↗</span></a>'
             +'<span class="ndate">'+esc(n.date||"-")+'</span>'
           +'</div>';
         }).join(""):'<div class="b-empty">조건에 맞는 공지가 없습니다.</div>';
