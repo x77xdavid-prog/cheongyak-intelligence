@@ -161,6 +161,11 @@
       primary = { kind: "public", item: pk ? pk.it : null, ap: pk ? pk.ap : null,
         why: ["공공분양(국민주택)은 가점이 아니라 납입·소득 기준 — 무주택 저가점에 유리"] };
     }
+    if (primary.item) {                                   // 리포터용: 추천 단지의 실측 당첨가점·경쟁률 노출
+      const px = pool.filter(x => x.it === primary.item)[0];
+      primary.cut = px ? px.cut : null;
+      primary.rv = px ? px.rv : null;
+    }
     return { track, primary, lanes, eligible: eligible.length,
       generalPick: generalPick ? generalPick.it : null,
       publicPick: publicPick ? publicPick.it : null,
@@ -238,6 +243,7 @@ if (typeof require !== "undefined" && require.main === module) {
   // 고가점(72)·서울 → 실제 당첨가점(69) 이내 → 일반 당첨권
   const rHi = A.recommend({ gajeom: 72, hasInput: true, region: "서울", everOwned: true, childStatus: "none", income: "high", fam: 0 }, items, now);
   assert(rHi.track === "general" && rHi.primary.kind === "winnable", "고가점 당첨권 판정 오류: " + JSON.stringify(rHi.primary));
+  assert(rHi.primary.cut != null, "리포터용 실측 당첨가점(primary.cut) 노출 실패");  // 이유 리포터가 숫자를 쓰려면 필수
   // 신생아 신호 → 신생아 레인 최우선
   const lanes = A.specialLanes({ childStatus: "newborn", everOwned: false, marryWithin7: true, income: "low", fam: 1 });
   assert(lanes[0].key === "newborn", "신생아 우선순위 오류: " + JSON.stringify(lanes.map(l => l.key)));
