@@ -542,6 +542,82 @@
   }
   .diag-total .dt-cta:hover{ background:var(--blue-tint); }
 
+  /* ===================== RECOMMENDATION (당신의 다음 행동) ===================== */
+  .reco{
+    margin-top:var(--sp-4); position:relative;
+    border:1px solid var(--hair-strong); border-left:3px solid var(--blue);
+    background:var(--sheet); padding:var(--sp-4) var(--sp-4) var(--sp-3);
+  }
+  .reco.t-special{ border-left-color:var(--stamp); }
+  .reco.t-public{ border-left-color:var(--warn); }
+  .reco-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:var(--sp-3); }
+  .reco-kicker{ font-size:10px; letter-spacing:.14em; color:var(--blue); text-transform:uppercase; }
+  .reco-stamp{
+    font-family:var(--f-body); font-weight:800; font-size:.8rem; letter-spacing:.02em;
+    border:2px solid var(--blue); color:var(--blue-deep); background:rgba(43,92,138,.06);
+    padding:5px 11px; border-radius:3px; transform:rotate(-2deg); white-space:nowrap; line-height:1.1;
+  }
+  .t-special .reco-stamp{ border-color:var(--stamp); color:var(--stamp); background:var(--stamp-soft); }
+  .t-public .reco-stamp{ border-color:var(--warn); color:var(--warn-deep); background:var(--warn-tint); }
+  .reco-lead{
+    font-family:var(--f-disp); font-weight:600; font-size:clamp(1.05rem,.9rem+.7vw,1.4rem);
+    line-height:1.4; color:var(--ink); margin:var(--sp-3) 0 var(--sp-3);
+  }
+  .reco-lead b{ color:var(--blue-deep); font-weight:700; }
+  .t-special .reco-lead b{ color:var(--stamp-deep); }
+  .t-public .reco-lead b{ color:var(--warn-deep); }
+  /* 행동 박스 — 핀된 현장 + 마감 + CTA */
+  .reco-act{
+    display:flex; flex-wrap:wrap; align-items:center; gap:var(--sp-3);
+    border:1px solid var(--hair); background:var(--paper); padding:var(--sp-3); border-radius:2px;
+  }
+  .reco-act .ra-main{ flex:1 1 240px; min-width:0; }
+  .reco-act .ra-name{ font-family:var(--f-disp); font-weight:600; font-size:1rem; color:var(--ink); }
+  .reco-act .ra-meta{ font-family:var(--f-mono); font-size:11px; color:var(--ink-3); margin-top:3px; }
+  .reco-act .ra-dday{
+    font-family:var(--f-mono); font-weight:700; font-size:1.05rem; color:var(--warn-deep);
+    border:1px solid var(--warn); background:var(--warn-tint); padding:6px 11px; border-radius:2px; white-space:nowrap;
+  }
+  .reco-cta{
+    font-family:var(--f-disp); font-weight:600; font-size:.9rem; text-decoration:none;
+    border:1px solid var(--blue); color:var(--sheet); background:var(--blue);
+    padding:10px 16px; border-radius:2px; min-height:44px;
+    display:inline-flex; align-items:center; justify-content:center; gap:7px; white-space:nowrap;
+    transition:background .15s ease;
+  }
+  .reco-cta:hover{ background:var(--blue-deep); }
+  .t-special .reco-cta{ border-color:var(--stamp); background:var(--stamp); }
+  .t-special .reco-cta:hover{ background:var(--stamp-deep); }
+  .t-public .reco-cta{ border-color:var(--warn); background:var(--warn); }
+  .t-public .reco-cta:hover{ background:var(--warn-deep); }
+  .reco-cta.ghost{ background:var(--paper); color:var(--blue-deep); }
+  .reco-cta.ghost:hover{ background:var(--blue-tint); }
+  /* 특공 레인 칩 */
+  .reco-lanes{ display:flex; flex-wrap:wrap; gap:var(--sp-2,8px); margin-top:var(--sp-3); }
+  .reco-lanes:empty{ display:none; }
+  .lane{
+    flex:1 1 220px; border:1px solid var(--hair); background:var(--paper);
+    border-radius:2px; padding:10px 12px;
+  }
+  .lane.maybe{ border-style:dashed; opacity:.92; }
+  .lane.top{ border-color:var(--stamp); box-shadow:inset 3px 0 0 var(--stamp); }
+  .lane .ln-h{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+  .lane .ln-name{ font-family:var(--f-disp); font-weight:600; font-size:.92rem; color:var(--ink); }
+  .lane .ln-step{ font-family:var(--f-mono); font-size:10px; color:var(--blue); white-space:nowrap; }
+  .lane .ln-why{ font-size:12.5px; line-height:1.5; color:var(--ink-2); margin-top:4px; }
+  .lane .ln-inc{ font-family:var(--f-mono); font-size:10px; color:var(--ink-3); margin-top:4px; }
+  /* 전략 팁 */
+  .reco-tips{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:var(--sp-2,8px); margin-top:var(--sp-3); }
+  .reco-tips:empty{ display:none; }
+  .tip{ border:1px solid var(--blue-line-2); background:var(--blue-tint); border-radius:2px; padding:10px 12px; }
+  .tip .tip-t{ font-family:var(--f-disp); font-weight:600; font-size:.86rem; color:var(--blue-deep); }
+  .tip .tip-d{ font-size:12px; line-height:1.55; color:var(--ink-2); margin-top:4px; }
+  .reco-disc{ font-family:var(--f-mono); font-size:10px; color:var(--ink-3); line-height:1.5; margin-top:var(--sp-3); }
+  @media (max-width:640px){
+    .reco-act .ra-dday{ order:3; }
+    .reco-cta{ flex:1 1 100%; }
+  }
+
   /* ===================== D-DAY TIMELINE (C) ===================== */
   .timeline{
     border:1px solid var(--hair); background:var(--sheet);
@@ -1136,6 +1212,33 @@
           <select id="i-region" name="i-region"><option value="">전국</option></select>
           <span class="ff-hint">지역 커트라인 대비 전망</span>
         </div>
+        <div class="ff">
+          <label for="i-child">자녀 상태 <span style="text-transform:none">(특공)</span></label>
+          <select id="i-child" name="i-child">
+            <option value="none">없음</option>
+            <option value="newborn">임신·2세 미만</option>
+            <option value="multi">미성년 2명 이상</option>
+          </select>
+          <span class="ff-hint">신생아·다자녀 특공 자격</span>
+        </div>
+        <div class="ff">
+          <label for="i-ever">평생 무주택 <span style="text-transform:none">(생애최초)</span></label>
+          <div class="seg2" role="group" aria-label="평생 주택 소유 이력" id="i-ever-seg">
+            <button type="button" data-ever="1" aria-pressed="true">한 번도 없음</button>
+            <button type="button" data-ever="0" aria-pressed="false">소유 이력 있음</button>
+          </div>
+          <span class="ff-hint">생애최초 특공 = 평생 무주택만</span>
+        </div>
+        <div class="ff">
+          <label for="i-income">소득 구간 <span style="text-transform:none">(특공)</span></label>
+          <select id="i-income" name="i-income">
+            <option value="unknown">모름</option>
+            <option value="low">도시근로자 130% 이하</option>
+            <option value="mid">130 ~ 160%</option>
+            <option value="high">160% 초과</option>
+          </select>
+          <span class="ff-hint">우선·일반·추첨 단계 판정</span>
+        </div>
       </form>
 
       <div class="diag">
@@ -1182,6 +1285,21 @@
       </div>
       <!-- SIGNATURE: leader-line callout at the diagnosis boundary -->
       <div class="ledger-foot"><span class="callout" id="diag-note">NOTE — 생년월일·통장 가입일을 입력하면 가점이 실시간 계산됩니다</span></div>
+
+      <!-- ============ 추천: 당신의 다음 행동 (매칭 없으면 특공/공공분양 폴백) ============ -->
+      <div class="reco" id="reco" hidden aria-live="polite" aria-labelledby="reco-kicker">
+        <div class="reco-top">
+          <span class="reco-kicker num" id="reco-kicker">SHEET 03·R — NEXT ACTION</span>
+          <span class="reco-stamp" id="reco-track"></span>
+        </div>
+        <div class="reco-hero">
+          <p class="reco-lead" id="reco-lead"></p>
+          <div class="reco-act" id="reco-act"></div>
+        </div>
+        <div class="reco-lanes" id="reco-lanes"></div>
+        <div class="reco-tips" id="reco-tips"></div>
+        <p class="reco-disc">※ 자격·가점·소득은 입력값 기준 추정입니다. 신청 전 청약홈과 입주자모집공고문으로 최종 확인하세요.</p>
+      </div>
     </div>
   </section>
 
@@ -1424,7 +1542,8 @@
        4) 내 가점 진단 — 실제 계산기 + localStorage
        ========================================================= */
     var LS_KEY="cheongyak.blueprint.gajeom.v1";
-    var ownState=0; // 0 무주택 / 1 유주택
+    var ownState=0;  // 0 무주택 / 1 유주택
+    var everState=1; // 1 평생 무주택 / 0 소유 이력 있음
     var GAJEOM={g1:0,g2:0,g3:0,total:0};
 
     function readForm(){
@@ -1434,7 +1553,10 @@
         "i-own":!!ownState,
         "i-join":$("i-join")?$("i-join").value:"",
         "i-fam":$("i-fam")?$("i-fam").value:"",
-        "i-region":$("i-region")?$("i-region").value:""
+        "i-region":$("i-region")?$("i-region").value:"",
+        "i-child":$("i-child")?$("i-child").value:"none",
+        "i-ever":everState,
+        "i-income":$("i-income")?$("i-income").value:"unknown"
       };
     }
     function saveForm(){
@@ -1449,11 +1571,102 @@
       if($("i-join")&&v["i-join"])$("i-join").value=v["i-join"];
       if($("i-fam")&&v["i-fam"]!=null)$("i-fam").value=v["i-fam"];
       if($("i-region")&&v["i-region"])$("i-region").value=v["i-region"];
+      if($("i-child")&&v["i-child"])$("i-child").value=v["i-child"];
+      if($("i-income")&&v["i-income"])$("i-income").value=v["i-income"];
       ownState=v["i-own"]?1:0;
+      everState=(v["i-ever"]===0||v["i-ever"]==="0")?0:1;
       if($("i-own-seg")){
         Array.prototype.forEach.call($("i-own-seg").querySelectorAll("button"),function(b){
           b.setAttribute("aria-pressed", (String(ownState)===b.getAttribute("data-own"))?"true":"false");
         });
+      }
+      if($("i-ever-seg")){
+        Array.prototype.forEach.call($("i-ever-seg").querySelectorAll("button"),function(b){
+          b.setAttribute("aria-pressed", (String(everState)===b.getAttribute("data-ever"))?"true":"false");
+        });
+      }
+    }
+
+    /* =========================================================
+       4-R) 추천 — 당신의 다음 행동 (매칭 없으면 특공/공공분양 폴백)
+       ========================================================= */
+    var LANE_NAME={first:"생애최초",newlywed:"신혼부부",newborn:"신생아",multichild:"다자녀",oldparent:"노부모부양",institution:"기관추천"};
+    var TRACK_INFO={
+      general:{cls:"t-general",stamp:"일반청약 유망"},
+      special:{cls:"t-special",stamp:"특별공급 우회"},
+      public:{cls:"t-public",stamp:"공공분양 우회"}
+    };
+    var LANEKB=(function(){var m={};((KB&&KB.specialSupply)||[]).forEach(function(s){if(s.key)m[s.key]=s;});return m;})();
+    function fmtMD2(d){ if(!d)return"-"; return ("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+    function ddTxt(ap){ if(!ap||ap.dday==null)return"·"; if(ap.key==="live")return"진행중"; return ap.dday===0?"D-DAY":"D-"+ap.dday; }
+
+    function profileFrom(bb,g){
+      var marry=bb["i-marry"]?new Date(bb["i-marry"]):null;
+      var within7=marry?(((TODAY-marry)/(365.25*864e5))<=7):false;
+      return {
+        gajeom:g.total, hasInput:g.hasInput, region:bb["i-region"]||"",
+        own:!!bb["i-own"], everOwned:(everState===0),
+        married:!!marry, marryWithin7:within7,
+        childStatus:bb["i-child"]||"none", income:bb["i-income"]||"unknown", fam:+bb["i-fam"]||0
+      };
+    }
+    function actHTML(item,ap){
+      if(!item){
+        return '<div class="ra-main"><div class="ra-name">지금 신청 가능한 모집 건이 없습니다</div>'
+          +'<div class="ra-meta">아래 알리미 표에서 예정 단지를 확인하고 청약홈 알림을 켜 두세요.</div></div>'
+          +'<a class="reco-cta ghost" href="#alert-h">알리미 표 보기</a>';
+      }
+      var meta=esc(item.지역||"")+" · "+esc(item.주택구분||"")+"·"+esc(item.분양임대||"")
+        +(ap&&ap.start?" · "+fmtMD2(ap.start)+"~"+fmtMD2(ap.end)+" 접수":"");
+      return '<div class="ra-main"><div class="ra-name">'+esc(item.주택명||"-")+'</div>'
+        +'<div class="ra-meta">'+meta+'</div></div>'
+        +'<span class="ra-dday num">'+esc(ddTxt(ap))+'</span>'
+        +'<a class="reco-cta" href="https://www.applyhome.co.kr/ai/aia/selectAPTLttotPblancListView.do" target="_blank" rel="noopener">청약홈에서 신청 →</a>'
+        +'<a class="reco-cta ghost" href="#alert-h">표에서 보기</a>';
+    }
+    function laneHTML(l,isTop){
+      var nm=LANE_NAME[l.key]||l.key;
+      return '<div class="lane'+(l.status==="maybe"?" maybe":"")+(isTop?" top":"")+'">'
+        +'<div class="ln-h"><span class="ln-name">'+esc(nm)+' 특공'+(isTop?" ★":"")+'</span><span class="ln-step">'+esc(l.step)+'</span></div>'
+        +'<div class="ln-why">'+esc(l.reason)+'</div>'
+        +(l.income?'<div class="ln-inc">'+esc(l.income)+'</div>':'')
+        +'</div>';
+    }
+    function tipHTML(t){
+      return '<div class="tip"><div class="tip-t">'+esc(t.title)+'</div><div class="tip-d">'+esc(t.detail)+'</div></div>';
+    }
+    function renderReco(){
+      var box=$("reco"); if(!box||!MATCH||!MATCH.recommend)return;
+      if(!GAJEOM.hasInput){ box.hidden=true; return; }
+      var bb=readForm(), prof=profileFrom(bb,GAJEOM);
+      var r=MATCH.recommend(prof, DATA, TODAY);
+      var ti=TRACK_INFO[r.track]||TRACK_INFO.general;
+      box.className="reco "+ti.cls; box.hidden=false;
+      if($("reco-track"))$("reco-track").textContent=ti.stamp;
+
+      var g=r.gajeom, reg=esc(r.region||"전국"), lead="";
+      if(r.track==="general"){
+        if(r.primary.kind==="winnable") lead="가점 <b>"+g+"점</b>이면 "+reg+"에서 <b>실제 당첨가점 안</b>에 듭니다. 바로 신청하세요.";
+        else if(r.primary.kind==="underdog") lead="<b>경쟁률 미달</b> 단지가 있어요. 가점이 낮아도 <b>지금</b> 노려볼 기회입니다.";
+        else lead="가점 <b>"+g+"점</b> — "+reg+" <b>가점 유망</b> 구간입니다. 아래 단지를 우선 신청하세요.";
+      }else if(r.track==="special"){
+        lead="가점 <b>"+g+"점</b>은 일반청약이 빠듯해요. 대신 <b>"+esc(LANE_NAME[r.primary.lane.key]||"")+" 특별공급</b>이 당신의 가장 강한 당첨 경로입니다.";
+      }else{
+        lead="가점 <b>"+g+"점</b>은 일반청약이 어려워요. <b>공공분양(국민주택)</b>은 가점이 아니라 납입·소득 기준이라 무주택 저가점에 유리합니다.";
+      }
+      if($("reco-lead"))$("reco-lead").innerHTML=lead;
+      if($("reco-act"))$("reco-act").innerHTML=actHTML(r.primary.item, r.primary.ap);
+
+      var lanesEl=$("reco-lanes");
+      if(lanesEl){
+        var show=r.lanes.slice(0,3);
+        lanesEl.innerHTML=show.map(function(l,i){return laneHTML(l, r.track==="special"&&i===0);}).join("");
+      }
+      var tipsEl=$("reco-tips");
+      if(tipsEl){
+        var strat=(KB&&KB.strategy)||[];
+        var pick=r.track==="general"?[]:strat.slice(0,2);
+        tipsEl.innerHTML=pick.map(tipHTML).join("");
       }
     }
 
@@ -1505,24 +1718,28 @@
         note.textContent="NOTE — "+(lead.length?lead.join(" · "):"입력값 기준 합계 "+g.total+"점");
       }
       renderAlerts(); // 가점이 바뀌면 판정도 갱신
+      renderReco();   // 추천(당신의 다음 행동)도 갱신
     }
 
     // 진단 입력 바인딩
-    ["i-birth","i-marry","i-join","i-fam","i-region"].forEach(function(id){
+    ["i-birth","i-marry","i-join","i-fam","i-region","i-child","i-income"].forEach(function(id){
       var el=$(id); if(!el)return;
       el.addEventListener("input",function(){saveForm();recompute();});
       el.addEventListener("change",function(){saveForm();recompute();});
     });
-    if($("i-own-seg")){
-      $("i-own-seg").addEventListener("click",function(e){
+    function bindSeg(segId,setter){
+      var seg=$(segId); if(!seg)return;
+      seg.addEventListener("click",function(e){
         var b=e.target.closest("button"); if(!b)return;
-        ownState=+b.getAttribute("data-own");
-        Array.prototype.forEach.call($("i-own-seg").querySelectorAll("button"),function(x){
+        setter(b);
+        Array.prototype.forEach.call(seg.querySelectorAll("button"),function(x){
           x.setAttribute("aria-pressed",x===b?"true":"false");
         });
         saveForm();recompute();
       });
     }
+    bindSeg("i-own-seg",function(b){ ownState=+b.getAttribute("data-own"); });
+    bindSeg("i-ever-seg",function(b){ everState=+b.getAttribute("data-ever"); });
     // magnetic primary CTA — one memorable interaction (skips on reduced-motion / touch)
     (function(){
       var b=document.querySelector(".hero .btn-primary");
@@ -1539,9 +1756,13 @@
       $("diag-reset").addEventListener("click",function(){
         try{localStorage.removeItem(LS_KEY);}catch(e){}
         ["i-birth","i-marry","i-join","i-fam","i-region"].forEach(function(id){if($(id))$(id).value="";});
-        ownState=0;
+        if($("i-child"))$("i-child").value="none";
+        if($("i-income"))$("i-income").value="unknown";
+        ownState=0; everState=1;
         if($("i-own-seg"))Array.prototype.forEach.call($("i-own-seg").querySelectorAll("button"),function(b){
           b.setAttribute("aria-pressed",b.getAttribute("data-own")==="0"?"true":"false");});
+        if($("i-ever-seg"))Array.prototype.forEach.call($("i-ever-seg").querySelectorAll("button"),function(b){
+          b.setAttribute("aria-pressed",b.getAttribute("data-ever")==="1"?"true":"false");});
         recompute();
       });
     }

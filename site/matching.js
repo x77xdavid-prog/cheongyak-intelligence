@@ -52,7 +52,121 @@
     return { score: s, band: s >= 70 ? "hi" : s >= 45 ? "mid" : "lo", reasons, outlook: ol, excluded: false };
   }
 
-  const API = { computeGajeom, expectedCutoff, gajeomOutlook, fit };
+  /* ---------------------------------------------------------------------------
+     추천 엔진 — "당신에게 맞는 현장" + (매칭 없으면) 특공/공공분양 폴백.
+     꼭 청약 받게 하려고 항상 '신청 가능한 한 가지'를 돌려준다. 모두 순수 로직. */
+
+  // 청약기간 "YYYY-MM-DD ~ YYYY-MM-DD" → {key,dday,start,end}. status()와 동일 규칙.
+  function parseApply(item, now) {
+    now = now || new Date();
+    const m = String((item && item.청약기간) || "").match(/\d{4}-\d{2}-\d{2}/g);
+    if (!m || !m.length) return { key: "wait", dday: null, start: null, end: null };
+    const st = new Date(m[0]); st.setHours(0, 0, 0, 0);
+    const en = m[1] ? new Date(m[1]) : new Date(m[0]); en.setHours(0, 0, 0, 0);
+    const t = new Date(now); t.setHours(0, 0, 0, 0);
+    const dd = Math.round((st - t) / 864e5), ddE = Math.round((en - t) / 864e5);
+    if (dd > 0) return { key: dd <= 7 ? "soon" : "wait", dday: dd, start: st, end: en };
+    if (ddE >= 0) return { key: "live", dday: 0, start: st, end: en };
+    return { key: "done", dday: ddE, start: st, end: en };
+  }
+  const isUpcoming = ap => !!ap && ap.dday != null && (ap.key === "soon" || ap.key === "wait" || ap.key === "live");
+
+  // 실제 당첨가점 — 평형 중 가장 낮은 '가점최저'(당첨 진입선). enrich 안 된 현장은 null.
+  function realCutoff(item) {
+    const c = item && item.경쟁률;
+    if (!c || !c.rows || !c.rows.length) return null;
+    const mins = [];
+    c.rows.forEach(r => { const v = parseInt(String(r.가점최저 || "").replace(/[^0-9]/g, ""), 10); if (v > 0) mins.push(v); });
+    return mins.length ? Math.min.apply(null, mins) : null;
+  }
+  const rateOf = item => { const s = item && item.경쟁률 && item.경쟁률.summary; return s ? (s.종합경쟁률 == null ? null : s.종합경쟁률) : null; };
+
+  // 소득구간(low ≤130% / mid 130~160% / high >160% / unknown) → 특공 공급단계
+  function incomeStep(income) {
+    switch (income) {
+      case "low": return { step: "우선공급", note: "소득 130% 이하 → 우선공급(50%) 대상" };
+      case "mid": return { step: "일반공급", note: "소득 130~160% → 일반공급(20%) 대상" };
+      case "high": return { step: "추첨", note: "소득 160% 초과 → 추첨(부동산 자산 3.31억 이하면 가능)" };
+      default: return { step: "소득확인", note: "소득구간을 입력하면 우선/일반/추첨 단계를 안내" };
+    }
+  }
+
+  // 자격 신호 → 신청 가능한 특별공급 레인. 강도순(저가점일수록 특공이 핵심).
+  function specialLanes(p) {
+    p = p || {};
+    const inc = incomeStep(p.income), L = [];
+    if (p.childStatus === "newborn")
+      L.push({ key: "newborn", strength: 5, status: "eligible", step: inc.step, income: inc.note,
+        reason: "임신·2세 미만 자녀 → 신생아 특공(자격 모집단이 작아 경쟁 분산)" });
+    if (p.everOwned === false && (p.marryWithin7 || p.married || p.childStatus !== "none"))
+      L.push({ key: "first", strength: 5, status: "eligible", step: inc.step, income: inc.note,
+        reason: "평생 무주택 → 생애최초 특공은 가점이 0이어도 추첨으로 당첨 가능(최강 우회)" });
+    if (p.childStatus === "multi")
+      L.push({ key: "multichild", strength: 4, status: "eligible", step: "배점제", income: "소득기준은 단지 공고 확인",
+        reason: "미성년 자녀 2명 이상 → 다자녀 특공(자녀수 배점이 클수록 유리)" });
+    if (p.marryWithin7)
+      L.push({ key: "newlywed", strength: 3, status: "eligible", step: inc.step, income: inc.note + " (신혼은 100/120% 기준)",
+        reason: "혼인 7년 이내 → 신혼부부 특공(소득구분→자녀수→추첨)" });
+    if ((+p.fam || 0) > 0)
+      L.push({ key: "oldparent", strength: 2, status: "maybe", step: "가점제", income: "",
+        reason: "직계존속 부양 중이면 노부모부양 특공 가능(만 65세+ 직계존속 3년 이상 등재 확인)" });
+    L.sort((a, b) => ((b.status === "eligible") - (a.status === "eligible")) || (b.strength - a.strength));
+    return L;
+  }
+
+  // profile: {gajeom, hasInput, region, own, everOwned, married, marryWithin7, childStatus, income, fam}
+  // 반환: 행동지향 단일 추천. primary.item 은 항상 채우려 노력(없으면 null + 메시지).
+  function recommend(p, items, now) {
+    p = p || {}; now = now || new Date(); items = items || [];
+    const region = p.region || "", g = p.gajeom || 0;
+    const pool = items.map(it => ({ it, ap: parseApply(it, now), cut: realCutoff(it), rv: rateOf(it) }));
+    const inReg = x => !region || x.it.지역 === region;
+    const upAll = pool.filter(x => isUpcoming(x.ap));
+    const upReg = upAll.filter(inReg);
+    const byDday = (a, b) => a.ap.dday - b.ap.dday;
+
+    const winnable = upReg.filter(x => x.cut != null && g >= x.cut);     // 실측 당첨가점 이내
+    const underdog = upReg.filter(x => x.rv != null && x.rv < 1);        // 경쟁률 미달 = 기회
+    const ol = gajeomOutlook(g, region);
+    const generalStrong = winnable.length > 0 || (p.hasInput && ol.tone === "hi");
+
+    const generalPick =
+      winnable.slice().sort(byDday)[0] || underdog.slice().sort(byDday)[0] || upReg.slice().sort(byDday)[0] || null;
+    const isPublic = x => x.it.주택구분 === "국민" && /분양/.test(x.it.분양임대 || "");  // 국민주택 = 공공분양
+    const publicPick = upReg.filter(isPublic).sort(byDday)[0] || upAll.filter(isPublic).sort(byDday)[0] || null;
+    const anyUp = upReg.slice().sort(byDday)[0] || upAll.slice().sort(byDday)[0] || null;
+
+    const lanes = specialLanes(p);
+    const eligible = lanes.filter(l => l.status === "eligible");
+
+    let track, primary;
+    if (generalStrong && generalPick) {
+      const win = winnable.indexOf(generalPick) >= 0;
+      track = "general";
+      primary = { kind: win ? "winnable" : "general", item: generalPick.it, ap: generalPick.ap,
+        why: [ol.label, win ? "실제 당첨가점 ≤ 내 가점 — 당첨권" : "희망지역 가점 유망"] };
+    } else if (eligible.length) {
+      track = "special";
+      primary = { kind: "special", lane: eligible[0], item: anyUp ? anyUp.it : null, ap: anyUp ? anyUp.ap : null,
+        why: [eligible[0].reason] };
+    } else if (underdog.length) {
+      const u = underdog.slice().sort(byDday)[0];
+      track = "general";
+      primary = { kind: "underdog", item: u.it, ap: u.ap, why: ["경쟁률 미달 — 가점이 낮아도 노려볼 기회"] };
+    } else {
+      const pk = publicPick || anyUp;
+      track = "public";
+      primary = { kind: "public", item: pk ? pk.it : null, ap: pk ? pk.ap : null,
+        why: ["공공분양(국민주택)은 가점이 아니라 납입·소득 기준 — 무주택 저가점에 유리"] };
+    }
+    return { track, primary, lanes, eligible: eligible.length,
+      generalPick: generalPick ? generalPick.it : null,
+      publicPick: publicPick ? publicPick.it : null,
+      winnable: winnable.length, underdog: underdog.length,
+      outlook: ol, gajeom: g, hasInput: !!p.hasInput, region };
+  }
+
+  const API = { computeGajeom, expectedCutoff, gajeomOutlook, fit, parseApply, realCutoff, incomeStep, specialLanes, recommend };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   root.MATCH = API;
 })(typeof window !== "undefined" ? window : globalThis);
@@ -72,5 +186,29 @@ if (typeof require !== "undefined" && require.main === module) {
   // fit: 서울 고가점 → hi
   const f = A.fit({ 지역: "지방", 주택구분: "민영" }, { regions: [], special: ["생애최초"] }, 70);
   assert(f.score >= 70 && f.band === "hi", "fit 점수 오류: " + JSON.stringify(f));
-  console.log("[OK] matching.js self-check passed", JSON.stringify(g));
+
+  // --- 추천 엔진 ---
+  const items = [
+    { 지역: "서울", 주택구분: "민영", 분양임대: "분양주택", 주택명: "서울 고가점 단지", 청약기간: "2026-07-05 ~ 2026-07-07",
+      경쟁률: { summary: { 종합경쟁률: 20 }, rows: [{ 가점최저: "69" }] } },
+    { 지역: "서울", 주택구분: "국민", 분양임대: "분양주택", 주택명: "서울 공공분양 국민주택", 청약기간: "2026-07-02 ~ 2026-07-03", 경쟁률: null },
+    { 지역: "경기", 주택구분: "민영", 분양임대: "분양주택", 주택명: "경기 미달 단지", 청약기간: "2026-07-04 ~ 2026-07-06",
+      경쟁률: { summary: { 종합경쟁률: 0.4, 미달: true }, rows: [{ 가점최저: "-" }] } }
+  ];
+  // 저가점(35)·서울·평생무주택·혼인7년내 → 일반 어려움 → 특공(생애최초/신혼) 트랙
+  const rLow = A.recommend({ gajeom: 35, hasInput: true, region: "서울", everOwned: false, married: true, marryWithin7: true, childStatus: "none", income: "low", fam: 0 }, items, now);
+  assert(rLow.track === "special" && rLow.primary.lane, "저가점 특공 폴백 실패: " + JSON.stringify(rLow.track));
+  assert(rLow.primary.lane.key === "first" || rLow.primary.lane.key === "newlywed", "특공 레인 선정 오류: " + JSON.stringify(rLow.primary.lane));
+  assert(rLow.publicPick && rLow.publicPick.주택구분 === "국민", "공공분양 픽 실패");
+  // 고가점(72)·서울 → 실제 당첨가점(69) 이내 → 일반 당첨권
+  const rHi = A.recommend({ gajeom: 72, hasInput: true, region: "서울", everOwned: true, childStatus: "none", income: "high", fam: 0 }, items, now);
+  assert(rHi.track === "general" && rHi.primary.kind === "winnable", "고가점 당첨권 판정 오류: " + JSON.stringify(rHi.primary));
+  // 신생아 신호 → 신생아 레인 최우선
+  const lanes = A.specialLanes({ childStatus: "newborn", everOwned: false, marryWithin7: true, income: "low", fam: 1 });
+  assert(lanes[0].key === "newborn", "신생아 우선순위 오류: " + JSON.stringify(lanes.map(l => l.key)));
+  // 신호 전혀 없음(자격 미상) → 특공 없음 → 공공/미달 폴백이라도 신청 경로 제공
+  const rNone = A.recommend({ gajeom: 30, hasInput: true, region: "경기", everOwned: true, childStatus: "none", income: "unknown", fam: 0 }, items, now);
+  assert(rNone.primary.item, "항상 신청 경로 제공 실패(폴백 없음)");
+
+  console.log("[OK] matching.js self-check passed", JSON.stringify(g), "| reco low→", rLow.track, rLow.primary.lane && rLow.primary.lane.key, "| hi→", rHi.primary.kind);
 }
