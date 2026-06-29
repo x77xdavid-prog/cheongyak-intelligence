@@ -94,6 +94,7 @@
   // 자격 신호 → 신청 가능한 특별공급 레인. 강도순(저가점일수록 특공이 핵심).
   function specialLanes(p) {
     p = p || {};
+    if (p.own) return [];                 // 현재 유주택 = 무주택 세대 아님 → 모든 특별공급 불가
     const inc = incomeStep(p.income), L = [];
     if (p.childStatus === "newborn")
       L.push({ key: "newborn", strength: 5, status: "eligible", step: inc.step, income: inc.note,
@@ -167,7 +168,40 @@
       outlook: ol, gajeom: g, hasInput: !!p.hasInput, region };
   }
 
-  const API = { computeGajeom, expectedCutoff, gajeomOutlook, fit, parseApply, realCutoff, incomeStep, specialLanes, recommend };
+  /* ---------------------------------------------------------------------------
+     검증 엔진 1 — 데이터 오류: 입력값의 모순·불가능값을 잡아 잘못된 전제로 추천이
+     나가는 걸 막는다. bb = 폼 원본(readForm 출력), now = 기준일. 순수 로직. */
+  function validateData(bb, now) {
+    bb = bb || {}; now = now || new Date();
+    const t = new Date(now); t.setHours(0, 0, 0, 0);
+    const pd = s => (/^\d{4}-\d{2}-\d{2}$/.test(String(s || "")) ? new Date(s) : null);
+    const birth = pd(bb["i-birth"]), marry = pd(bb["i-marry"]), join = pd(bb["i-join"]);
+    const out = [], fut = d => d && d > t;
+    if (fut(birth)) out.push({ level: "error", code: "birth-future", msg: "생년월일이 미래 날짜입니다 — 정정하세요." });
+    if (fut(marry)) out.push({ level: "error", code: "marry-future", msg: "혼인신고일이 미래 날짜입니다 — 정정하세요." });
+    if (fut(join)) out.push({ level: "error", code: "join-future", msg: "청약통장 가입일이 미래 날짜입니다 — 정정하세요." });
+    if (birth && join && join < birth) out.push({ level: "error", code: "join<birth", msg: "통장 가입일이 출생일보다 빠릅니다 — 날짜를 확인하세요." });
+    if (birth && marry && marry < birth) out.push({ level: "error", code: "marry<birth", msg: "혼인신고일이 출생일보다 빠릅니다 — 날짜를 확인하세요." });
+    if (birth && marry) { const a = (marry - birth) / (365.25 * 864e5); if (a >= 0 && a < 18) out.push({ level: "warn", code: "marry-young", msg: "혼인 시점이 만 18세 미만으로 계산됩니다 — 날짜를 확인하세요." }); }
+    const own = !!bb["i-own"], everNever = (bb["i-ever"] === 1 || bb["i-ever"] === "1");
+    if (own && everNever) out.push({ level: "error", code: "own-vs-ever", msg: "현재 ‘유주택’인데 ‘평생 무주택’으로 표시됨 — 양립할 수 없습니다. 둘 중 하나를 정정하세요." });
+    if (birth) { const age = (t - birth) / (365.25 * 864e5); if (age >= 0 && age < 30 && !marry) out.push({ level: "info", code: "age<30", msg: "만 30세 미만·미혼은 무주택기간 가점이 0점입니다(만 30세부터 기산)." }); }
+    const fam = +bb["i-fam"]; if (isFinite(fam) && fam > 6) out.push({ level: "warn", code: "fam-range", msg: "부양가족 수가 비정상적으로 큽니다 — 등본 기준으로 확인하세요." });
+    return out;
+  }
+
+  // 검증 엔진 2 — 자격 오류: 부적격(당첨 취소) 함정 중 입력값으로 판정 가능한 것.
+  // 판정 불가 항목(세대주·거주기간·재당첨·특공이력 등)은 UI가 KB.selfCheck 체크리스트로 안내.
+  function auditEligibility(p) {
+    p = p || {}; const risks = [];
+    const REG = { 서울: 1, 경기: 1, 인천: 1 };   // 2025.10 대책 이후 수도권 규제 비중 큼 → 보수적 안내
+    if (p.own) risks.push({ level: "error", category: "세대·무주택", msg: "현재 유주택 — 무주택 세대 자격이 없어 1순위·무주택 가점·특별공급이 모두 제한됩니다. 추첨제(가점 외)만 가능." });
+    if (!p.own && (+p.fam || 0) > 0) risks.push({ level: "info", category: "부양가족", msg: "부양 직계존속이 주택을 소유하면 세대 전체가 유주택이 됩니다. 직계존속 무주택·3년 연속 등재를 확인하세요." });
+    if (p.region && REG[p.region]) risks.push({ level: "warn", category: "세대주 요건", msg: p.region + "은 규제지역 비중이 큽니다 — 1순위는 ‘무주택 세대주’만 가능. 본인 세대주 여부·통장 2년·24회를 직접 확인하세요." });
+    return { risks: risks, checkAll: true };
+  }
+
+  const API = { computeGajeom, expectedCutoff, gajeomOutlook, fit, parseApply, realCutoff, incomeStep, specialLanes, recommend, validateData, auditEligibility };
   if (typeof module !== "undefined" && module.exports) module.exports = API;
   root.MATCH = API;
 })(typeof window !== "undefined" ? window : globalThis);
@@ -214,5 +248,20 @@ if (typeof require !== "undefined" && require.main === module) {
   const rUD = A.recommend({ gajeom: 60, hasInput: true, region: "경기", everOwned: true, childStatus: "none", income: "high", fam: 0 }, items, now);
   assert(rUD.track === "general" && rUD.primary.kind === "underdog", "고출력+미달 underdog kind 오류: " + JSON.stringify(rUD.primary.kind));
 
-  console.log("[OK] matching.js self-check passed", JSON.stringify(g), "| reco low→", rLow.track, rLow.primary.lane && rLow.primary.lane.key, "| hi→", rHi.primary.kind);
+  // --- 검증 엔진 ---
+  // 유주택은 모든 특공 차단
+  assert(A.specialLanes({ own: true, childStatus: "newborn", everOwned: false }).length === 0, "유주택 특공 차단 실패");
+  // 데이터 오류: 모순(유주택+평생무주택)·미래날짜·출생전가입
+  const v1 = A.validateData({ "i-birth": "1990-01-01", "i-own": true, "i-ever": 1 }, now);
+  assert(v1.some(x => x.code === "own-vs-ever" && x.level === "error"), "모순 검출 실패: " + JSON.stringify(v1));
+  const v2 = A.validateData({ "i-birth": "1990-01-01", "i-join": "2030-01-01" }, now);
+  assert(v2.some(x => x.code === "join-future"), "미래 가입일 검출 실패");
+  const v3 = A.validateData({ "i-birth": "2000-01-01", "i-join": "1995-01-01" }, now);
+  assert(v3.some(x => x.code === "join<birth"), "출생 전 가입 검출 실패");
+  assert(A.validateData({ "i-birth": "1986-06-25", "i-join": "2018-06-25", "i-own": false, "i-ever": 0 }, now).length === 0, "정상 입력 오검출");
+  // 자격 오류: 유주택 → error 위험
+  const au = A.auditEligibility({ own: true, region: "서울" });
+  assert(au.risks.some(r => r.level === "error" && r.category === "세대·무주택"), "유주택 부적격 위험 누락");
+
+  console.log("[OK] matching.js self-check passed", JSON.stringify(g), "| reco low→", rLow.track, rLow.primary.lane && rLow.primary.lane.key, "| hi→", rHi.primary.kind, "| validate/audit OK");
 }

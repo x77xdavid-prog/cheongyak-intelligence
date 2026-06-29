@@ -618,6 +618,37 @@
     .reco-cta{ flex:1 1 100%; }
   }
 
+  /* ===================== VALIDATION (검증) ===================== */
+  .verify{
+    margin-top:var(--sp-3); border:1px solid var(--hair-strong);
+    border-left:3px solid var(--ink-3); background:var(--paper); padding:var(--sp-3) var(--sp-4);
+  }
+  .verify.has-error{ border-left-color:var(--stamp); }
+  .verify.has-warn{ border-left-color:var(--warn); }
+  .verify-top{ display:flex; justify-content:space-between; align-items:baseline; gap:var(--sp-3); flex-wrap:wrap; }
+  .verify-kicker{ font-size:10px; letter-spacing:.14em; color:var(--ink-3); text-transform:uppercase; }
+  .verify-counts{ font-size:11px; color:var(--ink-2); }
+  .verify-issues{ display:flex; flex-direction:column; gap:6px; margin-top:8px; }
+  .verify-issues:empty{ display:none; }
+  .vi{ display:flex; gap:9px; align-items:flex-start; font-size:13px; line-height:1.5; padding:8px 10px; border-radius:2px; }
+  .vi-tag{ font-family:var(--f-mono); font-size:10px; font-weight:700; letter-spacing:.04em; padding:2px 7px; border-radius:2px; white-space:nowrap; flex:none; margin-top:1px; }
+  .vi.error{ background:var(--stamp-soft); color:var(--ink); }
+  .vi.error .vi-tag{ background:var(--stamp); color:#F7EFEE; }
+  .vi.warn{ background:var(--warn-tint); color:var(--ink); }
+  .vi.warn .vi-tag{ background:var(--warn); color:#fff; }
+  .vi.info{ background:var(--blue-tint); color:var(--ink-2); }
+  .vi.info .vi-tag{ background:var(--blue); color:var(--sheet); }
+  .vi.ok{ background:var(--blue-tint); color:var(--ink-2); font-family:var(--f-mono); font-size:11px; }
+  .verify-check{ margin-top:var(--sp-3); border-top:1px solid var(--hair); padding-top:8px; }
+  .verify-check summary{ font-family:var(--f-mono); font-size:11px; color:var(--blue-deep); cursor:pointer; letter-spacing:.02em; min-height:32px; display:flex; align-items:center; }
+  .verify-list{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:8px; margin-top:8px; }
+  .vchk{ border:1px solid var(--hair); border-radius:2px; padding:9px 11px; background:var(--sheet); }
+  .vchk.flag{ border-color:var(--stamp); box-shadow:inset 3px 0 0 var(--stamp); }
+  .vchk-h{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+  .vchk-cat{ font-family:var(--f-disp); font-weight:600; font-size:.82rem; color:var(--ink); }
+  .vchk-risk{ font-family:var(--f-mono); font-size:9.5px; color:var(--stamp); text-align:right; }
+  .vchk-item{ font-size:12px; line-height:1.5; color:var(--ink-2); margin-top:4px; }
+
   /* ===================== D-DAY TIMELINE (C) ===================== */
   .timeline{
     border:1px solid var(--hair); background:var(--sheet);
@@ -1300,6 +1331,19 @@
         <div class="reco-tips" id="reco-tips"></div>
         <p class="reco-disc">※ 자격·가점·소득은 입력값 기준 추정입니다. 신청 전 청약홈과 입주자모집공고문으로 최종 확인하세요.</p>
       </div>
+
+      <!-- ============ 검증: 데이터 오류 + 자격 부적격 함정 ============ -->
+      <div class="verify" id="verify" hidden aria-live="polite" aria-labelledby="verify-kicker">
+        <div class="verify-top">
+          <span class="verify-kicker num" id="verify-kicker">SHEET 03·V — VALIDATION</span>
+          <span class="verify-counts num" id="verify-counts"></span>
+        </div>
+        <div class="verify-issues" id="verify-issues"></div>
+        <details class="verify-check">
+          <summary>신청 전 자가점검 — 부적격은 고의가 아니어도 당첨 취소·청약 제한</summary>
+          <div class="verify-list" id="verify-list"></div>
+        </details>
+      </div>
     </div>
   </section>
 
@@ -1670,6 +1714,35 @@
       }
     }
 
+    /* ---- 검증: 데이터 오류 + 자격 부적격 함정 ---- */
+    function viHTML(i){
+      var tag=i.level==="error"?"오류":i.level==="warn"?"경고":"확인";
+      return '<div class="vi '+i.level+'"><span class="vi-tag">'+tag+'</span><span class="vi-msg">'+esc(i.msg)+'</span></div>';
+    }
+    function chkHTML(c,flag){
+      return '<div class="vchk'+(flag?" flag":"")+'"><div class="vchk-h"><span class="vchk-cat">'+esc(c.category)+'</span><span class="vchk-risk">'+esc(c.risk||"")+'</span></div>'
+        +'<div class="vchk-item">'+esc(c.item)+'</div></div>';
+    }
+    function renderVerify(){
+      var box=$("verify"); if(!box||!MATCH)return;
+      if(!GAJEOM.hasInput){ box.hidden=true; return; }
+      var bb=readForm(), prof=profileFrom(bb,GAJEOM);
+      var di=(MATCH.validateData?MATCH.validateData(bb,TODAY):[]);
+      var au=(MATCH.auditEligibility?MATCH.auditEligibility(prof):{risks:[]});
+      var issues=di.concat(au.risks||[]);
+      var ord={error:0,warn:1,info:2};
+      issues.sort(function(a,b){return (ord[a.level]||9)-(ord[b.level]||9);});
+      var nErr=issues.filter(function(i){return i.level==="error";}).length;
+      var nWarn=issues.filter(function(i){return i.level==="warn";}).length;
+      var sc=(KB&&KB.selfCheck)||[];
+      box.hidden=false;
+      box.className="verify"+(nErr?" has-error":nWarn?" has-warn":"");
+      if($("verify-counts"))$("verify-counts").textContent="오류 "+nErr+" · 경고 "+nWarn+" · 자가점검 "+sc.length;
+      if($("verify-issues"))$("verify-issues").innerHTML=issues.length?issues.map(viHTML).join(""):'<div class="vi ok">입력값에서 데이터 오류·자격 충돌이 발견되지 않았습니다.</div>';
+      var flagged={}; issues.forEach(function(i){ if(i.category)flagged[i.category]=1; });
+      if($("verify-list"))$("verify-list").innerHTML=sc.map(function(c){return chkHTML(c, !!flagged[c.category]);}).join("");
+    }
+
     var MAXG={g1:32,g2:35,g3:17};
     function setBar(fillId,trackId,vId,name,val,max){
       var pct=Math.max(0,Math.min(100,(val/max)*100));
@@ -1719,6 +1792,7 @@
       }
       renderAlerts(); // 가점이 바뀌면 판정도 갱신
       renderReco();   // 추천(당신의 다음 행동)도 갱신
+      renderVerify(); // 데이터/자격 오류 검증도 갱신
     }
 
     // 진단 입력 바인딩
