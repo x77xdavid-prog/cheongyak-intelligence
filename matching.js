@@ -174,7 +174,7 @@
   function validateData(bb, now) {
     bb = bb || {}; now = now || new Date();
     const t = new Date(now); t.setHours(0, 0, 0, 0);
-    const pd = s => (/^\d{4}-\d{2}-\d{2}$/.test(String(s || "")) ? new Date(s) : null);
+    const pd = s => { if (!/^\d{4}-\d{2}-\d{2}$/.test(String(s || ""))) return null; const d = new Date(s); return isNaN(d.getTime()) ? null : d; };
     const birth = pd(bb["i-birth"]), marry = pd(bb["i-marry"]), join = pd(bb["i-join"]);
     const out = [], fut = d => d && d > t;
     if (fut(birth)) out.push({ level: "error", code: "birth-future", msg: "생년월일이 미래 날짜입니다 — 정정하세요." });
@@ -185,7 +185,7 @@
     if (birth && marry) { const a = (marry - birth) / (365.25 * 864e5); if (a >= 0 && a < 18) out.push({ level: "warn", code: "marry-young", msg: "혼인 시점이 만 18세 미만으로 계산됩니다 — 날짜를 확인하세요." }); }
     const own = !!bb["i-own"], everNever = (bb["i-ever"] === 1 || bb["i-ever"] === "1");
     if (own && everNever) out.push({ level: "error", code: "own-vs-ever", msg: "현재 ‘유주택’인데 ‘평생 무주택’으로 표시됨 — 양립할 수 없습니다. 둘 중 하나를 정정하세요." });
-    if (birth) { const age = (t - birth) / (365.25 * 864e5); if (age >= 0 && age < 30 && !marry) out.push({ level: "info", code: "age<30", msg: "만 30세 미만·미혼은 무주택기간 가점이 0점입니다(만 30세부터 기산)." }); }
+    if (birth && !own) { const age = (t - birth) / (365.25 * 864e5); if (age >= 0 && age < 30 && !marry) out.push({ level: "info", code: "age<30", msg: "만 30세 미만·미혼은 무주택기간 가점이 0점입니다(만 30세부터 기산)." }); }
     const fam = +bb["i-fam"]; if (isFinite(fam) && fam > 6) out.push({ level: "warn", code: "fam-range", msg: "부양가족 수가 비정상적으로 큽니다 — 등본 기준으로 확인하세요." });
     return out;
   }
@@ -259,6 +259,11 @@ if (typeof require !== "undefined" && require.main === module) {
   const v3 = A.validateData({ "i-birth": "2000-01-01", "i-join": "1995-01-01" }, now);
   assert(v3.some(x => x.code === "join<birth"), "출생 전 가입 검출 실패");
   assert(A.validateData({ "i-birth": "1986-06-25", "i-join": "2018-06-25", "i-own": false, "i-ever": 0 }, now).length === 0, "정상 입력 오검출");
+  // 형식만 맞는 불가능 날짜(NaN)는 거짓음성 없이 무시 — 크래시·오통과 방지
+  assert(A.validateData({ "i-birth": "2026-13-40" }, now).length === 0, "불가능 날짜 처리 오류");
+  // 유주택+평생무주택 모순 시 'age<30' 정보는 억제(모순된 그림 방지)
+  const vc = A.validateData({ "i-birth": "2003-01-01", "i-own": true, "i-ever": 1 }, now);
+  assert(vc.some(x => x.code === "own-vs-ever") && !vc.some(x => x.code === "age<30"), "모순 시 age<30 억제 실패: " + JSON.stringify(vc.map(x => x.code)));
   // 자격 오류: 유주택 → error 위험
   const au = A.auditEligibility({ own: true, region: "서울" });
   assert(au.risks.some(r => r.level === "error" && r.category === "세대·무주택"), "유주택 부적격 위험 누락");
