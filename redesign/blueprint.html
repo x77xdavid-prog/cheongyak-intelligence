@@ -1650,7 +1650,7 @@
         else if(r.primary.kind==="underdog") lead="<b>경쟁률 미달</b> 단지가 있어요. 가점이 낮아도 <b>지금</b> 노려볼 기회입니다.";
         else lead="가점 <b>"+g+"점</b> — "+reg+" <b>가점 유망</b> 구간입니다. 아래 단지를 우선 신청하세요.";
       }else if(r.track==="special"){
-        lead="가점 <b>"+g+"점</b>은 일반청약이 빠듯해요. 대신 <b>"+esc(LANE_NAME[r.primary.lane.key]||"")+" 특별공급</b>이 당신의 가장 강한 당첨 경로입니다.";
+        lead="가점 <b>"+g+"점</b>은 일반청약이 빠듯해요. 대신 <b>"+esc((r.primary.lane&&LANE_NAME[r.primary.lane.key])||"특별")+" 특별공급</b>이 당신의 가장 강한 당첨 경로입니다.";
       }else{
         lead="가점 <b>"+g+"점</b>은 일반청약이 어려워요. <b>공공분양(국민주택)</b>은 가점이 아니라 납입·소득 기준이라 무주택 저가점에 유리합니다.";
       }

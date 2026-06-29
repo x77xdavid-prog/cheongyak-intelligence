@@ -142,9 +142,10 @@
     let track, primary;
     if (generalStrong && generalPick) {
       const win = winnable.indexOf(generalPick) >= 0;
+      const ud = !win && underdog.indexOf(generalPick) >= 0;   // 유망인데 매칭이 미달 단지뿐이면 '기회'로 안내
       track = "general";
-      primary = { kind: win ? "winnable" : "general", item: generalPick.it, ap: generalPick.ap,
-        why: [ol.label, win ? "실제 당첨가점 ≤ 내 가점 — 당첨권" : "희망지역 가점 유망"] };
+      primary = { kind: win ? "winnable" : ud ? "underdog" : "general", item: generalPick.it, ap: generalPick.ap,
+        why: [ol.label, win ? "실제 당첨가점 ≤ 내 가점 — 당첨권" : ud ? "경쟁률 미달 — 기회" : "희망지역 가점 유망"] };
     } else if (eligible.length) {
       track = "special";
       primary = { kind: "special", lane: eligible[0], item: anyUp ? anyUp.it : null, ap: anyUp ? anyUp.ap : null,
@@ -209,6 +210,9 @@ if (typeof require !== "undefined" && require.main === module) {
   // 신호 전혀 없음(자격 미상) → 특공 없음 → 공공/미달 폴백이라도 신청 경로 제공
   const rNone = A.recommend({ gajeom: 30, hasInput: true, region: "경기", everOwned: true, childStatus: "none", income: "unknown", fam: 0 }, items, now);
   assert(rNone.primary.item, "항상 신청 경로 제공 실패(폴백 없음)");
+  // 유망(고출력)인데 매칭이 미달 단지뿐 → kind=underdog (리드 문구 '경쟁률 미달'로 정정)
+  const rUD = A.recommend({ gajeom: 60, hasInput: true, region: "경기", everOwned: true, childStatus: "none", income: "high", fam: 0 }, items, now);
+  assert(rUD.track === "general" && rUD.primary.kind === "underdog", "고출력+미달 underdog kind 오류: " + JSON.stringify(rUD.primary.kind));
 
   console.log("[OK] matching.js self-check passed", JSON.stringify(g), "| reco low→", rLow.track, rLow.primary.lane && rLow.primary.lane.key, "| hi→", rHi.primary.kind);
 }
