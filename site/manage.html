@@ -5,7 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>내 청약 관리 · 사후관리 — 청약 인텔리전스</title>
-<meta name="description" content="신청한 청약을 기록해 발표일을 추적하고, 당첨 시 다음 절차·자금, 낙첨 시 그 단지 당첨 가점과 비교한 원인 리뷰와 다음 청약 일정을 도면처럼 정리합니다. 모든 기록은 이 브라우저에만 저장됩니다.">
+<meta name="description" content="신청한 청약을 기록하면 당첨자 발표일을 추적하고, 당첨 시 계약 절차·자금 계획, 낙첨 시 실제 당첨 가점과 비교한 원인 분석과 다음 청약 일정을 정리해 드립니다. 모든 기록은 이 브라우저에만 저장됩니다.">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,14 +54,14 @@
     --t-7:3.05rem;
     --t-8:3.82rem;
 
-    /* ---- space ---- */
-    --sp-1:.375rem;
-    --sp-2:.625rem;
-    --sp-3:1rem;
-    --sp-4:1.5rem;
-    --sp-5:2.25rem;
-    --sp-6:3.5rem;
-    --sp-7:5rem;
+    /* ---- space — 8px 배수 리듬 (sp-1만 4px 하프스텝) ---- */
+    --sp-1:.25rem;   /*  4 */
+    --sp-2:.5rem;    /*  8 */
+    --sp-3:1rem;     /* 16 */
+    --sp-4:1.5rem;   /* 24 */
+    --sp-5:2.5rem;   /* 40 */
+    --sp-6:3.5rem;   /* 56 */
+    --sp-7:5rem;     /* 80 */
 
     --gridsize:26px;
     --edge:clamp(1rem, 4vw, 3.25rem);
@@ -616,6 +616,10 @@
     *{ transition:none !important; }
   }
 </style>
+<!-- 데이터/로직: defer — 1.2MB 데이터가 첫 렌더를 막지 않도록 조기 다운로드, 파싱 후 실행 -->
+<script src="bunyang.js" defer onerror="window.__noB=1"></script>
+<script src="matching.js" defer onerror="window.__noM=1"></script>
+<script src="kb.js" defer onerror="window.__noKB=1"></script>
 <script type="speculationrules">
 {"prerender":[{"urls":["index.html","board.html"],"eagerness":"moderate"}]}
 </script>
@@ -631,7 +635,7 @@
     <div class="wrap">
       <span class="live"><span class="dot" aria-hidden="true"></span>내 기록은 이 브라우저에만 저장 · 서버 전송 없음</span>
       <span class="right">
-        <span>청약 문의 <strong class="num">1644-7445</strong> · 평일 <span class="num">09:00–17:30</span></span>
+        
         <a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">청약홈 바로가기 ↗</a>
       </span>
     </div>
@@ -647,7 +651,7 @@
       <nav class="nlinks" id="nav" aria-label="주요 메뉴">
         <a href="board.html">게시판</a>
         <a href="index.html#steps-h">청약 여정</a>
-        <a href="index.html#diag-h">청약 준비</a>
+        <a href="index.html#diag-h">가점 계산</a>
         <a href="index.html#alert-h">분양현장</a>
         <a href="manage.html" class="active" aria-current="page">내 청약 관리</a>
       </nav>
@@ -660,8 +664,8 @@
   <section class="hero">
     <div class="wrap">
       <span class="eyebrow tlabel"><span class="bar" aria-hidden="true"></span>My Applications · 사후관리</span>
-      <h1>신청한 청약을 <em>끝까지 관리</em>한다</h1>
-      <p class="lede">신청한 청약을 기록하면 발표일을 추적하고, <b>당첨 시 다음 절차·자금</b>을, <b>낙첨 시 그 단지 실제 당첨 가점과 비교한 원인 리뷰</b>와 다음 청약 일정을 도면처럼 정리한다.</p>
+      <h1>신청한 청약, <em>발표일부터 결과까지</em> 관리하세요</h1>
+      <p class="lede">신청한 청약을 기록하면 당첨자 발표일을 추적해 드립니다. <b>당첨되면 계약 절차와 자금 계획</b>을, <b>낙첨되면 그 단지 실제 당첨 가점과 비교한 원인 분석</b>과 다음 청약 일정을 정리해 보여드립니다.</p>
       <span class="privacy-note"><span class="lock" aria-hidden="true">⛁</span>모든 기록은 이 브라우저(localStorage)에만 저장 · 서버 전송 없음</span>
       <!-- SIGNATURE: dimension line annotation -->
       <div class="dimline" aria-hidden="true">
@@ -746,7 +750,7 @@
             <span class="fm" aria-hidden="true">印</span>
             <span class="fn">청약 인텔리전스</span>
           </span>
-          <span class="ftrust"><span class="lock" aria-hidden="true">⛁</span>입력값과 청약 기록은 localStorage에만 저장 · 서버 전송 없음. 청약 신청은 청약홈에서 진행하라.</span>
+          <span class="ftrust"><span class="lock" aria-hidden="true">⛁</span>입력값과 청약 기록은 이 브라우저에만 저장되며 서버로 전송되지 않습니다. 청약 신청은 청약홈에서 진행하세요.</span>
         </div>
         <nav class="foot-col" aria-label="청약 여정">
           <h3>청약 여정</h3>
@@ -771,24 +775,21 @@
             <li><a href="board.html">게시판</a></li>
             <li><a href="board.html">자주 묻는 질문</a></li>
             <li><a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">청약제도 안내</a></li>
-            <li><a href="index.html#care-h">고객센터 1644-7445</a></li>
+            
           </ul>
         </nav>
       </div>
       <div class="foot-bottom">
-        <span class="disc">본 서비스의 가점·매칭·낙첨 리뷰는 공개 청약 데이터 기반 추정치이며 법적·금융적 자문이 아니다. 실제 청약 신청·결과는 청약홈(applyhome.co.kr) 공고를 반드시 확인하라.</span>
+        <span class="disc">본 서비스의 가점·매칭·낙첨 분석은 공개 청약 데이터 기반 추정치이며 법적·금융적 자문이 아닙니다. 실제 청약 신청과 결과는 청약홈(applyhome.co.kr) 공고에서 반드시 확인하세요.</span>
         <a class="foot-related" href="https://210.mapsaihelp.com" target="_blank" rel="noopener">부동산 콘솔 ↗</a>
         <span class="meta num">© 2026 Cheongyak Intelligence</span>
       </div>
     </div>
   </footer>
 
-  <!-- 데이터/로직: 형제 공용 스크립트 (디자인 무관 순수 데이터·엔진) -->
-  <script src="bunyang.js" onerror="window.__noB=1"></script>
-  <script src="matching.js" onerror="window.__noM=1"></script>
-  <script src="kb.js" onerror="window.__noKB=1"></script>
+  <!-- 데이터/로직은 head에서 defer 로드 — DOMContentLoaded 시점엔 window.BUNYANG/MATCH/KB 보장 -->
   <script>
-  (function(){
+  document.addEventListener("DOMContentLoaded", function(){
     "use strict";
     var $=function(id){return document.getElementById(id);};
     var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});};
@@ -1045,7 +1046,7 @@
     fillDanji();
     if($("my-gj"))$("my-gj").textContent=myGj();
     render();
-  })();
+  });
   </script>
 </body>
 </html>

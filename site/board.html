@@ -50,14 +50,14 @@
     --t-7:3.05rem;
     --t-8:3.82rem;
 
-    /* ---- space ---- */
-    --sp-1:.375rem;
-    --sp-2:.625rem;
-    --sp-3:1rem;
-    --sp-4:1.5rem;
-    --sp-5:2.25rem;
-    --sp-6:3.5rem;
-    --sp-7:5rem;
+    /* ---- space — 8px 배수 리듬 (sp-1만 4px 하프스텝) ---- */
+    --sp-1:.25rem;   /*  4 */
+    --sp-2:.5rem;    /*  8 */
+    --sp-3:1rem;     /* 16 */
+    --sp-4:1.5rem;   /* 24 */
+    --sp-5:2.5rem;   /* 40 */
+    --sp-6:3.5rem;   /* 56 */
+    --sp-7:5rem;     /* 80 */
 
     --gridsize:26px;
     --edge:clamp(1rem, 4vw, 3.25rem);
@@ -515,6 +515,8 @@
     *{ transition:none !important; }
   }
 </style>
+<!-- 데이터: defer — 렌더를 막지 않도록 조기 다운로드, 파싱 후 실행 -->
+<script src="board-data.js?v=20260628" defer></script>
 <script type="speculationrules">
 {"prerender":[{"urls":["index.html","manage.html"],"eagerness":"moderate"}]}
 </script>
@@ -530,7 +532,7 @@
     <div class="wrap">
       <span class="live"><span class="dot" aria-hidden="true"></span>청약홈 공지·FAQ 수집본 · 기준일 <span class="num" id="util-updated">—</span></span>
       <span class="right">
-        <span>청약 문의 <strong class="num">1644-7445</strong> · 평일 <span class="num">09:00–17:30</span></span>
+        
         <a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">청약홈 바로가기 ↗</a>
       </span>
     </div>
@@ -546,7 +548,7 @@
       <nav class="nlinks" id="nav" aria-label="주요 메뉴">
         <a href="board.html" class="active" aria-current="page">게시판</a>
         <a href="index.html#steps-h">청약 여정</a>
-        <a href="index.html#diag-h">청약 준비</a>
+        <a href="index.html#diag-h">가점 계산</a>
         <a href="index.html#alert-h">분양현장</a>
         <a href="index.html#care-h">내 청약 관리</a>
       </nav>
@@ -559,8 +561,8 @@
   <section class="hero">
     <div class="wrap">
       <span class="eyebrow tlabel"><span class="bar" aria-hidden="true"></span>Notice &amp; FAQ Sheet</span>
-      <h1>청약 공지와 <em>자주묻는 질문</em>을 한 시트에</h1>
-      <p class="lede">청약 제도·서비스 변경 안내와 자주 묻는 질문을 한 곳에서. <b>청약홈 공지·FAQ를 수집해</b> 카테고리·검색으로 도면처럼 정리했다.</p>
+      <h1>청약 공지사항과 <em>자주 묻는 질문</em>을 한곳에서</h1>
+      <p class="lede">청약 제도 변경과 서비스 안내, 자주 묻는 질문을 모았습니다. <b>청약홈 공지와 FAQ를</b> 카테고리 필터와 검색으로 쉽게 찾아보세요.</p>
       <!-- SIGNATURE: dimension line annotation -->
       <div class="dimline" aria-hidden="true">
         <span class="seg"></span>
@@ -636,7 +638,7 @@
             <span class="fm" aria-hidden="true">印</span>
             <span class="fn">청약 인텔리전스</span>
           </span>
-          <span class="ftrust"><span class="lock" aria-hidden="true">⛁</span>입력값과 가점 데이터는 localStorage에만 저장 · 서버 전송 없음. 청약 신청은 청약홈에서 진행하라.</span>
+          <span class="ftrust"><span class="lock" aria-hidden="true">⛁</span>입력값과 가점 데이터는 이 브라우저에만 저장되며 서버로 전송되지 않습니다. 청약 신청은 청약홈에서 진행하세요.</span>
         </div>
         <nav class="foot-col" aria-label="청약 여정">
           <h3>청약 여정</h3>
@@ -661,22 +663,21 @@
             <li><a href="board.html" class="cur" aria-current="page">게시판</a></li>
             <li><a href="board.html">자주 묻는 질문</a></li>
             <li><a href="https://www.applyhome.co.kr" target="_blank" rel="noopener">청약제도 안내</a></li>
-            <li><a href="index.html#care-h">고객센터 1644-7445</a></li>
+            
           </ul>
         </nav>
       </div>
       <div class="foot-bottom">
-        <span class="disc">본 서비스의 공지·FAQ는 공개 청약 데이터 기반 수집본이며 법적·금융적 자문이 아니다. 실제 청약 신청·결과는 청약홈(applyhome.co.kr) 공고를 반드시 확인하라.</span>
+        <span class="disc">본 서비스의 공지·FAQ는 공개 청약 데이터를 수집한 것이며 법적·금융적 자문이 아닙니다. 실제 청약 신청과 결과는 청약홈(applyhome.co.kr) 공고에서 반드시 확인하세요.</span>
         <a class="foot-related" href="https://210.mapsaihelp.com" target="_blank" rel="noopener">부동산 콘솔 ↗</a>
         <span class="meta num">© 2026 Cheongyak Intelligence</span>
       </div>
     </div>
   </footer>
 
-  <!-- 데이터: 형제 board-data.js (디자인 무관 순수 데이터) -->
-  <script src="board-data.js?v=20260628"></script>
+  <!-- 데이터는 head에서 defer 로드 — DOMContentLoaded 시점엔 window.BOARD 보장 -->
   <script>
-  (function(){
+  document.addEventListener("DOMContentLoaded", function(){
     "use strict";
     var $=function(id){return document.getElementById(id);};
     var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});};
@@ -831,7 +832,7 @@
     /* ---------- 초기 구동 ---------- */
     renderNotices();
     renderFaq();
-  })();
+  });
   </script>
 </body>
 </html>

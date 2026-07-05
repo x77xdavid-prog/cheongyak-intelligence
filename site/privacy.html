@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<link rel="icon" href="data:,">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="index,follow">
+<title>개인정보처리방침 — 청약 인텔리전스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EAEEF0; --paper-2:#E1E7EA; --sheet:#F4F6F7;
+    --ink:#16242E; --ink-2:#3C4D57; --ink-3:#5A6B74;
+    --blue:#2B5C8A; --blue-deep:#1C3F61;
+    --blue-line:rgba(43,92,138,.12); --blue-line-2:rgba(43,92,138,.22); --blue-tint:rgba(43,92,138,.06);
+    --stamp:#C0392B;
+    --hair:rgba(22,36,46,.16);
+
+    --f-disp:'Space Grotesk','Pretendard',sans-serif;
+    --f-body:'Pretendard',system-ui,sans-serif;
+    --f-mono:'JetBrains Mono','Space Grotesk','Pretendard',monospace;
+
+    --t-0:0.78rem; --t-1:0.9375rem; --t-3:1.25rem;
+
+    /* space — 8px 배수 리듬 (sp-1만 4px 하프스텝) */
+    --sp-1:.25rem; --sp-2:.5rem; --sp-3:1rem; --sp-4:1.5rem; --sp-5:2.5rem; --sp-6:3.5rem;
+    --gridsize:26px;
+    --edge:clamp(1rem,4vw,3.25rem);
+    --maxw:1240px;
+  }
+
+  *{box-sizing:border-box;}
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0;
+    font-family:var(--f-body); font-size:var(--t-1); line-height:1.62;
+    color:var(--ink); background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--blue-line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--blue-line) 1px,transparent 1px),
+      linear-gradient(var(--blue-tint) 1px,transparent 1px),
+      linear-gradient(90deg,var(--blue-tint) 1px,transparent 1px);
+    background-size:
+      calc(var(--gridsize)*5) calc(var(--gridsize)*5),
+      calc(var(--gridsize)*5) calc(var(--gridsize)*5),
+      var(--gridsize) var(--gridsize),
+      var(--gridsize) var(--gridsize);
+    background-position:-1px -1px;
+    -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    overflow-x:hidden;
+  }
+  a{ color:inherit; text-decoration:none; }
+  h1,h2,h3,h4{ margin:0; font-weight:600; line-height:1.18; letter-spacing:-.01em; }
+  .num{ font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1; }
+
+  a:focus-visible,button:focus-visible{ outline:2px solid var(--blue); outline-offset:3px; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding-inline:var(--edge); }
+
+  /* ---- registration corner marks ---- */
+  .regmark{ position:fixed; width:22px; height:22px; z-index:50; pointer-events:none; opacity:.7; }
+  .regmark::before,.regmark::after{ content:""; position:absolute; background:var(--blue); }
+  .regmark::before{ width:100%; height:1px; top:50%; }
+  .regmark::after{ width:1px; height:100%; left:50%; }
+  .rm-tl{ top:10px; left:10px; } .rm-tr{ top:10px; right:10px; }
+  .rm-bl{ bottom:10px; left:10px; } .rm-br{ bottom:10px; right:10px; }
+  @media (max-width:640px){ .regmark{ display:none; } }
+
+  /* ---- utility bar ---- */
+  .utilbar{ border-bottom:1px solid var(--hair); background:rgba(244,246,247,.72); }
+  .utilbar .wrap{
+    display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3);
+    min-height:38px; flex-wrap:wrap;
+    font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2);
+  }
+  .utilbar .right strong{ color:var(--ink); font-weight:600; }
+
+  /* ---- nav ---- */
+  .nav{ border-bottom:1px solid var(--hair); background:var(--paper); position:sticky; top:0; z-index:40; }
+  .nav .wrap{ display:flex; align-items:center; gap:var(--sp-4); min-height:66px; }
+  .brand{ display:inline-flex; align-items:center; gap:11px; margin-right:auto; }
+  .brand .stamp-mark{
+    width:38px; height:38px; flex:none; border:1.5px solid var(--stamp); color:var(--stamp);
+    border-radius:50%; display:grid; place-items:center;
+    font-family:var(--f-body); font-weight:800; font-size:1rem; transform:rotate(-6deg); position:relative;
+  }
+  .brand .stamp-mark::after{ content:""; position:absolute; inset:3px; border:1px solid var(--stamp); border-radius:50%; opacity:.45; }
+  .brand .bname{ font-family:var(--f-disp); font-weight:600; font-size:1.06rem; letter-spacing:-.01em; color:var(--ink); }
+  .brand .bsub{ display:block; font-family:var(--f-mono); font-size:9px; letter-spacing:.22em; color:var(--blue); text-transform:uppercase; }
+  .nback{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--blue-deep); letter-spacing:.06em; padding:10px 12px; border-radius:2px; white-space:nowrap; }
+  .nback:hover{ background:var(--blue-tint); }
+
+  /* ---- sheet divider (dimension rule) ---- */
+  .section-divider .wrap{ padding-block:0; }
+  .dimrule{ display:flex; align-items:center; height:1px; margin:0; }
+  .dimrule .line{ flex:1; height:1px; background:var(--blue-line-2); position:relative; }
+  .dimrule .line::before,.dimrule .line::after{ content:""; position:absolute; top:-4px; width:1px; height:9px; background:var(--blue); }
+  .dimrule .line::before{ left:0; } .dimrule .line::after{ right:0; }
+  .dimrule .tag{
+    padding:0 12px; font-family:var(--f-mono); font-size:10px; letter-spacing:.14em;
+    color:var(--blue); text-transform:uppercase; white-space:nowrap; transform:translateY(-1px);
+  }
+
+  /* ---- section head ---- */
+  .section{ padding-top:var(--sp-6); padding-bottom:var(--sp-6); }
+  .section-head{
+    display:flex; align-items:flex-end; justify-content:space-between; gap:var(--sp-4);
+    margin-bottom:var(--sp-5); border-bottom:1px solid var(--hair); padding-bottom:var(--sp-3); flex-wrap:wrap;
+  }
+  .section-head h1{
+    font-family:var(--f-disp); font-weight:600; font-size:clamp(1.5rem,3vw,2rem);
+    letter-spacing:-.015em; color:var(--ink); text-wrap:balance;
+  }
+  .section-head .idx{
+    font-family:var(--f-mono); font-size:var(--t-0); color:var(--blue);
+    letter-spacing:.14em; text-transform:uppercase; display:block; margin-bottom:5px;
+  }
+  .section-head .hint{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); }
+
+  /* ---- document prose ---- */
+  .doc{ max-width:74ch; }
+  .doc > .lede{
+    font-size:var(--t-3); line-height:1.55; color:var(--ink-2); margin:0 0 var(--sp-5);
+    padding-bottom:var(--sp-4); border-bottom:1px solid var(--hair);
+  }
+  .art{ margin-bottom:var(--sp-5); }
+  .art h2{
+    font-family:var(--f-disp); font-weight:600; font-size:var(--t-3); color:var(--ink);
+    display:flex; align-items:baseline; gap:12px; margin-bottom:var(--sp-3);
+  }
+  .art h2 .no{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--blue); letter-spacing:.1em; flex:none; }
+  .art p{ margin:0 0 var(--sp-3); color:var(--ink-2); }
+  .art ul{ margin:0 0 var(--sp-3); padding-left:0; list-style:none; }
+  .art li{
+    position:relative; padding-left:22px; margin-bottom:var(--sp-2); color:var(--ink-2);
+  }
+  .art li::before{
+    content:""; position:absolute; left:4px; top:.72em; width:6px; height:1px; background:var(--blue);
+  }
+  .art a{ color:var(--blue-deep); text-decoration:underline; text-underline-offset:2px; text-decoration-color:var(--blue-line-2); }
+  .art a:hover{ text-decoration-color:var(--blue-deep); }
+  .art strong{ color:var(--ink); font-weight:600; }
+  .art code{
+    font-family:var(--f-mono); font-size:.86em; background:var(--sheet);
+    border:1px solid var(--hair); border-radius:2px; padding:1px 6px; color:var(--ink);
+  }
+  .callout-box{
+    background:var(--sheet); border:1px solid var(--hair); border-left:2px solid var(--blue);
+    padding:var(--sp-3) var(--sp-4); margin:0 0 var(--sp-3);
+    font-size:var(--t-0); font-family:var(--f-mono); line-height:1.7; color:var(--ink-2);
+  }
+  .stampdate{
+    margin-top:var(--sp-5); padding-top:var(--sp-4); border-top:1px solid var(--hair);
+    display:flex; gap:var(--sp-5); flex-wrap:wrap;
+    font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-3); letter-spacing:.04em;
+  }
+  .stampdate b{ color:var(--ink); font-weight:600; }
+
+  /* ---- footer ---- */
+  footer{ border-top:1px solid var(--hair); margin-top:var(--sp-6); background:rgba(225,231,234,.5); }
+  footer .wrap{ padding-top:var(--sp-6); padding-bottom:var(--sp-5); }
+  .foot-top{ display:flex; justify-content:space-between; gap:var(--sp-5); flex-wrap:wrap; padding-bottom:var(--sp-5); border-bottom:1px solid var(--hair); }
+  .foot-brand{ display:flex; flex-direction:column; gap:12px; max-width:40ch; }
+  .foot-brand .fb-mark{ display:inline-flex; align-items:center; gap:10px; }
+  .foot-brand .fm{ width:34px; height:34px; border:1.25px solid var(--stamp); color:var(--stamp); border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:.9rem; transform:rotate(-6deg); }
+  .foot-brand .fn{ font-family:var(--f-disp); font-weight:600; font-size:1.05rem; color:var(--ink); }
+  .foot-brand .ftrust{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); line-height:1.6; display:inline-flex; align-items:flex-start; gap:8px; }
+  .foot-brand .ftrust .lock{ color:var(--blue); flex:none; transform:translateY(1px); }
+  .foot-col h2{ font-family:var(--f-mono); font-size:var(--t-0); letter-spacing:.1em; text-transform:uppercase; color:var(--blue); font-weight:500; margin-bottom:14px; }
+  .foot-col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:3px; }
+  .foot-col a{ font-size:.9rem; color:var(--ink-2); display:inline-flex; align-items:center; min-height:34px; padding:2px 0; }
+  .foot-col a:hover{ color:var(--blue-deep); }
+  .foot-col a.cur{ color:var(--blue-deep); font-weight:600; }
+  .foot-bottom{ display:flex; justify-content:space-between; align-items:center; gap:var(--sp-3); padding-top:var(--sp-4); flex-wrap:wrap; }
+  .foot-bottom .disc{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); max-width:62ch; line-height:1.6; }
+  .foot-bottom .meta{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-3); white-space:nowrap; }
+  .foot-related{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--blue-deep); white-space:nowrap; }
+  .foot-related:hover{ text-decoration:underline; }
+
+  @media (max-width:640px){
+    .foot-bottom{ flex-direction:column; align-items:flex-start; }
+    .brand .bsub{ display:none; }
+  }
+</style>
+</head>
+<body>
+  <span class="regmark rm-tl" aria-hidden="true"></span>
+  <span class="regmark rm-tr" aria-hidden="true"></span>
+  <span class="regmark rm-bl" aria-hidden="true"></span>
+  <span class="regmark rm-br" aria-hidden="true"></span>
+
+  <!-- UTILITY BAR -->
+  <div class="utilbar">
+    <div class="wrap">
+      <span>문서 · 개인정보처리방침</span>
+      
+    </div>
+  </div>
+
+  <!-- NAV -->
+  <header class="nav">
+    <div class="wrap">
+      <a class="brand" href="index.html" aria-label="청약 인텔리전스 홈">
+        <span class="stamp-mark" aria-hidden="true">印</span>
+        <span class="bname">청약 인텔리전스<span class="bsub" aria-hidden="true">Cheongyak Intelligence</span></span>
+      </a>
+      <a class="nback" href="index.html">← 메인으로</a>
+    </div>
+  </header>
+
+  <!-- SHEET divider -->
+  <div class="section-divider"><div class="wrap"><div class="dimrule" aria-hidden="true"><span class="line"></span><span class="tag">Sheet PP</span><span class="line"></span></div></div></div>
+
+  <main class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="idx">SHEET PP — POLICY</span>
+          <h1>개인정보처리방침</h1>
+        </div>
+        <span class="hint num">시행일 2026-07-05</span>
+      </div>
+
+      <div class="doc">
+        <p class="lede">청약 인텔리전스(이하 “서비스”)는 이용자의 개인정보를 소중히 여기며, 정보를 <b>서버로 수집·저장하지 않는 정적(static) 구성</b>을 기본으로 운영한다. 본 방침은 서비스가 다루는 정보의 범위와 이용자의 권리를 설명한다.</p>
+
+        <section class="art" aria-labelledby="a1">
+          <h2 id="a1"><span class="no">01</span>수집하는 정보</h2>
+          <p>본 서비스는 정적 웹사이트로, 회원가입·로그인 절차가 없으며 이름·전화번호 등 개인정보를 <strong>서버 측에서 직접 수집·저장하지 않는다.</strong> 이용자가 입력하는 값은 다음과 같이 처리된다.</p>
+          <ul>
+            <li>가점 계산기·청약 관리 등에서 입력한 값(무주택 기간, 부양가족 수, 통장 가입 기간 등)은 이용자 <strong>브라우저의 <code>localStorage</code></strong>에만 저장되며 이 기기를 벗어나지 않는다.</li>
+            <li>해당 값은 서버로 전송되지 않으므로, 브라우저 데이터를 삭제하면 함께 사라지고 다른 기기로 옮겨지지 않는다.</li>
+            <li>웹서버 접근 과정에서 접속 로그·IP·브라우저 정보 등 표준적인 기술 정보가 호스팅 인프라에 의해 일시적으로 기록될 수 있다.</li>
+          </ul>
+          <div class="callout-box">저장 위치 · localStorage (이 기기) — 서버 전송 없음</div>
+        </section>
+
+        <section class="art" aria-labelledby="a2">
+          <h2 id="a2"><span class="no">02</span>쿠키 및 광고</h2>
+          <p>본 서비스는 광고 게재를 위해 <strong>Google AdSense</strong>를 사용한다. Google을 포함한 제3자 광고 사업자는 쿠키를 사용하여, 이용자의 <strong>이전 방문 기록</strong>을 바탕으로 관심에 맞는 광고를 표시할 수 있다.</p>
+          <ul>
+            <li>Google은 <strong>DoubleClick 쿠키(광고 쿠키)</strong>를 사용해 본 서비스 및 다른 사이트 방문 이력을 기반으로 광고를 게재한다.</li>
+            <li>이용자는 <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google 광고 설정</a>에서 맞춤형 광고를 <strong>비활성화(opt-out)</strong>할 수 있다.</li>
+            <li>제3자 광고 사업자의 쿠키 사용에 대한 자세한 내용은 <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener noreferrer">Google 광고 기술 정책</a>에서 확인할 수 있다.</li>
+            <li><a href="https://www.aboutads.info/choices/" target="_blank" rel="noopener noreferrer">www.aboutads.info</a>를 통해 다수 광고 사업자의 맞춤형 광고를 일괄 opt-out 할 수도 있다.</li>
+          </ul>
+          <p>브라우저 설정에서 쿠키를 차단할 수 있으나, 이 경우 일부 광고가 비맞춤형으로 표시될 수 있다.</p>
+        </section>
+
+        <section class="art" aria-labelledby="a3">
+          <h2 id="a3"><span class="no">03</span>제3자 제공 · 외부 서비스</h2>
+          <p>본 서비스는 이용자의 개인정보를 제3자에게 판매하거나 대여하지 않는다. 다만 서비스 제공 과정에서 다음의 외부 서비스가 관여할 수 있으며, 각 사업자의 정책에 따라 데이터가 처리된다.</p>
+          <ul>
+            <li><strong>Google (AdSense)</strong> — 광고 게재 및 쿠키 기반 측정. <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">Google 개인정보처리방침</a>을 따른다.</li>
+            <li><strong>웹폰트 / CDN</strong> — Google Fonts, jsDelivr 등에서 글꼴·자산을 불러오는 과정에서 표준 접속 정보가 해당 사업자에 전달될 수 있다.</li>
+            <li><strong>뉴스·시세 프록시(RSS)</strong> — 단지 뉴스·시세 등 콘텐츠를 표시하기 위해 외부 RSS/뉴스 프록시로 검색어가 전달될 수 있다. 개인 식별 정보는 포함되지 않는다.</li>
+          </ul>
+        </section>
+
+        <section class="art" aria-labelledby="a4">
+          <h2 id="a4"><span class="no">04</span>이용자 권리 및 문의</h2>
+          <p>본 서비스는 개인정보를 서버에 저장하지 않으므로, 기기에 저장된 값은 이용자가 직접 <strong>브라우저 데이터(localStorage·쿠키) 삭제</strong>로 언제든 제거할 수 있다. 맞춤형 광고 거부는 위 <a href="#a2">쿠키 및 광고</a> 항목의 링크를 통해 설정한다.</p>
+          <p>본 방침 또는 개인정보 처리에 관한 문의는 아래로 연락하면 된다.</p>
+          <div class="callout-box">개인정보 문의 · <a href="mailto:contact@example.com">contact@example.com</a></div>
+        </section>
+
+        <section class="art" aria-labelledby="a5">
+          <h2 id="a5"><span class="no">05</span>시행일 · 개정</h2>
+          <p>본 방침은 관련 법령·서비스 정책·외부 서비스의 변경에 따라 개정될 수 있으며, 개정 시 본 페이지를 통해 고지한다.</p>
+          <div class="stampdate">
+            <span>시행일 · <b class="num">2026-07-05</b></span>
+            <span>최종 개정 · <b class="num">2026-07-05</b></span>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="wrap">
+      <div class="foot-top">
+        <div class="foot-brand">
+          <span class="fb-mark">
+            <span class="fm" aria-hidden="true">印</span>
+            <span class="fn">청약 인텔리전스</span>
+          </span>
+          <span class="ftrust"><span class="lock" aria-hidden="true">⛁</span>입력값과 가점 데이터는 localStorage에만 저장 · 서버 전송 없음. 기기를 바꾸면 데이터는 함께 옮겨지지 않는다.</span>
+        </div>
+        <nav class="foot-col" aria-label="문서">
+          <h2>문서 · 지원</h2>
+          <ul>
+            <li><a href="index.html">메인으로</a></li>
+            <li><a href="privacy.html" class="cur" aria-current="page">개인정보처리방침</a></li>
+            <li><a href="index.html#alert-h">분양현장</a></li>
+            <li><a href="index.html#diag-h">가점 진단</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="foot-bottom">
+        <span class="disc">본 서비스의 경쟁률·당첨선·판정은 공개 청약 데이터 기반 추정치이며 법적·금융적 자문이 아니다. 실제 청약 신청·결과는 청약홈(applyhome.co.kr) 공고를 반드시 확인하라.</span>
+        <a class="foot-related" href="https://210.mapsaihelp.com" target="_blank" rel="noopener">부동산 콘솔 ↗</a>
+        <span class="meta num">© 2026 Cheongyak Intelligence</span>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

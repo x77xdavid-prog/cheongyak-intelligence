@@ -4,7 +4,8 @@
   <link rel="icon" href="data:,">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>청약 인텔리전스 — 분양 도면 분석</title>
+<title>청약 인텔리전스 — 청약 가점 계산·당첨 가능 단지 찾기</title>
+<meta name="description" content="청약 가점 계산기로 내 점수를 확인하고, 청약홈 분양 공고를 내 가점·자격과 비교해 당첨 가능성이 있는 단지를 찾아보세요. 분양 일정, 경쟁률, 무순위·특별공급 정보까지 한곳에서 제공합니다.">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -39,6 +40,7 @@
     --f-mono:'JetBrains Mono', 'Space Grotesk', 'Pretendard', monospace;
 
     /* type scale — 1.25 ratio */
+    --t-00:0.625rem; /* 10  도면 주석 최소 크기 */
     --t-0:0.78rem;   /* 12.5 caption */
     --t-1:0.9375rem; /* 15  body min */
     --t-2:1.0rem;
@@ -49,14 +51,14 @@
     --t-7:3.05rem;
     --t-8:3.82rem;
 
-    /* ---- space ---- */
-    --sp-1:.375rem;
-    --sp-2:.625rem;
-    --sp-3:1rem;
-    --sp-4:1.5rem;
-    --sp-5:2.25rem;
-    --sp-6:3.5rem;
-    --sp-7:5rem;
+    /* ---- space — 8px 배수 리듬 (sp-1만 4px 하프스텝) ---- */
+    --sp-1:.25rem;   /*  4 */
+    --sp-2:.5rem;    /*  8 */
+    --sp-3:1rem;     /* 16 */
+    --sp-4:1.5rem;   /* 24 */
+    --sp-5:2.5rem;   /* 40 */
+    --sp-6:3.5rem;   /* 56 */
+    --sp-7:5rem;     /* 80 */
 
     --gridsize:26px;
     --edge:clamp(1rem, 4vw, 3.25rem);
@@ -93,6 +95,8 @@
     overflow-x:hidden;
   }
   .num{ font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1; }
+  /* 표·입력의 모든 숫자는 tabular — 열 정렬이 신뢰감의 핵심 */
+  table, input, select{ font-variant-numeric:tabular-nums; font-feature-settings:"tnum" 1; }
   a{ color:inherit; text-decoration:none; }
   h1,h2,h3,h4{ margin:0; font-weight:600; line-height:1.18; letter-spacing:-.01em; }
 
@@ -126,7 +130,7 @@
   }
   .dimrule .line::before{ left:0; } .dimrule .line::after{ right:0; }
   .dimrule .tag{
-    padding:0 12px; font-family:var(--f-mono); font-size:10px; letter-spacing:.14em;
+    padding:0 12px; font-family:var(--f-mono); font-size:var(--t-00); letter-spacing:.14em;
     color:var(--blue); text-transform:uppercase; white-space:nowrap; transform:translateY(-1px);
   }
   .section-divider{ padding-block:0; }
@@ -135,7 +139,7 @@
   /* SIGNATURE: leader-line callout used at ledger / diagnosis edges */
   .callout{
     position:relative; display:inline-flex; align-items:center; gap:8px;
-    font-family:var(--f-mono); font-size:9.5px; letter-spacing:.06em; color:var(--blue);
+    font-family:var(--f-mono); font-size:var(--t-00); letter-spacing:.06em; color:var(--blue);
     padding-left:30px;
   }
   .callout::before{
@@ -201,20 +205,21 @@
     border:1.5px solid var(--stamp); color:var(--stamp);
     border-radius:50%;
     display:grid; place-items:center;
-    font-family:var(--f-body); font-weight:800; font-size:1rem;
+    font-family:var(--f-body); font-weight:800; font-size:var(--t-2);
     transform:rotate(-6deg);
     position:relative;
   }
   .brand .stamp-mark::after{
     content:""; position:absolute; inset:3px; border:1px solid var(--stamp); border-radius:50%; opacity:.45;
   }
-  .brand .bname{ font-family:var(--f-disp); font-weight:600; font-size:1.06rem; letter-spacing:-.01em; color:var(--ink); }
-  .brand .bsub{ display:block; font-family:var(--f-mono); font-size:9px; letter-spacing:.22em; color:var(--blue); text-transform:uppercase; }
+  .brand .bname{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-2); letter-spacing:-.01em; color:var(--ink); }
+  .brand .bsub{ display:block; font-family:var(--f-mono); font-size:var(--t-00); letter-spacing:.22em; color:var(--blue); text-transform:uppercase; }
 
   .nlinks{ display:flex; align-items:center; gap:2px; }
   .nlinks a{
-    font-size:.9rem; color:var(--ink-2); padding:10px 13px; border-radius:2px;
+    font-size:var(--t-1); color:var(--ink-2); padding:10px 13px; border-radius:2px;
     position:relative; white-space:nowrap;
+    transition:background .15s ease, color .15s ease;
   }
   .nlinks a:hover{ color:var(--ink); background:var(--blue-tint); }
   .nlinks a.active{ color:var(--blue-deep); font-weight:600; }
@@ -222,7 +227,7 @@
     content:""; position:absolute; left:13px; right:13px; bottom:1px; height:2px; background:var(--stamp);
   }
   .cta{
-    font-family:var(--f-disp); font-weight:500; font-size:.9rem;
+    font-family:var(--f-disp); font-weight:500; font-size:var(--t-1);
     background:var(--blue); color:var(--sheet);
     padding:11px 18px; border-radius:2px;
     border:1px solid var(--blue-deep);
@@ -274,13 +279,13 @@
   }
   .lede{
     margin-top:var(--sp-4); max-width:46ch;
-    font-size:1.06rem; line-height:1.66; color:var(--ink-2);
+    font-size:var(--t-2); line-height:1.66; color:var(--ink-2);
     text-wrap:pretty;
   }
   .lede b{ font-weight:600; color:var(--ink); }
   .hero-actions{ margin-top:var(--sp-4); display:flex; align-items:center; gap:var(--sp-4); flex-wrap:wrap; }
   .btn-primary{
-    font-family:var(--f-disp); font-weight:600; font-size:1.02rem;
+    font-family:var(--f-disp); font-weight:600; font-size:var(--t-2);
     background:var(--stamp); color:#F7EFEE;
     padding:14px 26px; border-radius:2px;
     border:1px solid var(--stamp-deep);
@@ -292,7 +297,7 @@
   .btn-primary:active{ transform:translateY(1px); }
   .btn-primary .tick{ font-family:var(--f-mono); }
   .link-arrow{
-    font-size:.96rem; color:var(--blue-deep); font-weight:500;
+    font-size:var(--t-1); color:var(--blue-deep); font-weight:500;
     border-bottom:1px solid var(--blue-line-2); padding-bottom:2px;
     min-height:44px; display:inline-flex; align-items:center;
   }
@@ -312,6 +317,14 @@
   }
   .dimline .seg::before{ left:0; } .dimline .seg::after{ right:0; }
   .dimline .val{ padding:0 12px; white-space:nowrap; }
+  /* SIGNATURE MOTION — 히어로 진입 시 치수선이 좌→우로 한 번 그어진다 (총 0.8s, 1회) */
+  @media (prefers-reduced-motion:no-preference){
+    .hero .dimline .seg{ transform-origin:left; animation:dimdraw .4s var(--ease-out-expo) both; }
+    .hero .dimline .seg:last-of-type{ animation-delay:.4s; }
+    .hero .dimline .val{ animation:dimfade .3s ease .35s both; }
+    @keyframes dimdraw{ from{ transform:scaleX(0); } to{ transform:scaleX(1); } }
+    @keyframes dimfade{ from{ opacity:0; } to{ opacity:1; } }
+  }
 
   /* hero floorplan card (SIGNATURE: little unit boxes) */
   .plansheet{
@@ -324,7 +337,7 @@
   }
   .plansheet::before{
     content:"DWG-2026.0627"; position:absolute; top:-1px; right:-1px;
-    font-family:var(--f-mono); font-size:9px; letter-spacing:.14em; color:var(--blue);
+    font-family:var(--f-mono); font-size:var(--t-00); letter-spacing:.14em; color:var(--blue);
     background:var(--paper); border:1px solid var(--hair); border-top:none; border-right:none;
     padding:3px 8px; border-bottom-left-radius:2px;
   }
@@ -332,7 +345,7 @@
     display:flex; justify-content:space-between; align-items:baseline;
     border-bottom:1px solid var(--hair); padding-bottom:8px; margin-bottom:12px;
   }
-  .planhead .ph-t{ font-family:var(--f-disp); font-weight:600; font-size:.92rem; color:var(--ink); }
+  .planhead .ph-t{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-1); color:var(--ink); }
   .planhead .ph-s{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); }
   .floorplan{
     position:relative;
@@ -346,13 +359,13 @@
   .unit{
     position:absolute; border:1.25px solid var(--blue);
     background:rgba(43,92,138,.05);
-    font-family:var(--f-mono); font-size:10px; color:var(--blue-deep);
+    font-family:var(--f-mono); font-size:var(--t-00); color:var(--blue-deep);
     display:flex; flex-direction:column; justify-content:flex-end;
     padding:4px;
   }
   .unit.match{ background:rgba(192,57,43,.08); border-color:var(--stamp); }
   /* room labels: raised contrast for AA (was --ink-3) */
-  .unit .ud{ font-size:9px; color:var(--ink-2); letter-spacing:.03em; font-weight:500; }
+  .unit .ud{ font-size:var(--t-00); color:var(--ink-2); letter-spacing:.03em; font-weight:500; }
   .unit .un{ font-weight:600; color:var(--blue-deep); }
   .unit.match .ud{ color:var(--stamp-deep); }
   .unit.match .un{ color:var(--stamp-deep); }
@@ -363,14 +376,14 @@
   /* dimension annotation along the plan top */
   .plan-dim-top{
     display:flex; align-items:center; margin-top:9px;
-    font-family:var(--f-mono); font-size:9px; color:var(--blue); letter-spacing:.04em;
+    font-family:var(--f-mono); font-size:var(--t-00); color:var(--blue); letter-spacing:.04em;
   }
   .plan-dim-top .seg{ flex:1; height:1px; background:var(--blue-line-2); position:relative; }
   .plan-dim-top .seg::before,.plan-dim-top .seg::after{ content:""; position:absolute; top:-3px; width:1px; height:7px; background:var(--blue); }
   .plan-dim-top .seg::before{ left:0; } .plan-dim-top .seg::after{ right:0; }
   .plan-dim-top .v{ padding:0 8px; }
   .plan-note{
-    margin-top:10px; font-family:var(--f-mono); font-size:10px; color:var(--ink-2);
+    margin-top:10px; font-family:var(--f-mono); font-size:var(--t-00); color:var(--ink-2);
     display:flex; justify-content:space-between; letter-spacing:.02em;
   }
   .plan-note .sw{ display:inline-flex; align-items:center; gap:6px; }
@@ -413,11 +426,11 @@
     font-size:clamp(2rem,4.4vw,2.9rem); line-height:1; color:var(--ink); letter-spacing:-.02em;
     display:flex; align-items:baseline; gap:4px;
   }
-  .metric .mval .unit-s{ font-size:1.1rem; font-weight:500; color:var(--blue); }
+  .metric .mval .unit-s{ font-size:var(--t-2); font-weight:500; color:var(--blue); }
   .metric .mnote{
-    margin-top:10px; font-size:.84rem; color:var(--ink-2);
+    margin-top:10px; font-size:var(--t-0); color:var(--ink-2);
   }
-  .metric .mnote .em{ color:var(--stamp); font-weight:600; font-family:var(--f-mono); }
+  .metric .mnote .em{ color:var(--warn-deep); font-weight:600; font-family:var(--f-mono); }
   /* dimension tick on first metric to keep ledger motif */
   .metric .corner{ position:absolute; top:8px; right:9px; width:9px; height:9px; border-top:1px solid var(--blue-line-2); border-right:1px solid var(--blue-line-2); }
   /* SIGNATURE: leader-line callout anchored at ledger bottom edge */
@@ -431,15 +444,16 @@
     position:relative; background:rgba(244,246,247,.4);
     min-height:160px; display:flex; flex-direction:column;
   }
+  .step{ transition:background .15s ease; }
   .step:hover{ background:var(--sheet); }
   .step .snum{
-    font-family:var(--f-mono); font-weight:700; font-size:1.5rem; color:var(--blue);
+    font-family:var(--f-mono); font-weight:700; font-size:var(--t-4); color:var(--blue);
     letter-spacing:.02em; line-height:1;
   }
   .step .sbar{ width:24px; height:2px; background:var(--stamp); margin:13px 0; }
-  .step h3{ font-family:var(--f-disp); font-weight:600; font-size:1.06rem; color:var(--ink); margin-bottom:7px; }
-  .step p{ font-size:.9rem; color:var(--ink-2); line-height:1.55; margin:0; }
-  .step .splus{ position:absolute; top:12px; right:12px; font-family:var(--f-mono); color:var(--blue-line-2); font-size:.8rem; }
+  .step h3{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-2); color:var(--ink); margin-bottom:7px; }
+  .step p{ font-size:var(--t-1); color:var(--ink-2); line-height:1.55; margin:0; }
+  .step .splus{ position:absolute; top:12px; right:12px; font-family:var(--f-mono); color:var(--blue-line-2); font-size:var(--t-0); }
 
   /* diagnosis input form — drafting field style */
   .diag-form{
@@ -456,7 +470,7 @@
     color:var(--ink-2); text-transform:uppercase;
   }
   .ff input, .ff select{
-    font-family:var(--f-mono); font-size:.92rem; color:var(--ink);
+    font-family:var(--f-mono); font-size:var(--t-1); color:var(--ink);
     background:var(--paper); border:1px solid var(--hair-strong); border-radius:2px;
     padding:10px 11px; min-height:44px; width:100%;
     transition:border-color .15s ease, box-shadow .15s ease;
@@ -467,13 +481,13 @@
   /* own-home toggle as a two-state segmented control */
   .ff .seg2{ display:flex; border:1px solid var(--hair-strong); border-radius:2px; overflow:hidden; min-height:44px; }
   .ff .seg2 button{
-    flex:1; font-family:var(--f-mono); font-size:.86rem; color:var(--ink-2);
+    flex:1; font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2);
     background:var(--paper); border:none; cursor:pointer; padding:0 8px;
     transition:background .15s ease, color .15s ease;
   }
   .ff .seg2 button + button{ border-left:1px solid var(--hair); }
   .ff .seg2 button[aria-pressed="true"]{ background:var(--blue); color:var(--sheet); }
-  .ff .ff-hint{ font-family:var(--f-mono); font-size:10px; color:var(--ink-3); letter-spacing:.02em; }
+  .ff .ff-hint{ font-family:var(--f-mono); font-size:var(--t-00); color:var(--ink-3); letter-spacing:.02em; }
 
   /* ===================== DIAGNOSIS PANEL (B) ===================== */
   .diag{
@@ -486,9 +500,9 @@
   .diag-row .dr-head{
     display:flex; justify-content:space-between; align-items:baseline; margin-bottom:8px; gap:12px;
   }
-  .diag-row .dr-name{ font-family:var(--f-disp); font-weight:600; font-size:1rem; color:var(--ink); }
+  .diag-row .dr-name{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-2); color:var(--ink); }
   .diag-row .dr-score{
-    font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-size:.92rem; color:var(--ink-2);
+    font-family:var(--f-mono); font-variant-numeric:tabular-nums; font-size:var(--t-1); color:var(--ink-2);
   }
   .diag-row .dr-score b{ color:var(--ink); font-weight:700; }
   .diag-row .dr-score .max{ color:var(--ink-3); }
@@ -512,7 +526,7 @@
     /* sit the manjeom label BELOW the track, right-anchored to the caret,
        so it never collides with the score (e.g. "20 / 32") on the row above */
     content:attr(data-l); position:absolute; top:calc(100% + 4px); right:0; left:auto; transform:none;
-    font-family:var(--f-mono); font-size:10px; color:var(--blue-deep); white-space:nowrap; letter-spacing:.04em;
+    font-family:var(--f-mono); font-size:var(--t-00); color:var(--blue-deep); white-space:nowrap; letter-spacing:.04em;
   }
   .diag-total{
     padding:var(--sp-4); display:flex; flex-direction:column; justify-content:space-between;
@@ -526,15 +540,15 @@
     font-size:clamp(3rem,7vw,4.2rem); line-height:.95; color:var(--ink); letter-spacing:-.03em;
     margin:6px 0 2px; display:flex; align-items:baseline; gap:6px;
   }
-  .diag-total .dt-val .o{ font-size:1.2rem; font-weight:500; color:var(--blue); }
+  .diag-total .dt-val .o{ font-size:var(--t-3); font-weight:500; color:var(--blue); }
   .diag-total .dt-pct{
-    font-family:var(--f-mono); font-size:.86rem; color:var(--stamp); font-weight:600;
+    font-family:var(--f-mono); font-size:var(--t-0); color:var(--stamp); font-weight:600;
     display:inline-flex; align-items:center; gap:7px; margin-top:4px;
   }
   .diag-total .dt-pct .tick{ width:14px; height:1px; background:var(--stamp); }
   .diag-total .dt-cta{
     margin-top:var(--sp-4);
-    font-family:var(--f-disp); font-weight:600; font-size:.92rem;
+    font-family:var(--f-disp); font-weight:600; font-size:var(--t-1);
     border:1px solid var(--blue); color:var(--blue-deep); background:var(--paper);
     padding:11px 16px; border-radius:2px; text-align:center;
     min-height:44px; display:inline-flex; align-items:center; justify-content:center; gap:8px;
@@ -551,9 +565,9 @@
   .reco.t-special{ border-left-color:var(--stamp); }
   .reco.t-public{ border-left-color:var(--warn); }
   .reco-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:var(--sp-3); }
-  .reco-kicker{ font-size:10px; letter-spacing:.14em; color:var(--blue); text-transform:uppercase; }
+  .reco-kicker{ font-size:var(--t-00); letter-spacing:.14em; color:var(--blue); text-transform:uppercase; }
   .reco-stamp{
-    font-family:var(--f-body); font-weight:800; font-size:.8rem; letter-spacing:.02em;
+    font-family:var(--f-body); font-weight:800; font-size:var(--t-0); letter-spacing:.02em;
     border:2px solid var(--blue); color:var(--blue-deep); background:rgba(43,92,138,.06);
     padding:5px 11px; border-radius:3px; transform:rotate(-2deg); white-space:nowrap; line-height:1.1;
   }
@@ -572,14 +586,14 @@
     border:1px solid var(--hair); background:var(--paper); padding:var(--sp-3); border-radius:2px;
   }
   .reco-act .ra-main{ flex:1 1 240px; min-width:0; }
-  .reco-act .ra-name{ font-family:var(--f-disp); font-weight:600; font-size:1rem; color:var(--ink); }
-  .reco-act .ra-meta{ font-family:var(--f-mono); font-size:11px; color:var(--ink-3); margin-top:3px; }
+  .reco-act .ra-name{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-2); color:var(--ink); }
+  .reco-act .ra-meta{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-3); margin-top:3px; }
   .reco-act .ra-dday{
-    font-family:var(--f-mono); font-weight:700; font-size:1.05rem; color:var(--warn-deep);
+    font-family:var(--f-mono); font-weight:700; font-size:var(--t-2); color:var(--warn-deep);
     border:1px solid var(--warn); background:var(--warn-tint); padding:6px 11px; border-radius:2px; white-space:nowrap;
   }
   .reco-cta{
-    font-family:var(--f-disp); font-weight:600; font-size:.9rem; text-decoration:none;
+    font-family:var(--f-disp); font-weight:600; font-size:var(--t-1); text-decoration:none;
     border:1px solid var(--blue); color:var(--sheet); background:var(--blue);
     padding:10px 16px; border-radius:2px; min-height:44px;
     display:inline-flex; align-items:center; justify-content:center; gap:7px; white-space:nowrap;
@@ -602,34 +616,40 @@
   .lane.maybe{ border-style:dashed; opacity:.92; }
   .lane.top{ border-color:var(--stamp); box-shadow:inset 3px 0 0 var(--stamp); }
   .lane .ln-h{ display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
-  .lane .ln-name{ font-family:var(--f-disp); font-weight:600; font-size:.92rem; color:var(--ink); }
-  .lane .ln-step{ font-family:var(--f-mono); font-size:10px; color:var(--blue); white-space:nowrap; }
-  .lane .ln-why{ font-size:12.5px; line-height:1.5; color:var(--ink-2); margin-top:4px; }
-  .lane .ln-inc{ font-family:var(--f-mono); font-size:10px; color:var(--ink-3); margin-top:4px; }
+  .lane .ln-name{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-1); color:var(--ink); }
+  .lane .ln-step{ font-family:var(--f-mono); font-size:var(--t-00); color:var(--blue); white-space:nowrap; }
+  .lane .ln-why{ font-size:var(--t-0); line-height:1.5; color:var(--ink-2); margin-top:4px; }
+  .lane .ln-inc{ font-family:var(--f-mono); font-size:var(--t-00); color:var(--ink-3); margin-top:4px; }
   /* 전략 팁 */
   .reco-tips{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:var(--sp-2,8px); margin-top:var(--sp-3); }
   .reco-tips:empty{ display:none; }
   .tip{ border:1px solid var(--blue-line-2); background:var(--blue-tint); border-radius:2px; padding:10px 12px; }
-  .tip .tip-t{ font-family:var(--f-disp); font-weight:600; font-size:.86rem; color:var(--blue-deep); }
-  .tip .tip-d{ font-size:12px; line-height:1.55; color:var(--ink-2); margin-top:4px; }
+  .tip .tip-t{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-0); color:var(--blue-deep); }
+  .tip .tip-d{ font-size:var(--t-0); line-height:1.55; color:var(--ink-2); margin-top:4px; }
   /* 추천 이유 리포터 — 왜 이 추천인가(근거 숫자) */
   .reco-why{ margin-top:var(--sp-3); border:1px solid var(--hair); border-left:3px solid var(--blue); background:var(--sheet); border-radius:2px; padding:10px 12px; }
   .reco-why:empty{ display:none; }
   .t-special .reco-why{ border-left-color:var(--stamp); }
   .t-public .reco-why{ border-left-color:var(--warn); }
-  .reco-why .why-h{ font-family:var(--f-mono); font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); margin-bottom:6px; }
+  .reco-why .why-h{ font-family:var(--f-mono); font-size:var(--t-00); letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3); margin-bottom:6px; }
   .why-row{ display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 10px; padding:5px 0; border-top:1px solid var(--hair); }
   .why-row:first-of-type{ border-top:0; }
-  .why-k{ flex:0 0 auto; font-size:12px; color:var(--ink-3); min-width:120px; }
-  .why-v{ flex:0 0 auto; font-family:var(--f-mono); font-weight:600; font-size:13px; color:var(--ink); }
-  .why-note{ flex:1 1 180px; font-size:12px; line-height:1.5; color:var(--ink-2); }
+  .why-k{ flex:0 0 auto; font-size:var(--t-0); color:var(--ink-3); min-width:120px; }
+  .why-v{ flex:0 0 auto; font-family:var(--f-mono); font-weight:600; font-size:var(--t-0); color:var(--ink); }
+  .why-note{ flex:1 1 180px; font-size:var(--t-0); line-height:1.5; color:var(--ink-2); }
   /* 이 단지 더 알아보기 — 뉴스·시세·공고 검색 딥링크(단지명 기반, 항상 최신) */
   .reco-news{ display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin-top:var(--sp-2,8px); }
   .reco-news:empty{ display:none; }
-  .rn-label{ font-family:var(--f-mono); font-size:10px; color:var(--ink-3); }
-  .rn-link{ font-size:12px; color:var(--blue-deep); border:1px solid var(--blue-line-2,var(--hair)); background:var(--paper); border-radius:2px; padding:3px 8px; text-decoration:none; }
-  .rn-link:hover{ background:var(--blue-tint); }
-  .reco-disc{ font-family:var(--f-mono); font-size:10px; color:var(--ink-3); line-height:1.5; margin-top:var(--sp-3); }
+  .rn-label{ font-family:var(--f-mono); font-size:var(--t-00); color:var(--ink-3); }
+  .rn-link{
+    font-size:var(--t-0); color:var(--blue-deep); border:1px solid var(--blue-line-2,var(--hair));
+    background:var(--paper); border-radius:2px; padding:0 12px; text-decoration:none;
+    display:inline-flex; align-items:center; min-height:44px; /* 탭 타겟 */
+    transition:background .15s ease, border-color .15s ease;
+  }
+  .rn-link:hover{ background:var(--blue-tint); border-color:var(--blue-line-2); }
+  .rn-link:active{ transform:translateY(1px); }
+  .reco-disc{ font-family:var(--f-mono); font-size:var(--t-00); color:var(--ink-3); line-height:1.5; margin-top:var(--sp-3); }
   @media (max-width:640px){
     .reco-act .ra-dday{ order:3; }
     .reco-cta{ flex:1 1 100%; }
@@ -643,28 +663,28 @@
   .verify.has-error{ border-left-color:var(--stamp); }
   .verify.has-warn{ border-left-color:var(--warn); }
   .verify-top{ display:flex; justify-content:space-between; align-items:baseline; gap:var(--sp-3); flex-wrap:wrap; }
-  .verify-kicker{ font-size:10px; letter-spacing:.14em; color:var(--ink-3); text-transform:uppercase; }
-  .verify-counts{ font-size:11px; color:var(--ink-2); }
+  .verify-kicker{ font-size:var(--t-00); letter-spacing:.14em; color:var(--ink-3); text-transform:uppercase; }
+  .verify-counts{ font-size:var(--t-0); color:var(--ink-2); }
   .verify-issues{ display:flex; flex-direction:column; gap:6px; margin-top:8px; }
   .verify-issues:empty{ display:none; }
-  .vi{ display:flex; gap:9px; align-items:flex-start; font-size:13px; line-height:1.5; padding:8px 10px; border-radius:2px; }
-  .vi-tag{ font-family:var(--f-mono); font-size:10px; font-weight:700; letter-spacing:.04em; padding:2px 7px; border-radius:2px; white-space:nowrap; flex:none; margin-top:1px; }
+  .vi{ display:flex; gap:9px; align-items:flex-start; font-size:var(--t-0); line-height:1.5; padding:8px 10px; border-radius:2px; }
+  .vi-tag{ font-family:var(--f-mono); font-size:var(--t-00); font-weight:700; letter-spacing:.04em; padding:2px 7px; border-radius:2px; white-space:nowrap; flex:none; margin-top:1px; }
   .vi.error{ background:var(--stamp-soft); color:var(--ink); }
   .vi.error .vi-tag{ background:var(--stamp); color:#F7EFEE; }
   .vi.warn{ background:var(--warn-tint); color:var(--ink); }
   .vi.warn .vi-tag{ background:var(--warn); color:#fff; }
   .vi.info{ background:var(--blue-tint); color:var(--ink-2); }
   .vi.info .vi-tag{ background:var(--blue); color:var(--sheet); }
-  .vi.ok{ background:var(--blue-tint); color:var(--ink-2); font-family:var(--f-mono); font-size:11px; }
+  .vi.ok{ background:var(--blue-tint); color:var(--ink-2); font-family:var(--f-mono); font-size:var(--t-0); }
   .verify-check{ margin-top:var(--sp-3); border-top:1px solid var(--hair); padding-top:8px; }
-  .verify-check summary{ font-family:var(--f-mono); font-size:11px; color:var(--blue-deep); cursor:pointer; letter-spacing:.02em; min-height:32px; display:flex; align-items:center; }
+  .verify-check summary{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--blue-deep); cursor:pointer; letter-spacing:.02em; min-height:32px; display:flex; align-items:center; }
   .verify-list{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:8px; margin-top:8px; }
   .vchk{ border:1px solid var(--hair); border-radius:2px; padding:9px 11px; background:var(--sheet); }
   .vchk.flag{ border-color:var(--stamp); box-shadow:inset 3px 0 0 var(--stamp); }
   .vchk-h{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
-  .vchk-cat{ font-family:var(--f-disp); font-weight:600; font-size:.82rem; color:var(--ink); }
-  .vchk-risk{ font-family:var(--f-mono); font-size:9.5px; color:var(--stamp); text-align:right; }
-  .vchk-item{ font-size:12px; line-height:1.5; color:var(--ink-2); margin-top:4px; }
+  .vchk-cat{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-0); color:var(--ink); }
+  .vchk-risk{ font-family:var(--f-mono); font-size:var(--t-00); color:var(--stamp); text-align:right; }
+  .vchk-item{ font-size:var(--t-0); line-height:1.5; color:var(--ink-2); margin-top:4px; }
 
   /* ===================== D-DAY TIMELINE (C) ===================== */
   .timeline{
@@ -688,17 +708,17 @@
   }
   .tl-stop .dd{
     font-family:var(--f-mono); font-weight:700; font-variant-numeric:tabular-nums;
-    font-size:1.15rem; color:var(--ink); line-height:1;
+    font-size:var(--t-3); color:var(--ink); line-height:1;
   }
-  .tl-stop .dt{ font-family:var(--f-mono); font-size:.74rem; color:var(--ink-2); margin-top:4px; display:block; }
-  .tl-stop .dn{ font-size:.82rem; color:var(--ink-2); margin-top:6px; display:block; line-height:1.35; }
+  .tl-stop .dt{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); margin-top:4px; display:block; }
+  .tl-stop .dn{ font-size:var(--t-0); color:var(--ink-2); margin-top:6px; display:block; line-height:1.35; }
   /* urgent stop uses WARN amber, not brand red */
   .tl-stop.urgent::before{
     border-color:var(--warn); background:var(--warn); box-shadow:0 0 0 4px var(--warn-tint);
   }
   .tl-stop.urgent .dd{ color:var(--warn-deep); }
   .tl-stop.urgent .badge{
-    display:inline-block; margin-top:7px; font-family:var(--f-mono); font-size:8.5px;
+    display:inline-block; margin-top:7px; font-family:var(--f-mono); font-size:var(--t-00);
     letter-spacing:.1em; text-transform:uppercase; color:var(--warn-deep);
     border:1px solid var(--warn); background:var(--warn-tint); padding:2px 6px; border-radius:2px;
   }
@@ -742,12 +762,12 @@
   .a-search{ width:160px; }
   .a-select:focus, .a-search:focus{ outline:none; border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-tint); }
 
-  .tablecard{ border:1px solid var(--hair); background:var(--sheet); }
+  .tablecard{ border:1px solid var(--hair); background:var(--sheet); overflow-x:auto; }
   /* expandable row affordance + detail */
   .alert-table tbody tr.cxrow{ cursor:pointer; }
   .alert-table tbody tr.cxrow.nodata{ cursor:default; }
   .cx-name .exp{
-    display:inline-block; margin-left:7px; font-family:var(--f-mono); font-size:9px;
+    display:inline-block; margin-left:7px; font-family:var(--f-mono); font-size:var(--t-00);
     letter-spacing:.06em; color:var(--blue); border:1px solid var(--blue-line-2);
     padding:1px 5px; border-radius:2px; vertical-align:middle; transition:transform .2s ease;
   }
@@ -761,13 +781,13 @@
   .cxdetail h5 .sm{ color:var(--ink-2); letter-spacing:.02em; text-transform:none; }
   .cxdetail h5 .under{ color:var(--stamp-deep); font-weight:700; }
   .cz-wrap{ max-height:280px; overflow:auto; border:1px solid var(--hair); border-radius:2px; background:var(--sheet); }
-  table.cztable{ width:100%; border-collapse:collapse; font-family:var(--f-mono); font-size:.78rem; }
+  table.cztable{ width:100%; border-collapse:collapse; font-family:var(--f-mono); font-size:var(--t-0); }
   table.cztable th, table.cztable td{ padding:8px 10px; border-bottom:1px solid var(--hair); text-align:center; white-space:nowrap; }
   table.cztable th{ position:sticky; top:0; background:rgba(43,92,138,.06); color:var(--blue); font-weight:500; letter-spacing:.04em; }
   table.cztable td:first-child, table.cztable th:first-child{ text-align:left; }
   table.cztable tbody tr:last-child td{ border-bottom:none; }
   table.cztable td.under{ color:var(--stamp-deep); font-weight:700; }
-  .cxd-empty{ font-family:var(--f-mono); font-size:.82rem; color:var(--ink-2); padding:6px 0; }
+  .cxd-empty{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); padding:6px 0; }
   .alert-table{ width:100%; border-collapse:collapse; }
   .alert-table thead th{
     font-family:var(--f-mono); font-size:var(--t-0); text-transform:uppercase; letter-spacing:.08em;
@@ -780,7 +800,9 @@
     padding:16px var(--sp-3); border-bottom:1px solid var(--hair); vertical-align:middle;
   }
   .alert-table tbody tr:last-child td{ border-bottom:none; }
-  .alert-table tbody tr:hover{ background:rgba(43,92,138,.03); }
+  .alert-table tbody tr{ transition:background .15s ease; }
+  .alert-table tbody tr:hover{ background:var(--blue-tint); }
+  .alert-table tbody tr.cxrow:active{ background:rgba(43,92,138,.09); }
 
   /* SIGNATURE: per-row unit-plan thumbnail + dimension annotation */
   .cx-cell{ display:flex; align-items:center; gap:14px; }
@@ -799,23 +821,23 @@
   /* dimension annotation tag on the thumbnail */
   .planthumb::after{
     content:attr(data-dim); position:absolute; bottom:-15px; left:0;
-    font-family:var(--f-mono); font-size:8.5px; color:var(--blue); letter-spacing:.02em; white-space:nowrap;
+    font-family:var(--f-mono); font-size:var(--t-00); color:var(--blue); letter-spacing:.02em; white-space:nowrap;
   }
-  .cx-name{ font-family:var(--f-disp); font-weight:600; font-size:1.02rem; color:var(--ink); }
-  .cx-meta{ font-family:var(--f-mono); font-size:.78rem; color:var(--ink-2); margin-top:3px; letter-spacing:.01em; }
+  .cx-name{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-2); color:var(--ink); }
+  .cx-meta{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); margin-top:3px; letter-spacing:.01em; }
   .cx-meta .sz{ color:var(--blue); font-weight:500; }
-  .cx-rate{ font-family:var(--f-mono); font-weight:600; font-variant-numeric:tabular-nums; font-size:1.05rem; color:var(--ink); text-align:right; }
-  .cx-rate small{ display:block; font-weight:400; font-size:.72rem; color:var(--ink-2); letter-spacing:.04em; }
+  .cx-rate{ font-family:var(--f-mono); font-weight:600; font-variant-numeric:tabular-nums; font-size:var(--t-2); color:var(--ink); text-align:right; }
+  .cx-rate small{ display:block; font-weight:400; font-size:var(--t-0); color:var(--ink-2); letter-spacing:.04em; }
   .cx-due{ font-family:var(--f-mono); font-variant-numeric:tabular-nums; text-align:right; }
-  .cx-due .d{ font-weight:700; font-size:1rem; color:var(--warn-deep); }
-  .cx-due .date{ display:block; font-size:.76rem; color:var(--ink-2); margin-top:2px; }
+  .cx-due .d{ font-weight:700; font-size:var(--t-2); color:var(--warn-deep); }
+  .cx-due .date{ display:block; font-size:var(--t-0); color:var(--ink-2); margin-top:2px; }
   .cx-due.calm .d{ color:var(--blue); }
 
   /* stamp judgment */
   .jcell{ text-align:right; }
   .stampbadge{
     display:inline-flex; align-items:center; justify-content:center;
-    font-family:var(--f-body); font-weight:800; font-size:.84rem; letter-spacing:.02em;
+    font-family:var(--f-body); font-weight:800; font-size:var(--t-0); letter-spacing:.02em;
     border:2px solid var(--stamp); color:var(--stamp);
     padding:7px 13px; border-radius:3px;
     transform:rotate(-3deg);
@@ -860,15 +882,15 @@
   }
   .acc-head:hover{ background:rgba(43,92,138,.03); }
   .acc-head .anum{
-    flex:none; font-family:var(--f-mono); font-weight:700; font-size:.95rem; color:var(--blue);
+    flex:none; font-family:var(--f-mono); font-weight:700; font-size:var(--t-1); color:var(--blue);
     width:34px; height:34px; border:1px solid var(--blue-line-2); border-radius:2px;
     display:grid; place-items:center; letter-spacing:.01em; background:var(--paper);
   }
   .acc-head .acat{
-    font-family:var(--f-mono); font-size:9px; letter-spacing:.12em; text-transform:uppercase;
+    font-family:var(--f-mono); font-size:var(--t-00); letter-spacing:.12em; text-transform:uppercase;
     color:var(--blue); display:block; margin-bottom:3px;
   }
-  .acc-head .atitle{ font-family:var(--f-disp); font-weight:600; font-size:1rem; color:var(--ink); line-height:1.3; }
+  .acc-head .atitle{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-2); color:var(--ink); line-height:1.3; }
   .acc-head .achev{ margin-left:auto; flex:none; font-family:var(--f-mono); color:var(--blue-line-2); transition:transform .2s ease; }
   .acc-item.open .acc-head .achev{ transform:rotate(45deg); color:var(--blue); }
   .acc-item.risk .acc-head .anum{ border-color:var(--stamp); color:var(--stamp); }
@@ -876,11 +898,11 @@
   .acc-item.open .acc-body{ grid-template-rows:1fr; }
   .acc-body > div{ overflow:hidden; }
   .acc-in{ padding:0 var(--sp-3) var(--sp-3) calc(var(--sp-3) + 34px + var(--sp-3)); }
-  .acc-in p{ margin:0 0 10px; font-size:.92rem; color:var(--ink-2); line-height:1.62; }
+  .acc-in p{ margin:0 0 10px; font-size:var(--t-1); color:var(--ink-2); line-height:1.62; }
   .acc-in p:last-child{ margin-bottom:0; }
   .acc-in .why{ color:var(--ink-2); }
   .acc-in .meta-tag{
-    display:inline-flex; align-items:center; gap:7px; font-family:var(--f-mono); font-size:.74rem;
+    display:inline-flex; align-items:center; gap:7px; font-family:var(--f-mono); font-size:var(--t-0);
     letter-spacing:.02em; padding:5px 10px; border-radius:2px; margin-top:4px;
   }
   .acc-in .meta-tag.docs{ color:var(--blue-deep); background:var(--blue-tint); border:1px solid var(--blue-line-2); }
@@ -900,8 +922,8 @@
   }
   .foot-brand{ display:flex; flex-direction:column; gap:12px; }
   .foot-brand .fb-mark{ display:inline-flex; align-items:center; gap:10px; }
-  .foot-brand .fm{ width:34px; height:34px; border:1.25px solid var(--stamp); color:var(--stamp); border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:.9rem; transform:rotate(-6deg); position:relative; }
-  .foot-brand .fn{ font-family:var(--f-disp); font-weight:600; font-size:1.05rem; color:var(--ink); }
+  .foot-brand .fm{ width:34px; height:34px; border:1.25px solid var(--stamp); color:var(--stamp); border-radius:50%; display:grid; place-items:center; font-weight:800; font-size:var(--t-1); transform:rotate(-6deg); position:relative; }
+  .foot-brand .fn{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-2); color:var(--ink); }
   .foot-brand .ftrust{
     font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); line-height:1.6;
     display:inline-flex; align-items:flex-start; gap:8px; max-width:34ch;
@@ -913,8 +935,9 @@
   }
   .foot-col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:3px; }
   .foot-col a{
-    font-size:.9rem; color:var(--ink-2); display:inline-flex; align-items:center;
-    min-height:34px; padding:2px 0;
+    font-size:var(--t-1); color:var(--ink-2); display:inline-flex; align-items:center;
+    min-height:44px; padding:2px 0; /* 탭 타겟 */
+    transition:color .15s ease;
   }
   .foot-col a:hover{ color:var(--blue-deep); }
   .foot-col a.cur{ color:var(--blue-deep); font-weight:600; }
@@ -993,12 +1016,12 @@
     /* shrunk plan thumbnail keeps the signature on mobile */
     .mcard .planthumb{ width:42px; height:33px; }
     .mcard .planthumb::after{ display:none; }
-    .mcard .mc-name{ font-family:var(--f-disp); font-weight:600; font-size:1rem; color:var(--ink); }
-    .mcard .mc-meta{ font-family:var(--f-mono); font-size:.76rem; color:var(--ink-2); margin-top:3px; }
+    .mcard .mc-name{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-2); color:var(--ink); }
+    .mcard .mc-meta{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-2); margin-top:3px; }
     .mcard .mc-meta .sz{ color:var(--blue); }
     .mcard .mc-stats{ display:flex; gap:var(--sp-4); margin-top:13px; padding-top:11px; border-top:1px solid var(--hair); font-family:var(--f-mono); }
-    .mcard .mc-stats .k{ font-size:.68rem; color:var(--ink-2); text-transform:uppercase; letter-spacing:.06em; display:block; margin-bottom:3px; }
-    .mcard .mc-stats .v{ font-weight:600; font-variant-numeric:tabular-nums; font-size:.95rem; color:var(--ink); }
+    .mcard .mc-stats .k{ font-size:var(--t-00); color:var(--ink-2); text-transform:uppercase; letter-spacing:.06em; display:block; margin-bottom:3px; }
+    .mcard .mc-stats .v{ font-weight:600; font-variant-numeric:tabular-nums; font-size:var(--t-1); color:var(--ink); }
     .mcard .mc-stats .v.due{ color:var(--warn-deep); }
     .mcard .mc-stats .v.due.calm{ color:var(--blue); }
     .foot-top{ grid-template-columns:1fr; }
@@ -1037,10 +1060,76 @@
     .live .dot{ animation:none; }
     *{ transition:none !important; }
   }
+
+  /* ===================== PICKS (SHEET 07 · 추천 단지) ===================== */
+  .picks{ display:flex; flex-direction:column; border:1px solid var(--hair); background:var(--sheet); }
+  .pick{ border-bottom:1px solid var(--hair); }
+  .pick:last-child{ border-bottom:none; }
+  .pick-hd{
+    width:100%; display:flex; align-items:center; gap:var(--sp-3); text-align:left;
+    background:transparent; border:none; cursor:pointer; padding:var(--sp-3) var(--sp-4);
+    min-height:44px; font-family:var(--f-body); transition:background .15s ease;
+  }
+  .pick-hd:hover{ background:var(--paper); }
+  .pick-hd:focus-visible{ outline:2px solid var(--blue); outline-offset:-2px; }
+  .pk-idx{ flex:none; width:2.4ch; font-family:var(--f-mono); font-size:var(--t-0); color:var(--blue); letter-spacing:.06em; }
+  .pk-main{ flex:1 1 auto; min-width:0; }
+  .pk-name{ font-family:var(--f-disp); font-weight:600; font-size:var(--t-2); color:var(--ink); display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .pk-meta{ font-family:var(--f-mono); font-size:var(--t-0); color:var(--ink-3); margin-top:3px; }
+  .pk-badge{ font-family:var(--f-mono); font-weight:700; font-size:var(--t-00); letter-spacing:.1em; color:var(--stamp); border:1px solid var(--stamp); background:var(--stamp-soft); padding:1px 5px; border-radius:2px; }
+  .pk-badge.warn{ color:var(--warn-deep); border-color:var(--warn); background:var(--warn-tint); }
+  .pk-dday{ flex:none; font-family:var(--f-mono); font-weight:700; font-size:var(--t-1); color:var(--ink-2); border:1px solid var(--hair-strong); background:var(--paper); padding:5px 9px; border-radius:2px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .pk-dday.soon{ color:var(--warn-deep); border-color:var(--warn); background:var(--warn-tint); }
+  .pk-dday.live{ color:var(--blue-deep); border-color:var(--blue); background:var(--blue-tint); }
+  .pk-chev{ flex:none; font-family:var(--f-mono); font-size:var(--t-2); color:var(--blue-line-2); transition:transform .2s ease; }
+  .pick-hd[aria-expanded="true"] .pk-chev{ transform:rotate(90deg); color:var(--blue); }
+  .pick-detail{ background:var(--paper); padding:0 var(--sp-4) var(--sp-4) calc(var(--sp-4) + 2.4ch + var(--sp-3)); }
+  .pick-detail[hidden]{ display:none; }
+  .pd-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:0 var(--sp-4); border-top:1px solid var(--hair); padding-top:var(--sp-3); }
+  .pd-row{ display:flex; gap:9px; padding:5px 0; align-items:baseline; }
+  .pd-k{ flex:0 0 auto; min-width:70px; font-family:var(--f-mono); font-size:var(--t-00); letter-spacing:.04em; text-transform:uppercase; color:var(--ink-3); }
+  .pd-v{ font-size:var(--t-0); color:var(--ink); line-height:1.5; word-break:break-word; }
+  .pd-v.mono{ font-family:var(--f-mono); font-variant-numeric:tabular-nums; }
+  .pd-links{ display:flex; flex-wrap:wrap; gap:8px; margin-top:var(--sp-3); }
+  @media (max-width:640px){
+    .pick-hd{ flex-wrap:wrap; }
+    .pk-dday{ order:3; }
+    .pick-detail{ padding-left:var(--sp-4); }
+  }
+
+  /* ===================== AD ZONE ===================== */
+  .adzone{ padding-block:var(--sp-5); }
+  .adwrap{ border:1px dashed var(--hair-strong); background:var(--sheet); padding:var(--sp-3); }
+  .ad-label{ display:block; margin-bottom:8px; font-family:var(--f-mono); font-size:var(--t-00); letter-spacing:.14em; text-transform:uppercase; color:var(--ink-3); }
+  .adwrap .adsbygoogle{ min-height:0; }
+
+  /* ===================== NEWS (SHEET 08 · 부동산 뉴스) ===================== */
+  .news{ display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:1px; background:var(--hair); border:1px solid var(--hair); }
+  .nc{ display:flex; flex-direction:column; gap:8px; min-height:118px; padding:var(--sp-3) var(--sp-4); background:var(--sheet); transition:background .15s ease; }
+  .nc:has(.nc-title:hover){ background:var(--blue-tint); }
+  .nc-src{ font-family:var(--f-mono); font-size:var(--t-00); letter-spacing:.06em; text-transform:uppercase; color:var(--blue); }
+  .nc-title{ display:block; font-family:var(--f-disp); font-weight:600; font-size:var(--t-1); line-height:1.4; color:var(--ink); text-decoration:none; text-wrap:balance; }
+  a.nc-title:hover{ color:var(--blue-deep); text-decoration:underline; text-underline-offset:2px; }
+  .nc-foot{ margin-top:auto; font-family:var(--f-mono); font-size:var(--t-00); color:var(--ink-3); font-variant-numeric:tabular-nums; }
+  .nc.skel .sk{ background:var(--paper-2); border-radius:2px; }
+  .nc.skel .sk.s{ width:38%; height:9px; }
+  .nc.skel .sk.t{ width:92%; height:14px; }
+  .nc.skel .sk.t2{ width:64%; height:14px; }
+  .nc.skel .sk.f{ width:30%; height:9px; margin-top:auto; }
+  @media (prefers-reduced-motion:no-preference){
+    .nc.skel .sk{ background:linear-gradient(90deg,var(--paper-2) 0%,var(--sheet) 50%,var(--paper-2) 100%); background-size:200% 100%; animation:skshine 1.5s ease-in-out infinite; }
+    @keyframes skshine{ from{ background-position:200% 0; } to{ background-position:-200% 0; } }
+  }
 </style>
+<!-- 데이터/로직: defer — 1.2MB 데이터가 첫 렌더를 막지 않도록 조기 다운로드, 파싱 후 실행 -->
+<script src="bunyang.js" defer></script>
+<script src="matching.js" defer></script>
+<script src="kb.js" defer></script>
 <script type="speculationrules">
 {"prerender":[{"urls":["board.html","manage.html"],"eagerness":"moderate"}]}
 </script>
+<!-- AdSense 로더 (승인 대기 · placeholder client) -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" crossorigin="anonymous"></script>
 </head>
 <body>
   <span class="regmark rm-tl" aria-hidden="true"></span>
@@ -1052,7 +1141,7 @@
   <div class="utilbar">
     <div class="wrap">
       <span class="live"><span class="dot" aria-hidden="true"></span>실시간 분양 데이터 · 청약홈 수집 <span class="num" id="util-updated">—</span></span>
-      <span class="right">청약 문의 <strong class="num">1644-7445</strong> · 평일 <span class="num">09:00–17:30</span></span>
+      
     </div>
   </div>
 
@@ -1066,7 +1155,7 @@
       <nav class="nlinks" id="nav" aria-label="주요 메뉴">
         <a href="board.html">게시판</a>
         <a href="#steps-h" class="active" aria-current="page">청약 여정</a>
-        <a href="#diag-h">청약 준비</a>
+        <a href="#diag-h">가점 계산</a>
         <a href="#alert-h">분양현장</a>
         <a href="manage.html">내 청약 관리</a>
       </nav>
@@ -1081,8 +1170,8 @@
       <div class="hero-grid">
         <div class="hero-copy">
           <span class="eyebrow tlabel"><span class="bar" aria-hidden="true"></span>Cheongyak Intelligence</span>
-          <h1>내 가점이 닿는 집을 <em>도면처럼</em> 읽어 드립니다</h1>
-          <p class="lede">분양 공고를 내 가점·자격으로 자동 매칭한다. <b>광고가 아니라 원장이다.</b> 입력값은 이 기기에만 저장된다.</p>
+          <h1>내 청약 가점으로 <em>당첨 가능한 단지</em>를 확인하세요</h1>
+          <p class="lede">청약홈 분양 공고를 내 가점·자격 조건과 자동으로 비교해 <b>신청할 수 있는 단지만</b> 보여드립니다. 입력한 정보는 이 기기에만 저장됩니다.</p>
           <div class="hero-actions">
             <a class="btn-primary" href="#diag-h"><span class="tick" aria-hidden="true">＋</span>내 가점 확인</a>
             <a class="link-arrow" href="#alert-h">분양현장 먼저 보기 →</a>
@@ -1090,7 +1179,7 @@
           <!-- SIGNATURE: dimension line annotation -->
           <div class="dimline" aria-hidden="true">
             <span class="seg"></span>
-            <span class="val num">입력 → 매칭 = 약 90초</span>
+            <span class="val num">입력부터 결과 확인까지 약 90초</span>
             <span class="seg"></span>
           </div>
         </div>
@@ -1128,7 +1217,7 @@
       <div class="section-head">
         <div>
           <span class="idx">SHEET 01 — TODAY</span>
-          <h2 id="ledger-h">오늘의 청약 원장</h2>
+          <h2 id="ledger-h">오늘의 청약 현황</h2>
         </div>
         <span class="hint num" id="ledger-hint">기준일 — · 전국 표본</span>
       </div>
@@ -1137,7 +1226,7 @@
           <span class="corner" aria-hidden="true"></span>
           <span class="mlabel">청약 진행중</span>
           <span class="mval"><span class="num" id="m-live">0</span><span class="unit-s">건</span></span>
-          <span class="mnote">지금 접수 가능한 현장</span>
+          <span class="mnote">지금 접수할 수 있는 단지</span>
         </div>
         <div class="metric">
           <span class="mlabel">청약 임박</span>
@@ -1147,7 +1236,7 @@
         <div class="metric">
           <span class="mlabel">미달 현장</span>
           <span class="mval"><span class="num" id="m-under">0</span><span class="unit-s">건</span></span>
-          <span class="mnote">종합경쟁률 <span class="num">1:1</span> 미만 · 기회</span>
+          <span class="mnote">경쟁률 <span class="num">1:1</span> 미만 — 당첨 기회</span>
         </div>
         <div class="metric">
           <span class="mlabel">수집 현장</span>
@@ -1156,7 +1245,7 @@
         </div>
       </div>
       <!-- SIGNATURE: leader-line callout repeats the drawing motif at the ledger edge -->
-      <div class="ledger-foot"><span class="callout" id="ledger-callout">DETAIL A — 조건 맞는 단지는 아래 분양현장 시트에서 도면으로 펼침</span></div>
+      <div class="ledger-foot"><span class="callout" id="ledger-callout">내 조건에 맞는 단지는 아래 분양현장 목록에서 확인할 수 있습니다</span></div>
     </div>
   </section>
 
@@ -1169,7 +1258,7 @@
       <div class="section-head">
         <div>
           <span class="idx">SHEET 02 — PROCESS</span>
-          <h2 id="steps-h">청약, 5단계로 끝낸다</h2>
+          <h2 id="steps-h">청약 절차, 5단계로 정리했습니다</h2>
         </div>
         <span class="hint num">통장 개설 → 신청·결과</span>
       </div>
@@ -1179,35 +1268,35 @@
           <span class="snum num">01</span>
           <span class="sbar" aria-hidden="true"></span>
           <h3>통장 만들기</h3>
-          <p>주택청약종합저축 개설과 예치금 기준을 한눈에 확인한다.</p>
+          <p>주택청약종합저축 가입 방법과 지역별 예치금 기준을 확인합니다.</p>
         </div>
         <div class="step">
           <span class="splus" aria-hidden="true">＋</span>
           <span class="snum num">02</span>
           <span class="sbar" aria-hidden="true"></span>
           <h3>내 점수·자격</h3>
-          <p>무주택 기간·부양가족·납입 횟수로 가점을 정확히 계산한다.</p>
+          <p>무주택 기간·부양가족 수·통장 가입 기간으로 청약 가점을 계산합니다.</p>
         </div>
         <div class="step">
           <span class="splus" aria-hidden="true">＋</span>
           <span class="snum num">03</span>
           <span class="sbar" aria-hidden="true"></span>
           <h3>조건 매칭</h3>
-          <p>내 가점·지역·평형에 맞는 공고만 자동으로 걸러 낸다.</p>
+          <p>내 가점·희망 지역·평형에 맞는 분양 공고만 자동으로 골라냅니다.</p>
         </div>
         <div class="step">
           <span class="splus" aria-hidden="true">＋</span>
           <span class="snum num">04</span>
           <span class="sbar" aria-hidden="true"></span>
           <h3>단지 찾기</h3>
-          <p>경쟁률·당첨선·마감일을 비교해 노릴 단지를 추린다.</p>
+          <p>경쟁률·당첨 가점·접수 마감일을 비교해 신청할 단지를 고릅니다.</p>
         </div>
         <div class="step">
           <span class="splus" aria-hidden="true">＋</span>
           <span class="snum num">05</span>
           <span class="sbar" aria-hidden="true"></span>
           <h3>신청·결과</h3>
-          <p>순위별 접수 일정과 당첨·낙첨 결과를 추적·기록한다.</p>
+          <p>순위별 접수 일정을 확인하고 당첨·낙첨 결과를 기록해 관리합니다.</p>
         </div>
       </div>
     </div>
@@ -1222,9 +1311,9 @@
       <div class="section-head">
         <div>
           <span class="idx">SHEET 03 — DIAGNOSIS</span>
-          <h2 id="diag-h">내 가점 진단</h2>
+          <h2 id="diag-h">청약 가점 계산기</h2>
         </div>
-        <span class="hint num">만점 84 기준 · 항목별 실측 · 기기 저장</span>
+        <span class="hint num">만점 84점 기준 · 입력값은 기기에만 저장</span>
       </div>
 
       <!-- 입력 폼: 값은 localStorage에만 저장 -->
@@ -1361,7 +1450,7 @@
         </div>
         <div class="verify-issues" id="verify-issues"></div>
         <details class="verify-check">
-          <summary>신청 전 자가점검 — 부적격은 고의가 아니어도 당첨 취소·청약 제한</summary>
+          <summary>신청 전 자가점검 — 부적격 판정을 받으면 고의가 아니어도 당첨 취소·청약 제한을 받을 수 있습니다</summary>
           <div class="verify-list" id="verify-list"></div>
         </details>
       </div>
@@ -1388,7 +1477,7 @@
         </div>
         <div class="tl-foot">
           <span class="swatch" aria-hidden="true"></span>
-          D-3 이내 접수 시작은 경고색으로 표기 · 일정은 청약홈 접수 기준이며 변경될 수 있다.
+          D-3 이내에 접수가 시작되는 단지는 강조 표시됩니다 · 일정은 청약홈 접수 기준이며 변경될 수 있습니다.
         </div>
       </div>
     </div>
@@ -1427,7 +1516,7 @@
         <table class="alert-table">
           <thead>
             <tr>
-              <th scope="col">단지 / 평형 구획</th>
+              <th scope="col">단지 / 대표 평형</th>
               <th scope="col" class="rt">1순위 경쟁률</th>
               <th scope="col" class="rt">접수 마감</th>
               <th scope="col" class="rt">판정</th>
@@ -1441,7 +1530,7 @@
       </div>
 
       <div class="table-foot">
-        <span>도장 판정은 내 가점·자격 입력값 기준 추정이며 확정 결과가 아니다.</span>
+        <span>판정 표시는 입력한 가점·자격 기준의 추정이며 확정 결과가 아닙니다.</span>
         <span id="alert-count" class="num">—</span>
       </div>
     </div>
@@ -1456,7 +1545,7 @@
       <div class="section-head">
         <div>
           <span class="idx">SHEET 06 — AFTERCARE</span>
-          <h2 id="care-h">신청 후, 부적격 없이 끝까지</h2>
+          <h2 id="care-h">신청 후 절차와 부적격 예방 체크</h2>
         </div>
         <span class="hint num">청약 8단계 · 부적격 셀프체크 11</span>
       </div>
@@ -1481,6 +1570,51 @@
     </div>
   </section>
 
+  <!-- SIGNATURE divider -->
+  <div class="section-divider"><div class="wrap"><div class="dimrule" aria-hidden="true"><span class="line"></span><span class="tag">Sheet 07</span><span class="line"></span></div></div></div>
+
+  <!-- PICKS (F) — 이번 주 추천 단지 -->
+  <section class="section" aria-labelledby="picks-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="idx">SHEET 07 — PICKS</span>
+          <h2 id="picks-h">이번 주 추천 단지</h2>
+        </div>
+        <span class="hint num" id="picks-hint">접수 임박순 · 6곳</span>
+      </div>
+      <div class="picks" id="picks"></div>
+    </div>
+  </section>
+
+  <!-- IN-CONTENT AD (승인 대기 · placeholder) -->
+  <div class="adzone">
+    <div class="wrap">
+      <div class="adwrap">
+        <span class="ad-label">AD — 광고</span>
+        <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-0000000000000000" data-ad-slot="0000000000" data-ad-format="auto" data-full-width-responsive="true"></ins>
+        <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+      </div>
+    </div>
+  </div>
+
+  <!-- SIGNATURE divider -->
+  <div class="section-divider"><div class="wrap"><div class="dimrule" aria-hidden="true"><span class="line"></span><span class="tag">Sheet 08</span><span class="line"></span></div></div></div>
+
+  <!-- NEWS (G) — 부동산 뉴스 -->
+  <section class="section" aria-labelledby="news-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="idx">SHEET 08 — NEWS</span>
+          <h2 id="news-h">부동산 뉴스</h2>
+        </div>
+        <span class="hint num">청약·분양 실시간 검색</span>
+      </div>
+      <div class="news" id="news" aria-live="polite"></div>
+    </div>
+  </section>
+
   <!-- FOOTER (D) -->
   <footer>
     <div class="wrap">
@@ -1490,7 +1624,7 @@
             <span class="fm" aria-hidden="true">印</span>
             <span class="fn">청약 인텔리전스</span>
           </span>
-          <span class="ftrust"><span class="lock" aria-hidden="true">⛁</span>입력값과 가점 데이터는 localStorage에만 저장 · 서버 전송 없음. 기기를 바꾸면 데이터는 함께 옮겨지지 않는다.</span>
+          <span class="ftrust"><span class="lock" aria-hidden="true">⛁</span>입력값과 가점 데이터는 이 브라우저에만 저장되며 서버로 전송되지 않습니다. 기기를 바꾸면 데이터가 함께 이동하지 않습니다.</span>
         </div>
         <nav class="foot-col" aria-label="청약 여정">
           <h3>청약 여정</h3>
@@ -1516,24 +1650,23 @@
             <li><a href="#">청약 준비</a></li>
             <li><a href="#">게시판</a></li>
             <li><a href="#">자주 묻는 질문</a></li>
-            <li><a href="#">고객센터 1644-7445</a></li>
+            <li><a href="privacy.html">개인정보처리방침</a></li>
+            
           </ul>
         </nav>
       </div>
       <div class="foot-bottom">
-        <span class="disc">본 서비스의 경쟁률·당첨선·판정은 공개 청약 데이터 기반 추정치이며 법적·금융적 자문이 아니다. 실제 청약 신청·결과는 청약홈(applyhome.co.kr) 공고를 반드시 확인하라.</span>
+        <span class="disc">본 서비스의 경쟁률·당첨 가점·판정은 공개 청약 데이터 기반 추정치이며 법적·금융적 자문이 아닙니다. 실제 청약 신청과 결과는 청약홈(applyhome.co.kr) 공고에서 반드시 확인하세요.</span>
         <a class="foot-related" href="https://210.mapsaihelp.com" target="_blank" rel="noopener">부동산 콘솔 ↗</a>
         <span class="meta num">© 2026 Cheongyak Intelligence</span>
       </div>
     </div>
   </footer>
 
-  <!-- 데이터/로직: 상위 폴더 공용 스크립트 (디자인 무관 순수 데이터·엔진) -->
-  <script src="bunyang.js"></script>
-  <script src="matching.js"></script>
-  <script src="kb.js"></script>
+  <!-- 데이터/로직은 head에서 defer 로드. deferred 스크립트는 DOMContentLoaded 전에 실행되므로
+       아래 초기화를 DOMContentLoaded로 지연하면 window.BUNYANG/MATCH/KB 로드가 보장된다. -->
   <script>
-  (function(){
+  document.addEventListener("DOMContentLoaded", function(){
     "use strict";
     var $=function(id){return document.getElementById(id);};
     var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});};
@@ -2211,7 +2344,159 @@
     recompute();       // 가점 계산 → 판정 → renderAlerts()까지 연쇄
     renderTimeline();
     renderAlerts();    // 안전하게 1회 더(가점 0이어도 표는 채워짐)
-  })();
+  });
+  </script>
+
+  <!-- SHEET 07 추천 단지 + SHEET 08 부동산 뉴스 (독립 모듈 · defer된 bunyang.js 이후 실행) -->
+  <script>
+  document.addEventListener("DOMContentLoaded", function(){
+    "use strict";
+    if(!(window.BUNYANG && Array.isArray(window.BUNYANG.items))) return;
+    var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];});};
+
+    // 청약기간 "YYYY-MM-DD ~ YYYY-MM-DD" → {key,dday}. matching.js parseApply와 동일 규칙.
+    function parseApply(item, now){
+      var m=String((item&&item.청약기간)||"").match(/\d{4}-\d{2}-\d{2}/g);
+      if(!m||!m.length) return {key:"wait", dday:null};
+      var st=new Date(m[0]); st.setHours(0,0,0,0);
+      var en=m[1]?new Date(m[1]):new Date(m[0]); en.setHours(0,0,0,0);
+      var t=new Date(now||new Date()); t.setHours(0,0,0,0);
+      var dd=Math.round((st-t)/864e5), ddE=Math.round((en-t)/864e5);
+      if(isNaN(dd)||isNaN(ddE)) return {key:"wait", dday:null};
+      if(dd>0) return {key: dd<=7?"soon":"wait", dday:dd};
+      if(ddE>=0) return {key:"live", dday:0};
+      return {key:"done", dday:ddE};
+    }
+    function daysSince(dstr, now){
+      var m=String(dstr||"").match(/\d{4}-\d{2}-\d{2}/); if(!m) return null;
+      var d=new Date(m[0]); d.setHours(0,0,0,0); if(isNaN(d)) return null;
+      var t=new Date(now||new Date()); t.setHours(0,0,0,0);
+      return Math.round((t-d)/864e5);
+    }
+    function fmtDot(dstr){ var m=String(dstr||"").match(/(\d{4})-(\d{2})-(\d{2})/); return m?(m[1]+"."+m[2]+"."+m[3]):"—"; }
+
+    /* ---------- toggleRow (전역: 추천 단지 행 펼침) ---------- */
+    window.toggleRow=function(pbno){
+      var hd=document.getElementById("row-"+pbno), d=document.getElementById("rowd-"+pbno);
+      if(!hd||!d) return;
+      var willOpen=d.hidden;
+      d.hidden=!willOpen;
+      hd.setAttribute("aria-expanded", willOpen?"true":"false");
+    };
+
+    /* ---------- SHEET 07 · 추천 단지 (6곳, 접수 임박순) ---------- */
+    function pdRow(k,v){ return '<div class="pd-row"><span class="pd-k">'+esc(k)+'</span><span class="pd-v mono">'+esc(v||"—")+'</span></div>'; }
+    function linksHTML(it){
+      if(!it.주택명) return "";
+      var q=encodeURIComponent(it.주택명), q2=encodeURIComponent(it.주택명+" 분양");
+      return '<div class="pd-links">'
+        +'<a class="rn-link" href="https://search.naver.com/search.naver?where=news&query='+q+'" target="_blank" rel="noopener">뉴스 ↗</a>'
+        +'<a class="rn-link" href="https://search.naver.com/search.naver?query='+q2+'" target="_blank" rel="noopener">분양·시세 ↗</a>'
+        +'<a class="rn-link" href="https://www.applyhome.co.kr/ai/aia/selectAPTLttotPblancListView.do" target="_blank" rel="noopener">청약홈 공고 ↗</a>'
+        +'</div>';
+    }
+    function renderPicks(){
+      var box=document.getElementById("picks"); if(!box) return;
+      var now=new Date();
+      var rows=window.BUNYANG.items.map(function(it,i){ return {it:it, ap:parseApply(it,now), i:i}; });
+      var up=rows.filter(function(r){ return r.ap.dday!=null && (r.ap.key==="live"||r.ap.key==="soon"||r.ap.key==="wait"); })
+                 .sort(function(a,b){ return a.ap.dday-b.ap.dday; });
+      var rest=rows.filter(function(r){ return up.indexOf(r)<0; });
+      var pick=up.concat(rest).slice(0,6);
+      box.innerHTML=pick.map(function(r,idx){
+        var it=r.it, ap=r.ap, pb=esc(it.pbno||("i"+idx));
+        var dd, cls="pk-dday";
+        if(ap.key==="live"){ dd="접수중"; cls+=" live"; }
+        else if(ap.dday!=null && ap.dday>0){ dd="D-"+ap.dday; if(ap.dday<=7) cls+=" soon"; }
+        else if(ap.key==="done"){ dd="마감"; }
+        else { dd="일정 미정"; }
+        var ds=daysSince(it.모집공고일, now);
+        var isNew=(ds!=null && ds>=0 && ds<=7);
+        var near=(ap.key!=="live" && ap.dday!=null && ap.dday>0 && ap.dday<=7);
+        var sub=[it.지역, it.주택구분].filter(Boolean).join(" · ");
+        return ''
+          +'<div class="pick">'
+          +'<button type="button" class="pick-hd" id="row-'+pb+'" aria-expanded="false" aria-controls="rowd-'+pb+'" onclick="toggleRow(\''+pb+'\')">'
+            +'<span class="pk-idx num" aria-hidden="true">'+String(idx+1).padStart(2,"0")+'</span>'
+            +'<span class="pk-main">'
+              +'<span class="pk-name">'+esc(it.주택명||"—")
+                +(isNew?' <span class="pk-badge">NEW</span>':"")
+                +(near?' <span class="pk-badge warn">마감 임박</span>':"")
+              +'</span>'
+              +'<span class="pk-meta">'+esc(sub||"—")+'</span>'
+            +'</span>'
+            +'<span class="'+cls+' num">'+esc(dd)+'</span>'
+            +'<span class="pk-chev" aria-hidden="true">›</span>'
+          +'</button>'
+          +'<div class="pick-detail" id="rowd-'+pb+'" hidden>'
+            +'<div class="pd-grid">'
+              +pdRow("시공사", it.시공사)
+              +pdRow("문의처", it.문의처)
+              +pdRow("모집공고", fmtDot(it.모집공고일))
+              +pdRow("청약기간", it.청약기간)
+              +pdRow("당첨발표", fmtDot(it.당첨자발표))
+              +pdRow("경쟁률", it.경쟁률?"집계됨":"—")
+            +'</div>'
+            +linksHTML(it)
+          +'</div>'
+          +'</div>';
+      }).join("");
+      var hint=document.getElementById("picks-hint");
+      if(hint) hint.textContent="접수 임박순 · "+pick.length+"곳";
+    }
+
+    /* ---------- SHEET 08 · 부동산 뉴스 (RSS → 실패 시 폴백 6건) ---------- */
+    /* ponytail: 폴백은 창작 헤드라인 금지 — 뉴스 로드 실패 시 정직한 검색 딥링크만 노출 */
+    var FALLBACK=["청약 경쟁률","무순위 청약","신혼부부 특별공급","분양가 상한제","청약통장","생애최초 특별공급"].map(function(kw){
+      return {title:"'"+kw+"' 최신 뉴스 검색 ↗", source:"네이버 뉴스 검색", date:"", link:"https://search.naver.com/search.naver?where=news&query="+encodeURIComponent(kw)};
+    });
+    function skeleton(){
+      var box=document.getElementById("news"); if(!box) return;
+      var s="";
+      for(var i=0;i<6;i++){ s+='<div class="nc skel" aria-hidden="true"><span class="sk s"></span><span class="sk t"></span><span class="sk t2"></span><span class="sk f"></span></div>'; }
+      box.innerHTML=s;
+    }
+    function newsCard(n){
+      return '<article class="nc">'
+        +'<span class="nc-src">'+esc(n.source||"뉴스")+'</span>'
+        +'<a class="nc-title" href="'+esc(n.link||"#")+'" target="_blank" rel="noopener">'+esc(n.title||"")+'</a>'
+        +'<span class="nc-foot">'+esc(n.date||"")+'</span>'
+        +'</article>';
+    }
+    function renderNews(list){
+      var box=document.getElementById("news"); if(!box) return;
+      var arr=(list&&list.length)?list.slice(0,6):FALLBACK;
+      box.innerHTML=arr.map(newsCard).join("");
+    }
+    function loadNews(){
+      var box=document.getElementById("news"); if(!box) return;
+      skeleton();
+      var url="https://api.rss2json.com/v1/api.json?rss_url="+encodeURIComponent("https://news.google.com/rss/search?q=부동산+청약&hl=ko&gl=KR&ceid=KR:ko");
+      var done=false;
+      var ctrl=("AbortController" in window)?new AbortController():null;
+      var timer=setTimeout(function(){ if(done)return; done=true; if(ctrl)try{ctrl.abort();}catch(e){} renderNews(FALLBACK); }, 6000);
+      function fail(){ if(done)return; done=true; clearTimeout(timer); renderNews(FALLBACK); }
+      try{
+        fetch(url, ctrl?{signal:ctrl.signal}:{})
+          .then(function(r){ return r.json(); })
+          .then(function(data){
+            if(done)return; done=true; clearTimeout(timer);
+            if(!data || data.status!=="ok" || !Array.isArray(data.items) || !data.items.length){ renderNews(FALLBACK); return; }
+            var items=data.items.slice(0,6).map(function(it){
+              var title=String(it.title||""), source=String(it.author||"");
+              var parts=title.split(" - ");
+              if(parts.length>1){ if(!source) source=parts.pop(); else parts.pop(); title=parts.join(" - "); }
+              return { title:title, link:it.link, source:source||"Google 뉴스", date:fmtDot(it.pubDate) };
+            });
+            renderNews(items);
+          })
+          .catch(fail);
+      }catch(e){ fail(); }
+    }
+
+    renderPicks();
+    loadNews();
+  });
   </script>
 </body>
 </html>
