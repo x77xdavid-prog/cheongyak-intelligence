@@ -1643,6 +1643,7 @@
   <script src="../bunyang.js"></script>
   <script src="../matching.js"></script>
   <script src="../kb.js"></script>
+  <script src="../alerts-config.js"></script>
   <script>
   (function(){
     "use strict";
@@ -1717,10 +1718,9 @@
     fillRegions($("n-region"));
 
     /* =========================================================
-       이메일 알림 구독 (NOTIFY)
+       이메일 알림 구독 (NOTIFY) — Supabase 저장 (설정: /alerts-config.js)
        ========================================================= */
-    // TODO: formspree.io 에서 무료 폼 생성 후 엔드포인트 입력 (예: "https://formspree.io/f/abcdwxyz")
-    var SUBSCRIBE_ENDPOINT="";
+    var ACFG=window.ALERTS_CFG||{};
     var NOTIFY_LS="cheongyak.blueprint.notify.v1";
     (function(){
       var form=$("notify-form");
@@ -1745,16 +1745,25 @@
           return c.getAttribute("aria-pressed")==="true";
         }).map(function(c){return c.getAttribute("data-topic");});
         if(!topics.length){msg.textContent="받을 알림 종류를 하나 이상 선택해 주세요.";return;}
-        var payload={email:email,region:$("n-region").value||"전국",topics:topics.join(","),consent:true};
+        var payload={email:email,region:$("n-region").value||"",topics:topics.join(",")};
         try{localStorage.setItem(NOTIFY_LS,JSON.stringify(payload));}catch(e){}
-        if(!SUBSCRIBE_ENDPOINT){
+        if(!ACFG.SUPABASE_URL||!ACFG.SUPABASE_ANON_KEY){
           msg.textContent="알림 서비스 오픈 준비 중입니다 — 신청 내용은 이 기기에 저장되었고, 오픈 시 자동 반영됩니다.";
           return;
         }
         msg.textContent="구독 처리 중…";
-        fetch(SUBSCRIBE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)})
+        fetch(ACFG.SUPABASE_URL+"/rest/v1/subscribers",{
+          method:"POST",
+          headers:{
+            "apikey":ACFG.SUPABASE_ANON_KEY,
+            "Authorization":"Bearer "+ACFG.SUPABASE_ANON_KEY,
+            "Content-Type":"application/json",
+            "Prefer":"return=minimal"
+          },
+          body:JSON.stringify(payload)
+        })
           .then(function(r){
-            if(r.ok){msg.textContent="구독 완료! "+email+" 으로 조건에 맞는 소식을 보내드립니다.";}
+            if(r.ok){msg.textContent="구독 완료! 매일 아침 조건에 맞는 소식이 있으면 "+email+" 으로 보내드립니다.";}
             else{msg.textContent="구독에 실패했습니다. 잠시 후 다시 시도해 주세요.";}
           })
           .catch(function(){msg.textContent="네트워크 오류 — 잠시 후 다시 시도해 주세요.";});

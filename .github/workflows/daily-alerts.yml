@@ -1,0 +1,46 @@
+name: daily-alerts
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # 매일 09:00 KST (UTC 00:00)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-alerts
+  cancel-in-progress: false
+
+jobs:
+  fetch-and-notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 청약홈 데이터 수집 (bunyang.js 병합 + 무순위)
+        run: node scripts/fetch-bunyang.mjs
+
+      - name: 데이터 변경 커밋 (Pages 자동 재배포)
+        run: |
+          git config user.name "cheongyak-bot"
+          git config user.email "actions@github.com"
+          git add bunyang.js site/bunyang.js data/remndr.json
+          if git diff --cached --quiet; then
+            echo "변경 없음 — 커밋 스킵"
+          else
+            git commit -m "data: 청약홈 일일 수집 $(date -u -d '+9 hours' +%F)"
+            git push || (git pull --rebase && git push) # 동시 커밋 충돌 시 1회 재시도
+          fi
+
+      - name: 알림 발송 (시크릿 미설정 시 자동 스킵)
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+        run: node scripts/notify.mjs

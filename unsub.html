@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>수신거부 · 청약 인텔리전스</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.css">
+<style>
+  body{margin:0;font-family:'Pretendard',system-ui,sans-serif;background:#EAEEF0;color:#16242E;
+    display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem;box-sizing:border-box}
+  .card{background:#F4F6F7;border:1px solid rgba(22,36,46,.16);max-width:420px;width:100%;padding:2rem}
+  h1{font-size:1.25rem;margin:0 0 .5rem}
+  p{font-size:.9375rem;color:#3C4D57;line-height:1.6;margin:0 0 1.25rem}
+  input{width:100%;box-sizing:border-box;font-size:.95rem;padding:11px;min-height:44px;
+    border:1px solid rgba(22,36,46,.30);border-radius:2px;background:#EAEEF0;margin-bottom:.75rem}
+  input:focus{outline:none;border-color:#2B5C8A;box-shadow:0 0 0 3px rgba(43,92,138,.06)}
+  button{font-size:.95rem;font-weight:600;color:#F4F6F7;background:#C0392B;border:1px solid #93281E;
+    border-radius:2px;padding:12px 20px;min-height:44px;cursor:pointer;width:100%}
+  button:hover{background:#93281E}
+  .msg{font-size:.8rem;color:#5A6B74;min-height:1.2em;margin-top:.75rem;display:block}
+  a{color:#2B5C8A}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>알림 수신거부</h1>
+    <p>구독한 이메일 주소를 확인 후 버튼을 누르면 더 이상 알림이 발송되지 않습니다.</p>
+    <input type="email" id="e" placeholder="you@example.com" autocomplete="email">
+    <button id="btn">수신거부</button>
+    <span class="msg" id="msg"></span>
+    <p style="margin-top:1.25rem;margin-bottom:0"><a href="redesign/blueprint.html">← 청약 인텔리전스로 돌아가기</a></p>
+  </div>
+  <script src="alerts-config.js"></script>
+  <script>
+  (function(){
+    "use strict";
+    var CFG=window.ALERTS_CFG||{};
+    var $=function(id){return document.getElementById(id);};
+    // 메일 링크의 ?e= 파라미터로 주소 프리필
+    try{
+      var e=new URLSearchParams(location.search).get("e");
+      if(e)$("e").value=e;
+    }catch(err){}
+    $("btn").addEventListener("click",function(){
+      var email=($("e").value||"").trim(), msg=$("msg");
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){msg.textContent="올바른 이메일 주소를 입력해 주세요.";return;}
+      if(!CFG.SUPABASE_URL||!CFG.SUPABASE_ANON_KEY){msg.textContent="알림 서비스 준비 중이라 아직 발송된 메일이 없습니다.";return;}
+      msg.textContent="처리 중…";
+      fetch(CFG.SUPABASE_URL+"/rest/v1/unsubs",{
+        method:"POST",
+        headers:{
+          "apikey":CFG.SUPABASE_ANON_KEY,
+          "Authorization":"Bearer "+CFG.SUPABASE_ANON_KEY,
+          "Content-Type":"application/json",
+          "Prefer":"return=minimal"
+        },
+        body:JSON.stringify({email:email})
+      })
+        .then(function(r){
+          msg.textContent=r.ok?"수신거부 완료. 다음 발송부터 제외됩니다.":"처리에 실패했습니다. 잠시 후 다시 시도해 주세요.";
+        })
+        .catch(function(){msg.textContent="네트워크 오류 — 잠시 후 다시 시도해 주세요.";});
+    });
+  })();
+  </script>
+</body>
+</html>
