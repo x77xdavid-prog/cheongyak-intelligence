@@ -3,7 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>청약 인텔리전스 — 분양 도면 분석</title>
+<title>청약 인텔리전스 — 가점 계산·분양현장 알리미</title>
+<meta name="description" content="청약 가점 무료 계산, 청약홈 실데이터 기반 분양현장 알리미. 특별공급·마감 임박·미달 현장을 이메일로 받아보세요. 무주택기간·부양가족·통장 가입기간 자동 계산.">
+<link rel="canonical" href="https://x77xdavid-prog.github.io/cheongyak-intelligence/redesign/blueprint.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="청약 인텔리전스 — 가점 계산·분양현장 알리미">
+<meta property="og:description" content="청약 가점을 90초 만에 계산하고, 내 조건에 맞는 분양현장을 도면처럼 읽어 드립니다. 특별공급·마감 임박 알림 구독.">
+<meta property="og:url" content="https://x77xdavid-prog.github.io/cheongyak-intelligence/redesign/blueprint.html">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="청약 인텔리전스 — 가점 계산·분양현장 알리미">
+<meta name="twitter:description" content="청약 가점 무료 계산 + 특별공급·마감 임박 이메일 알림.">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "청약 인텔리전스",
+  "url": "https://x77xdavid-prog.github.io/cheongyak-intelligence/redesign/blueprint.html",
+  "description": "청약 가점 계산기와 청약홈 실데이터 기반 분양현장 알리미. 특별공급·마감 임박·미달 현장 이메일 알림.",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "inLanguage": "ko",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "KRW" }
+}
+</script>
+<!-- AdSense: 승인 후 ca-pub 실제 ID로 교체 (index.html과 동일 패턴) -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-0000000000000000" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1037,6 +1062,45 @@
     .live .dot{ animation:none; }
     *{ transition:none !important; }
   }
+
+  /* ===================== NOTIFY — 이메일 알림 구독 ===================== */
+  .notify-card{
+    border:1px solid var(--hair); background:var(--sheet);
+    display:grid; grid-template-columns:minmax(0,1.4fr) minmax(0,1fr); gap:0;
+  }
+  .notify-main{ padding:var(--sp-4); border-right:1px solid var(--hair); }
+  .notify-side{ padding:var(--sp-4); background:var(--blue-tint); }
+  .notify-side h3{ font-size:var(--t-2); margin-bottom:var(--sp-2); }
+  .notify-side ul{ margin:0; padding-left:1.1em; color:var(--ink-2); font-size:var(--t-1); }
+  .notify-side li{ margin-bottom:6px; }
+  .notify-form{ display:flex; flex-direction:column; gap:var(--sp-3); }
+  .notify-row{ display:flex; gap:var(--sp-2); flex-wrap:wrap; }
+  .notify-row input[type="email"]{
+    flex:2 1 220px; font-family:var(--f-mono); font-size:.92rem; color:var(--ink);
+    background:var(--paper); border:1px solid var(--hair-strong); border-radius:2px;
+    padding:10px 11px; min-height:44px;
+  }
+  .notify-row input[type="email"]:focus{ outline:none; border-color:var(--blue); box-shadow:0 0 0 3px var(--blue-tint); }
+  .notify-row .a-select{ flex:1 1 130px; min-height:44px; }
+  .notify-chips{ display:flex; gap:var(--sp-1); flex-wrap:wrap; }
+  .notify-consent{
+    display:flex; align-items:flex-start; gap:8px;
+    font-size:var(--t-0); color:var(--ink-3); font-family:var(--f-mono);
+  }
+  .notify-consent input{ margin-top:2px; accent-color:var(--blue); width:16px; height:16px; }
+  .notify-submit{
+    align-self:flex-start; display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--f-disp); font-weight:600; font-size:var(--t-1);
+    color:var(--sheet); background:var(--stamp); border:1px solid var(--stamp-deep);
+    border-radius:2px; padding:12px 22px; min-height:44px; cursor:pointer;
+    transition:background .15s ease;
+  }
+  .notify-submit:hover{ background:var(--stamp-deep); }
+  .notify-msg{ font-family:var(--f-mono); font-size:var(--t-0); min-height:1.2em; color:var(--ink-3); }
+  @media (max-width:860px){
+    .notify-card{ grid-template-columns:1fr; }
+    .notify-main{ border-right:none; border-bottom:1px solid var(--hair); }
+  }
 </style>
 <script type="speculationrules">
 {"prerender":[{"urls":["../board.html","../manage.html"],"eagerness":"moderate"}]}
@@ -1448,6 +1512,54 @@
   </section>
 
   <!-- SIGNATURE divider -->
+  <div class="section-divider"><div class="wrap"><div class="dimrule" aria-hidden="true"><span class="line"></span><span class="tag">Sheet 05·N</span><span class="line"></span></div></div></div>
+
+  <!-- NOTIFY — 이메일 알림 구독 -->
+  <section class="section" aria-labelledby="notify-h" id="notify">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <span class="idx">SHEET 05·N — NOTIFY</span>
+          <h2 id="notify-h">청약 소식, 이메일로 받기</h2>
+        </div>
+        <span class="hint num">무료 · 언제든 해지</span>
+      </div>
+
+      <div class="notify-card">
+        <div class="notify-main">
+          <form class="notify-form" id="notify-form">
+            <div class="notify-row">
+              <input type="email" id="n-email" placeholder="you@example.com" autocomplete="email" aria-label="이메일 주소" required>
+              <select id="n-region" class="a-select" aria-label="관심 지역"><option value="">전국</option></select>
+            </div>
+            <div class="notify-chips" role="group" aria-label="받을 알림 종류">
+              <button class="chip-btn" type="button" data-topic="special" aria-pressed="true">특별공급 공고</button>
+              <button class="chip-btn" type="button" data-topic="soon" aria-pressed="true">마감 임박 D-7</button>
+              <button class="chip-btn" type="button" data-topic="under" aria-pressed="false">미달·무순위(줍줍)</button>
+              <button class="chip-btn" type="button" data-topic="new" aria-pressed="false">신규 분양 공고</button>
+            </div>
+            <label class="notify-consent">
+              <input type="checkbox" id="n-consent">
+              <span>이메일 수신에 동의합니다. 주소는 알림 발송에만 쓰이며 <a href="../privacy.html" style="text-decoration:underline">개인정보처리방침</a>에 따라 처리됩니다.</span>
+            </label>
+            <button type="submit" class="notify-submit"><span aria-hidden="true">✉</span>알림 구독</button>
+            <span class="notify-msg" id="n-msg" aria-live="polite"></span>
+          </form>
+        </div>
+        <div class="notify-side">
+          <h3>이런 소식을 보내드립니다</h3>
+          <ul>
+            <li><b>특별공급</b> — 신혼·생애최초·다자녀 등 자격별 공고가 뜨면 바로</li>
+            <li><b>마감 임박</b> — 관심 지역 접수 마감 7일 전 리마인드</li>
+            <li><b>미달·무순위</b> — 경쟁률 미달로 다시 나온 기회 단지</li>
+            <li><b>신규 공고</b> — 청약홈 신규 등록 현장 요약</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SIGNATURE divider -->
   <div class="section-divider"><div class="wrap"><div class="dimrule" aria-hidden="true"><span class="line"></span><span class="tag">Sheet 06</span><span class="line"></span></div></div></div>
 
   <!-- AFTERCARE (E) — 청약 절차 + 부적격 셀프체크 -->
@@ -1495,28 +1607,27 @@
         <nav class="foot-col" aria-label="청약 여정">
           <h3>청약 여정</h3>
           <ul>
-            <li><a href="#" class="cur" aria-current="page">청약 여정</a></li>
-            <li><a href="#">통장 만들기</a></li>
-            <li><a href="#">내 점수·자격</a></li>
-            <li><a href="#">조건 매칭</a></li>
+            <li><a href="#steps-h" class="cur" aria-current="page">청약 여정</a></li>
+            <li><a href="#steps-h">통장 만들기</a></li>
+            <li><a href="#diag-h">내 점수·자격</a></li>
+            <li><a href="#alert-h">조건 매칭</a></li>
           </ul>
         </nav>
         <nav class="foot-col" aria-label="분양·관리">
           <h3>분양 · 관리</h3>
           <ul>
-            <li><a href="#">분양현장</a></li>
-            <li><a href="#">마감 임박 D-day</a></li>
-            <li><a href="#">내 청약 관리</a></li>
-            <li><a href="#">가점 진단</a></li>
+            <li><a href="#alert-h">분양현장</a></li>
+            <li><a href="#tl-h">마감 임박 D-day</a></li>
+            <li><a href="../manage.html">내 청약 관리</a></li>
+            <li><a href="#notify-h">이메일 알림 구독</a></li>
           </ul>
         </nav>
         <nav class="foot-col" aria-label="자료·지원">
           <h3>자료 · 지원</h3>
           <ul>
-            <li><a href="#">청약 준비</a></li>
-            <li><a href="#">게시판</a></li>
-            <li><a href="#">자주 묻는 질문</a></li>
-            
+            <li><a href="#care-h">청약 절차·부적격 체크</a></li>
+            <li><a href="../board.html">게시판</a></li>
+            <li><a href="../privacy.html">개인정보처리방침</a></li>
           </ul>
         </nav>
       </div>
@@ -1603,6 +1714,52 @@
     }
     fillRegions($("a-region"));
     fillRegions($("i-region"));
+    fillRegions($("n-region"));
+
+    /* =========================================================
+       이메일 알림 구독 (NOTIFY)
+       ========================================================= */
+    // TODO: formspree.io 에서 무료 폼 생성 후 엔드포인트 입력 (예: "https://formspree.io/f/abcdwxyz")
+    var SUBSCRIBE_ENDPOINT="";
+    var NOTIFY_LS="cheongyak.blueprint.notify.v1";
+    (function(){
+      var form=$("notify-form");
+      if(!form)return;
+      // 알림 종류 칩 토글 (권역 필터 칩과 별개 — data-topic 기준)
+      Array.prototype.forEach.call(form.querySelectorAll(".chip-btn[data-topic]"),function(c){
+        c.addEventListener("click",function(){
+          c.setAttribute("aria-pressed",c.getAttribute("aria-pressed")==="true"?"false":"true");
+        });
+      });
+      // 이전 신청 내용 복원
+      try{
+        var saved=JSON.parse(localStorage.getItem(NOTIFY_LS)||"null");
+        if(saved&&saved.email)$("n-email").value=saved.email;
+      }catch(e){}
+      form.addEventListener("submit",function(ev){
+        ev.preventDefault();
+        var email=($("n-email").value||"").trim(), msg=$("n-msg");
+        if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){msg.textContent="올바른 이메일 주소를 입력해 주세요.";return;}
+        if(!$("n-consent").checked){msg.textContent="수신 동의에 체크해 주세요.";return;}
+        var topics=Array.prototype.filter.call(form.querySelectorAll(".chip-btn[data-topic]"),function(c){
+          return c.getAttribute("aria-pressed")==="true";
+        }).map(function(c){return c.getAttribute("data-topic");});
+        if(!topics.length){msg.textContent="받을 알림 종류를 하나 이상 선택해 주세요.";return;}
+        var payload={email:email,region:$("n-region").value||"전국",topics:topics.join(","),consent:true};
+        try{localStorage.setItem(NOTIFY_LS,JSON.stringify(payload));}catch(e){}
+        if(!SUBSCRIBE_ENDPOINT){
+          msg.textContent="알림 서비스 오픈 준비 중입니다 — 신청 내용은 이 기기에 저장되었고, 오픈 시 자동 반영됩니다.";
+          return;
+        }
+        msg.textContent="구독 처리 중…";
+        fetch(SUBSCRIBE_ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(payload)})
+          .then(function(r){
+            if(r.ok){msg.textContent="구독 완료! "+email+" 으로 조건에 맞는 소식을 보내드립니다.";}
+            else{msg.textContent="구독에 실패했습니다. 잠시 후 다시 시도해 주세요.";}
+          })
+          .catch(function(){msg.textContent="네트워크 오류 — 잠시 후 다시 시도해 주세요.";});
+      });
+    })();
 
     /* =========================================================
        4) 내 가점 진단 — 실제 계산기 + localStorage
@@ -2105,9 +2262,9 @@
     }
 
     // 권역 칩
-    Array.prototype.forEach.call(document.querySelectorAll(".chip-btn"),function(c){
+    Array.prototype.forEach.call(document.querySelectorAll(".chip-btn[data-zone]"),function(c){
       c.addEventListener("click",function(){
-        Array.prototype.forEach.call(document.querySelectorAll(".chip-btn"),function(o){o.setAttribute("aria-pressed","false");});
+        Array.prototype.forEach.call(document.querySelectorAll(".chip-btn[data-zone]"),function(o){o.setAttribute("aria-pressed","false");});
         c.setAttribute("aria-pressed","true");
         aState.zone=c.getAttribute("data-zone")||"";
         renderAlerts();

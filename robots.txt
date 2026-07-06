@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /청약자료/raw/
+
+Sitemap: https://x77xdavid-prog.github.io/cheongyak-intelligence/sitemap.xml
