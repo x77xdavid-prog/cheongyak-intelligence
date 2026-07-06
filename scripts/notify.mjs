@@ -20,7 +20,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SITE_URL = process.env.SITE_URL || "https://x77xdavid-prog.github.io/cheongyak-intelligence";
+const SITE_URL = process.env.SITE_URL || "https://cheongyak.co.kr";
 const PAGE_URL = `${SITE_URL}/redesign/blueprint.html`;
 const DRY = process.env.DRY === "1";
 const NEW_WINDOW_DAYS = 2;   // '신규' 판정 창 — sent_log가 항목 단위 중복을 막으므로 넉넉해도 안전
