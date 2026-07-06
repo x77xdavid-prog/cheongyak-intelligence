@@ -1047,8 +1047,7 @@
     transition:opacity .18s, transform .26s var(--ease-out-expo); pointer-events:none;
   }
   .ff:focus-within::after{ opacity:.9; transform:scale(1); }
-  /* magnetic primary CTA — one memorable moment */
-  .btn-primary{ transition:transform .4s var(--ease-out-expo), background .2s ease, color .2s ease; }
+  .btn-primary{ transition:background .2s ease, color .2s ease; }
   /* perceived-perf: skip painting offscreen heavy tables */
   .cz-wrap{ content-visibility:auto; contain-intrinsic-size:auto 480px; }
   /* scroll-driven reveal — compositor only, zero JS */
@@ -2047,18 +2046,7 @@
     bindSeg("i-own-seg",function(b){ ownState=+b.getAttribute("data-own"); });
     bindSeg("i-ever-seg",function(b){ everState=+b.getAttribute("data-ever"); });
 
-    // magnetic primary CTA — one memorable interaction (skips on reduced-motion / touch)
-    (function(){
-      var b=document.querySelector(".hero .btn-primary");
-      if(!b||REDUCE||!matchMedia("(pointer:fine)").matches)return;
-      var p=b.parentNode;
-      p.addEventListener("pointermove",function(e){
-        var r=b.getBoundingClientRect();
-        var x=e.clientX-(r.left+r.width/2), y=e.clientY-(r.top+r.height/2);
-        b.style.transform="translate("+(x*0.2).toFixed(1)+"px,"+(y*0.35).toFixed(1)+"px)";
-      });
-      p.addEventListener("pointerleave",function(){ b.style.transform="translate(0,0)"; });
-    })();
+    // ponytail: 마그네틱 CTA 제거 — 버튼은 고정, 클릭 시에만 반응 (커서 추종 움직임 삭제)
     if($("diag-reset")){
       $("diag-reset").addEventListener("click",function(){
         try{localStorage.removeItem(LS_KEY);}catch(e){}
