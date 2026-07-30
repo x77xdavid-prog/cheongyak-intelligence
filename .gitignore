@@ -18,3 +18,6 @@ Thumbs.db
 .DS_Store
 .vscode/
 _old-design/
+
+# 스크랩 원본 아카이브 — 로컬 참조용, 배포 금지(애드센스 스크랩 콘텐츠 정책)
+청약자료/raw/
