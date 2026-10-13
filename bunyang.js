@@ -1,7 +1,7 @@
 window.BUNYANG = {
   "total": 425,
   "count": 425,
-  "updated": "2026-10-12 13:54",
+  "updated": "2026-10-13 14:55",
   "items": [
     {
       "지역": "광주",
