@@ -1,7 +1,7 @@
 window.BUNYANG = {
   "total": 466,
   "count": 466,
-  "updated": "2026-11-15 14:23",
+  "updated": "2026-11-16 14:21",
   "items": [
     {
       "지역": "부산",
